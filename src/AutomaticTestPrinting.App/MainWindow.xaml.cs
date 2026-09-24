@@ -1,7 +1,10 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using AutomaticTestPrinting.App.Models;
+using AutomaticTestPrinting.App.Services;
 using AutomaticTestPrinting.Core.Models;
 using AutomaticTestPrinting.Core.Services;
 using Microsoft.Win32;
@@ -11,6 +14,7 @@ namespace AutomaticTestPrinting.App;
 public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ReportFile> _reports = [];
+    private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
     private readonly JsonSettingsStore _settingsStore;
 
     public MainWindow()
@@ -23,8 +27,9 @@ public partial class MainWindow : Window
             "settings.json");
 
         _settingsStore = new JsonSettingsStore(settingsPath);
-        DataContext = new { Reports = _reports };
+        DataContext = new { Reports = _reports, RecognitionResults = _recognitionResults };
         UpdateReportListState();
+        UpdateRecognitionResultState();
     }
 
     private async void Window_Loaded(object sender, RoutedEventArgs e)
@@ -91,7 +96,9 @@ public partial class MainWindow : Window
     private void ClearReports_Click(object sender, RoutedEventArgs e)
     {
         _reports.Clear();
+        _recognitionResults.Clear();
         UpdateReportListState();
+        UpdateRecognitionResultState();
         UpdateStatus();
     }
 
@@ -110,14 +117,52 @@ public partial class MainWindow : Window
         }
 
         await SaveSettingsAsync();
-        StatusText.Text = $"準備完了：{_reports.Count}件のレポートを読み取れます";
+        ValidateButton.IsEnabled = false;
+        _recognitionResults.Clear();
+        UpdateRecognitionResultState();
 
-        MessageBox.Show(
-            this,
-            $"教材と出力先を確認しました。\nレポート {_reports.Count}件が読み取り対象です。\n\n次の開発段階でOCR処理を接続します。",
-            "読み取り準備が整いました",
-            MessageBoxButton.OK,
-            MessageBoxImage.Information);
+        try
+        {
+            var service = new WindowsReportOcrService();
+            var progress = new Progress<string>(message => StatusText.Text = message);
+
+            foreach (var report in _reports)
+            {
+                try
+                {
+                    var result = await service.RecognizeAsync(report.FullPath, progress);
+                    _recognitionResults.Add(RecognitionResultItem.Success(result));
+                }
+                catch (Exception exception)
+                {
+                    _recognitionResults.Add(
+                        RecognitionResultItem.Failure(report.FullPath, exception.Message));
+                }
+
+                UpdateRecognitionResultState();
+            }
+
+            var failedCount = _recognitionResults.Count(result => result.HasError);
+            StatusText.Text = failedCount == 0
+                ? $"読み取り完了：{_recognitionResults.Count}件"
+                : $"読み取り完了：成功 {_recognitionResults.Count - failedCount}件、要確認 {failedCount}件";
+        }
+        finally
+        {
+            ValidateButton.IsEnabled = true;
+        }
+    }
+
+    private void OpenSourceReport_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { Tag: string sourcePath } || !File.Exists(sourcePath))
+        {
+            MessageBox.Show(this, "原本PDFが見つかりません。", "ファイルを開けません",
+                MessageBoxButton.OK, MessageBoxImage.Warning);
+            return;
+        }
+
+        Process.Start(new ProcessStartInfo(sourcePath) { UseShellExecute = true });
     }
 
     private static string? SelectFolder(string title)
@@ -146,6 +191,13 @@ public partial class MainWindow : Window
     {
         EmptyReportsText.Visibility = _reports.Count == 0 ? Visibility.Visible : Visibility.Collapsed;
         ReportsList.Visibility = _reports.Count == 0 ? Visibility.Collapsed : Visibility.Visible;
+    }
+
+    private void UpdateRecognitionResultState()
+    {
+        RecognitionResultsSection.Visibility = _recognitionResults.Count == 0
+            ? Visibility.Collapsed
+            : Visibility.Visible;
     }
 
     private void UpdateStatus()

@@ -120,6 +120,48 @@
                         </Border>
                     </Grid>
                 </Border>
+
+                <Border x:Name="RecognitionResultsSection" Margin="0,20,0,0"
+                        Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="10" Padding="26">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
+                        <TextBlock Margin="0,6,0,18" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="印刷前に、生徒名・依頼の有無・問題数を必ず確認してください。" />
+                        <ItemsControl ItemsSource="{Binding RecognitionResults}">
+                            <ItemsControl.ItemTemplate>
+                                <DataTemplate>
+                                    <Border Margin="0,0,0,12" Padding="16" Background="#F9FAFB"
+                                            BorderBrush="#EAECF0" BorderThickness="1" CornerRadius="8">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="180" />
+                                                <ColumnDefinition Width="*" />
+                                            </Grid.ColumnDefinitions>
+                                            <StackPanel>
+                                                <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding StudentName}" />
+                                                <TextBlock Margin="0,5,12,0" FontSize="12"
+                                                           Foreground="{StaticResource MutedTextBrush}"
+                                                           Text="{Binding FileName}" TextWrapping="Wrap" />
+                                                <Button Margin="0,10,12,0" HorizontalAlignment="Left"
+                                                        Style="{StaticResource SecondaryButton}"
+                                                        Tag="{Binding SourcePath}" Click="OpenSourceReport_Click"
+                                                        Content="原本PDFを開く" />
+                                            </StackPanel>
+                                            <StackPanel Grid.Column="1">
+                                                <TextBlock FontWeight="SemiBold" Text="{Binding NormalTestSummary}" />
+                                                <TextBlock Margin="0,5,0,0" Text="{Binding StageTestSummary}" />
+                                                <TextBlock Margin="0,7,0,0" FontSize="12"
+                                                           Foreground="{StaticResource MutedTextBrush}"
+                                                           Text="{Binding OrientationSummary}" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Border>
+                                </DataTemplate>
+                            </ItemsControl.ItemTemplate>
+                        </ItemsControl>
+                    </StackPanel>
+                </Border>
             </StackPanel>
         </ScrollViewer>
 
@@ -131,12 +173,12 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock x:Name="StatusText" FontWeight="SemiBold" Text="設定を確認してください" />
-                    <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                               Text="この段階ではExcelやプリンターを操作しません。" />
+                <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                               Text="読み取りだけを行います。Excelやプリンターはまだ操作しません。" />
                 </StackPanel>
                 <Button x:Name="ValidateButton" Grid.Column="1" MinWidth="190"
                         Style="{StaticResource PrimaryButton}" Click="ValidateButton_Click"
-                        Content="読み取り準備を確認" />
+                        Content="レポートを読み取る" />
             </Grid>
         </Border>
     </Grid>
