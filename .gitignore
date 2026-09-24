@@ -1,0 +1,22 @@
+bin/
+obj/
+.vs/
+.idea/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+TestResults/
+artifacts/
+publish/
+*.log
+
+# Local configuration and sensitive data
+appsettings.Local.json
+settings.json
+reports/
+materials/
+outputs/
+*.xlsm
+*.xlsx
+*.pdf

@@ -1,0 +1,143 @@
+<Window x:Class="AutomaticTestPrinting.App.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="確認テスト作成"
+        Width="1100" Height="760" MinWidth="920" MinHeight="640"
+        WindowStartupLocation="CenterScreen" Background="#F2F4F7"
+        Loaded="Window_Loaded" Closing="Window_Closing">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Grid.Row="0" Background="White" BorderBrush="#EAECF0" BorderThickness="0,0,0,1">
+            <Grid Margin="36,24">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock FontSize="26" FontWeight="Bold" Text="確認テスト作成" />
+                    <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
+                               Text="レポートを読み込み、内容を確認してからテストを作成します。" />
+                </StackPanel>
+                <Border Grid.Column="1" VerticalAlignment="Center" Background="#ECFDF3"
+                        BorderBrush="#ABEFC6" BorderThickness="1" CornerRadius="12" Padding="12,5">
+                    <TextBlock Foreground="#067647" FontWeight="SemiBold" Text="初期設定" />
+                </Border>
+            </Grid>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="36,28,36,24">
+                <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="10" Padding="26">
+                    <StackPanel>
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="1. 保存場所を設定" />
+                        <TextBlock Margin="0,6,0,20" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="OneDrive内の教材フォルダーと、作成したテストの保存先を指定してください。" />
+                        <TextBlock FontWeight="SemiBold" Text="教材フォルダー" />
+                        <Grid Margin="0,8,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="MaterialFolderTextBox" Height="40" Padding="10,8"
+                                     VerticalContentAlignment="Center" BorderBrush="{StaticResource BorderBrush}"
+                                     IsReadOnly="True" ToolTip="ExcelとPDF教材を保存しているOneDriveフォルダー" />
+                            <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="BrowseMaterialFolder_Click" Content="フォルダーを選択" />
+                        </Grid>
+                        <TextBlock FontWeight="SemiBold" Text="出力フォルダー" />
+                        <Grid Margin="0,8,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="OutputFolderTextBox" Height="40" Padding="10,8"
+                                     VerticalContentAlignment="Center" BorderBrush="{StaticResource BorderBrush}"
+                                     IsReadOnly="True" ToolTip="作成した問題PDFと解答PDFの保存先" />
+                            <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="BrowseOutputFolder_Click" Content="フォルダーを選択" />
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,20,0,0" Background="{StaticResource SurfaceBrush}"
+                        BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" CornerRadius="10" Padding="26">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto" />
+                            <RowDefinition Height="Auto" />
+                        </Grid.RowDefinitions>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock FontSize="18" FontWeight="SemiBold" Text="2. レポートを選択" />
+                                <TextBlock Margin="0,6,0,0" Foreground="{StaticResource MutedTextBrush}"
+                                           Text="PDFは複数選択できます。手書き部分は読み取り対象にしません。" />
+                            </StackPanel>
+                            <Button Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center"
+                                    Style="{StaticResource SecondaryButton}" Click="AddReports_Click" Content="PDFを追加" />
+                            <Button Grid.Column="2" Margin="8,0,0,0" VerticalAlignment="Center"
+                                    Style="{StaticResource SecondaryButton}" Click="ClearReports_Click" Content="すべて外す" />
+                        </Grid>
+
+                        <Border Grid.Row="1" Margin="0,20,0,0" Background="#F9FAFB"
+                                BorderBrush="#EAECF0" BorderThickness="1" CornerRadius="7">
+                            <Grid>
+                                <TextBlock x:Name="EmptyReportsText" Padding="18,24" HorizontalAlignment="Center"
+                                           Foreground="{StaticResource MutedTextBrush}" Text="まだレポートが選択されていません" />
+                                <ListBox x:Name="ReportsList" Margin="8" MinHeight="100" MaxHeight="190"
+                                         Background="Transparent" BorderThickness="0" ItemsSource="{Binding Reports}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <Grid Margin="6,5">
+                                                <Grid.ColumnDefinitions>
+                                                    <ColumnDefinition Width="Auto" />
+                                                    <ColumnDefinition Width="*" />
+                                                </Grid.ColumnDefinitions>
+                                                <Border Width="34" Height="34" Background="#FEE4E2" CornerRadius="6">
+                                                    <TextBlock HorizontalAlignment="Center" VerticalAlignment="Center"
+                                                               Foreground="#B42318" FontWeight="Bold" Text="PDF" />
+                                                </Border>
+                                                <StackPanel Grid.Column="1" Margin="12,0,0,0">
+                                                    <TextBlock FontWeight="SemiBold" Text="{Binding FileName}" />
+                                                    <TextBlock FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                                               Text="{Binding FullPath}" TextTrimming="CharacterEllipsis" />
+                                                </StackPanel>
+                                            </Grid>
+                                        </DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                            </Grid>
+                        </Border>
+                    </Grid>
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#EAECF0" BorderThickness="0,1,0,0">
+            <Grid Margin="36,18">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel VerticalAlignment="Center">
+                    <TextBlock x:Name="StatusText" FontWeight="SemiBold" Text="設定を確認してください" />
+                    <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                               Text="この段階ではExcelやプリンターを操作しません。" />
+                </StackPanel>
+                <Button x:Name="ValidateButton" Grid.Column="1" MinWidth="190"
+                        Style="{StaticResource PrimaryButton}" Click="ValidateButton_Click"
+                        Content="読み取り準備を確認" />
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
