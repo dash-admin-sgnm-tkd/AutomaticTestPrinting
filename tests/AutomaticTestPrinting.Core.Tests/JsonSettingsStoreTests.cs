@@ -16,6 +16,7 @@ public sealed class JsonSettingsStoreTests
             var store = new JsonSettingsStore(path);
             var expected = new AppSettings
             {
+                ReportInboxFolder = @"G:\マイドライブ\確認テスト\01_未処理",
                 MaterialFolder = @"C:\OneDrive\教材",
                 OutputFolder = @"C:\OneDrive\出力"
             };
@@ -23,6 +24,7 @@ public sealed class JsonSettingsStoreTests
             await store.SaveAsync(expected);
             var actual = await store.LoadAsync();
 
+            Assert.Equal(expected.ReportInboxFolder, actual.ReportInboxFolder);
             Assert.Equal(expected.MaterialFolder, actual.MaterialFolder);
             Assert.Equal(expected.OutputFolder, actual.OutputFolder);
         }
@@ -45,6 +47,7 @@ public sealed class JsonSettingsStoreTests
             await File.WriteAllTextAsync(path, "not-json");
             var settings = await new JsonSettingsStore(path).LoadAsync();
 
+            Assert.Null(settings.ReportInboxFolder);
             Assert.Null(settings.MaterialFolder);
             Assert.Null(settings.OutputFolder);
         }

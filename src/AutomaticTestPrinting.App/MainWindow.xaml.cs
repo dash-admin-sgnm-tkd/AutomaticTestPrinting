@@ -36,6 +36,7 @@ public partial class MainWindow : Window
     private async void Window_Loaded(object sender, RoutedEventArgs e)
     {
         var settings = await _settingsStore.LoadAsync();
+        ReportInboxFolderTextBox.Text = settings.ReportInboxFolder ?? string.Empty;
         MaterialFolderTextBox.Text = settings.MaterialFolder ?? string.Empty;
         OutputFolderTextBox.Text = settings.OutputFolder ?? string.Empty;
         UpdateStatus();
@@ -56,6 +57,22 @@ public partial class MainWindow : Window
 
         MaterialFolderTextBox.Text = folder;
         InvalidateRecognitionResults();
+        UpdateStatus();
+    }
+
+    private void BrowseReportInboxFolder_Click(object sender, RoutedEventArgs e)
+    {
+        var folder = SelectFolder(
+            "Google Driveでミラーリングした未処理レポートフォルダーを選択してください");
+        if (folder is null)
+        {
+            return;
+        }
+
+        ReportInboxFolderTextBox.Text = folder;
+        _reports.Clear();
+        InvalidateRecognitionResults();
+        UpdateReportListState();
         UpdateStatus();
     }
 
@@ -99,6 +116,52 @@ public partial class MainWindow : Window
 
         UpdateReportListState();
         UpdateStatus();
+    }
+
+    private async void LoadInboxReports_Click(object sender, RoutedEventArgs e)
+    {
+        var inboxFolder = ReportInboxFolderTextBox.Text;
+        if (string.IsNullOrWhiteSpace(inboxFolder) || !Directory.Exists(inboxFolder))
+        {
+            MessageBox.Show(this,
+                "Google Driveのレポート受け取りフォルダーを設定してください。",
+                "フォルダーを確認してください",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        var scanResult = ReportInboxService.Scan(inboxFolder, _reports);
+        foreach (var report in scanResult.Reports)
+        {
+            _reports.Add(report);
+        }
+
+        if (scanResult.Reports.Count > 0)
+        {
+            InvalidateRecognitionResults();
+        }
+
+        UpdateReportListState();
+        UpdateStatus();
+        await SaveSettingsAsync();
+
+        if (scanResult.Reports.Count == 0)
+        {
+            var message = scanResult.WaitingForSyncCount > 0
+                ? "同期中と思われるPDFがあります。数秒待ってからもう一度読み込んでください。"
+                : "新しいPDFはありませんでした。";
+            MessageBox.Show(this,
+                message,
+                "レポート受け取りフォルダー",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            return;
+        }
+
+        StatusText.Text = scanResult.WaitingForSyncCount > 0
+            ? $"レポート {scanResult.Reports.Count}件を追加しました（同期待ち {scanResult.WaitingForSyncCount}件）"
+            : $"レポート {scanResult.Reports.Count}件をGoogle Driveから追加しました";
     }
 
     private void ClearReports_Click(object sender, RoutedEventArgs e)
@@ -274,6 +337,7 @@ public partial class MainWindow : Window
     {
         var settings = new AppSettings
         {
+            ReportInboxFolder = EmptyToNull(ReportInboxFolderTextBox.Text),
             MaterialFolder = EmptyToNull(MaterialFolderTextBox.Text),
             OutputFolder = EmptyToNull(OutputFolderTextBox.Text)
         };
@@ -299,6 +363,7 @@ public partial class MainWindow : Window
         CreatePdfsButton.IsEnabled =
             ConfirmResultsCheckBox.IsChecked == true &&
             _recognizedReports.Count > 0 &&
+            !_recognitionResults.Any(result => result.HasError) &&
             _recognizedReports.SelectMany(report => report.TestRequests).Any();
     }
 

@@ -35,9 +35,21 @@
                 <Border Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1" CornerRadius="10" Padding="26">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="1. 保存場所を設定" />
+                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="1. フォルダーを設定" />
                         <TextBlock Margin="0,6,0,20" Foreground="{StaticResource MutedTextBrush}"
-                                   Text="OneDrive内の教材フォルダーと、作成したテストの保存先を指定してください。" />
+                                   Text="Google Driveのレポート受け取り先、教材、作成結果の保存先を指定してください。" />
+                        <TextBlock FontWeight="SemiBold" Text="レポート受け取りフォルダー（Google Drive）" />
+                        <Grid Margin="0,8,0,16">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="ReportInboxFolderTextBox" Height="40" Padding="10,8"
+                                     VerticalContentAlignment="Center" BorderBrush="{StaticResource BorderBrush}"
+                                     IsReadOnly="True" ToolTip="Google Driveでミラーリングした未処理レポートフォルダー" />
+                            <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="BrowseReportInboxFolder_Click" Content="フォルダーを選択" />
+                        </Grid>
                         <TextBlock FontWeight="SemiBold" Text="教材フォルダー" />
                         <Grid Margin="0,8,0,16">
                             <Grid.ColumnDefinitions>
@@ -77,6 +89,7 @@
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <StackPanel>
                                 <TextBlock FontSize="18" FontWeight="SemiBold" Text="2. レポートを選択" />
@@ -84,8 +97,11 @@
                                            Text="PDFは複数選択できます。手書き部分は読み取り対象にしません。" />
                             </StackPanel>
                             <Button Grid.Column="1" Margin="12,0,0,0" VerticalAlignment="Center"
-                                    Style="{StaticResource SecondaryButton}" Click="AddReports_Click" Content="PDFを追加" />
+                                    Style="{StaticResource PrimaryButton}" Click="LoadInboxReports_Click"
+                                    Content="Google Driveから読込" />
                             <Button Grid.Column="2" Margin="8,0,0,0" VerticalAlignment="Center"
+                                    Style="{StaticResource SecondaryButton}" Click="AddReports_Click" Content="PDFを追加" />
+                            <Button Grid.Column="3" Margin="8,0,0,0" VerticalAlignment="Center"
                                     Style="{StaticResource SecondaryButton}" Click="ClearReports_Click" Content="すべて外す" />
                         </Grid>
 
