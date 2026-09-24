@@ -54,4 +54,14 @@ dotnet test
 dotnet run --project src/AutomaticTestPrinting.App
 ```
 
+## Windows試験配布版の作成
+
+Windows 11 64bit向けの自己完結型アプリをZIPにまとめます。.NETの別途インストールは不要です。
+
+```powershell
+powershell -ExecutionPolicy Bypass -File scripts/Publish-Distribution.ps1
+```
+
+成果物は既定で `artifacts/distribution` に作成されます。配布版には教材、レポート、生徒情報を含めません。
+
 教材、レポート、生徒情報を含むファイルはGitHubへ追加しないでください。
