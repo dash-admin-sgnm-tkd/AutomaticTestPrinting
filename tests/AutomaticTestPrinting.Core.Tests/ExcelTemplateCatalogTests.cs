@@ -79,6 +79,12 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         "1048-1323",
         25,
         "vintage-fourth-edition")]
+    [InlineData(
+        "国語力を伸ばす語彙1700(シグマベスト)",
+        "国語力を伸ばす 語彙1700_20230301本部.xlsm",
+        "1011-1310",
+        25,
+        "vocabulary-1700-sigma-best")]
     public void Prepare_AcceptsNewlySupportedReportMaterial(
         string materialName,
         string workbookName,
@@ -123,6 +129,20 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         File.WriteAllBytes(Path.Combine(_directory, "Vintage.xlsm"), []);
         var request = new NormalTestRequestCandidate(
             "Vintage4thEdition", "1-100", 26, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.True(result.IsSupported);
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Prepare_RejectsMoreThanFiftyVocabulary1700Questions()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(Path.Combine(_directory, "国語力を伸ばす 語彙1700.xlsm"), []);
+        var request = new NormalTestRequestCandidate(
+            "国語力を伸ばす語彙1700(シグマベスト)", "1-100", 51, 1, true);
 
         var result = ExcelTemplateCatalog.Prepare(request, _directory);
 

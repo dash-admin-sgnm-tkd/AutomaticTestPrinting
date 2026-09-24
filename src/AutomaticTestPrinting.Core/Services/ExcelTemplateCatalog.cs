@@ -63,8 +63,23 @@ public static partial class ExcelTemplateCatalog
         "講師用",
         "生徒用");
 
+    private static readonly ExcelTemplateProfile Vocabulary1700 = new(
+        "vocabulary-1700-sigma-best",
+        "国語力を伸ばす 語彙1700（シグマベスト）",
+        "国語力を伸ばす 語彙1700",
+        ["国語力を伸ばす語彙1700", "語彙1700"],
+        1700,
+        50,
+        "作業シート",
+        "G1",
+        "G2",
+        "問題解答リスト",
+        "講師用",
+        "生徒用",
+        UseWideAnswerLayout: true);
+
     private static readonly IReadOnlyList<ExcelTemplateProfile> Profiles =
-        [Target1900, EikenPre1Ex, Target1000, Vintage4];
+        [Target1900, EikenPre1Ex, Target1000, Vintage4, Vocabulary1700];
 
     public static ExcelRequestPreparation Prepare(
         NormalTestRequestCandidate request,

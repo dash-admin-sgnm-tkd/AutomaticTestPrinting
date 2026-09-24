@@ -264,6 +264,11 @@ public static class ExcelPdfGenerationService
         SetPrintArea(teacherSheet, printArea);
         SetPrintArea(studentSheet, printArea);
 
+        if (request.Profile.UseWideAnswerLayout)
+        {
+            ApplyWideAnswerLayout(teacherSheet, studentSheet, firstPageCount);
+        }
+
         ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
         ValidateStudentAnswerCellsAreEmpty(studentSheet, firstPageCount, secondPageCount);
     }
@@ -415,6 +420,67 @@ public static class ExcelPdfGenerationService
         finally
         {
             ReleaseComObject(pageSetup);
+        }
+    }
+
+    private static void ApplyWideAnswerLayout(
+        dynamic teacherSheet,
+        dynamic studentSheet,
+        int rowCount)
+    {
+        foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
+        {
+            dynamic numberColumn = sheet.Columns["B"];
+            dynamic questionColumn = sheet.Columns["C"];
+            dynamic answerColumn = sheet.Columns["D"];
+            dynamic layoutRange = sheet.Range["A1:Z101"];
+            dynamic outputRange = sheet.Range[$"B1:D{rowCount + 1}"];
+            dynamic font = outputRange.Font;
+            dynamic pageSetup = sheet.PageSetup;
+            try
+            {
+                layoutRange.UnMerge();
+                outputRange.ClearFormats();
+                numberColumn.ColumnWidth = 9;
+                questionColumn.ColumnWidth = 18;
+                answerColumn.ColumnWidth = 72;
+                font.Name = "Yu Gothic UI";
+                font.Size = 10;
+                outputRange.WrapText = true;
+                outputRange.Orientation = 0;
+                outputRange.VerticalAlignment = -4160;
+                sheet.ResetAllPageBreaks();
+                pageSetup.Orientation = 2;
+                pageSetup.Zoom = false;
+                pageSetup.FitToPagesWide = 1;
+                pageSetup.FitToPagesTall = false;
+                pageSetup.CenterHorizontally = true;
+            }
+            finally
+            {
+                ReleaseComObject(pageSetup);
+                ReleaseComObject(font);
+                ReleaseComObject(outputRange);
+                ReleaseComObject(layoutRange);
+                ReleaseComObject(answerColumn);
+                ReleaseComObject(questionColumn);
+                ReleaseComObject(numberColumn);
+            }
+
+            for (var row = 1; row <= rowCount + 1; row++)
+            {
+                dynamic outputRow = sheet.Rows[row];
+                try
+                {
+                    outputRow.RowHeight = row == 1 ? 20 : 30;
+                }
+                finally
+                {
+                    ReleaseComObject(outputRow);
+                }
+            }
+
+            ApplyBorders(sheet.Range[$"B1:D{rowCount + 1}"]);
         }
     }
 

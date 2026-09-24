@@ -12,7 +12,8 @@ public sealed record ExcelTemplateProfile(
     string RangeEndCell,
     string QuestionListSheetName,
     string TeacherSheetName,
-    string StudentSheetName);
+    string StudentSheetName,
+    bool UseWideAnswerLayout = false);
 
 public sealed record ExcelRequestPreparation(
     bool IsSupported,
