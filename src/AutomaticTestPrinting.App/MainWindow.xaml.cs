@@ -131,7 +131,8 @@ public partial class MainWindow : Window
                 try
                 {
                     var result = await service.RecognizeAsync(report.FullPath, progress);
-                    _recognitionResults.Add(RecognitionResultItem.Success(result));
+                    _recognitionResults.Add(
+                        RecognitionResultItem.Success(result, MaterialFolderTextBox.Text));
                 }
                 catch (Exception exception)
                 {

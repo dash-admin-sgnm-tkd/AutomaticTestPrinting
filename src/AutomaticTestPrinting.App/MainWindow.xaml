@@ -152,6 +152,10 @@
                                                 <TextBlock FontWeight="SemiBold" Text="{Binding NormalTestSummary}" />
                                                 <TextBlock Margin="0,6,0,0" Text="{Binding NormalTestDetails}"
                                                            TextWrapping="Wrap" LineHeight="21" />
+                                                <TextBlock Margin="0,7,0,0" Foreground="#175CD3"
+                                                           FontWeight="SemiBold"
+                                                           Text="{Binding ExcelPreparationDetails}"
+                                                           TextWrapping="Wrap" LineHeight="21" />
                                                 <TextBlock Margin="0,5,0,0" Text="{Binding StageTestSummary}" />
                                                 <TextBlock Margin="0,7,0,0" FontSize="12"
                                                            Foreground="{StaticResource MutedTextBrush}"
