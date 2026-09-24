@@ -1,0 +1,549 @@
+using System.Globalization;
+using System.IO;
+using System.Runtime.InteropServices;
+using AutomaticTestPrinting.Core.Models;
+
+namespace AutomaticTestPrinting.App.Services;
+
+public static class ExcelPdfGenerationService
+{
+    private const int CalculationManual = -4135;
+    private const int LineStyleNone = -4142;
+    private const int LineStyleContinuous = 1;
+    private const int BorderWeightThin = 2;
+    private const int FixedFormatPdf = 0;
+    private const int QualityStandard = 0;
+    private const int AutomationSecurityForceDisable = 3;
+
+    public static Task<ExcelPdfGenerationResult> GenerateAsync(
+        ExcelPdfGenerationRequest request,
+        CancellationToken cancellationToken = default)
+    {
+        var completion = new TaskCompletionSource<ExcelPdfGenerationResult>(
+            TaskCreationOptions.RunContinuationsAsynchronously);
+
+        var thread = new Thread(() =>
+        {
+            try
+            {
+                cancellationToken.ThrowIfCancellationRequested();
+                completion.TrySetResult(Generate(request, cancellationToken));
+            }
+            catch (OperationCanceledException exception)
+            {
+                completion.TrySetCanceled(exception.CancellationToken);
+            }
+            catch (Exception exception)
+            {
+                completion.TrySetException(exception);
+            }
+        })
+        {
+            IsBackground = true,
+            Name = "Excel PDF generation"
+        };
+
+        thread.SetApartmentState(ApartmentState.STA);
+        thread.Start();
+        return completion.Task;
+    }
+
+    private static ExcelPdfGenerationResult Generate(
+        ExcelPdfGenerationRequest request,
+        CancellationToken cancellationToken)
+    {
+        ValidateRequest(request);
+        Directory.CreateDirectory(request.OutputFolder);
+
+        var temporaryFolder = Path.Combine(
+            Path.GetTempPath(),
+            "AutomaticTestPrinting",
+            Guid.NewGuid().ToString("N", CultureInfo.InvariantCulture));
+        Directory.CreateDirectory(temporaryFolder);
+        var temporaryWorkbookPath = Path.Combine(
+            temporaryFolder,
+            Path.GetFileName(request.WorkbookPath));
+        File.Copy(request.WorkbookPath, temporaryWorkbookPath, false);
+
+        object? excel = null;
+        object? workbooks = null;
+        object? workbook = null;
+        object? worksheets = null;
+        object? backgroundSheet = null;
+        object? teacherSheet = null;
+        object? studentSheet = null;
+        ExcelPdfGenerationResult? outputPaths = null;
+        var completed = false;
+
+        try
+        {
+            var excelType = Type.GetTypeFromProgID("Excel.Application")
+                ?? throw new InvalidOperationException(
+                    "Microsoft Excelが見つかりません。Excel 2021がインストールされているか確認してください。");
+
+            excel = Activator.CreateInstance(excelType)
+                ?? throw new InvalidOperationException("Microsoft Excelを起動できませんでした。");
+            dynamic excelApplication = excel;
+            excelApplication.Visible = false;
+            excelApplication.DisplayAlerts = false;
+            excelApplication.ScreenUpdating = false;
+            excelApplication.EnableEvents = false;
+            excelApplication.AutomationSecurity = AutomationSecurityForceDisable;
+
+            workbooks = excelApplication.Workbooks;
+            dynamic workbookCollection = workbooks;
+            workbook = workbookCollection.Open(
+                temporaryWorkbookPath,
+                UpdateLinks: 0,
+                ReadOnly: false,
+                IgnoreReadOnlyRecommended: true,
+                AddToMru: false);
+            excelApplication.Calculation = CalculationManual;
+
+            dynamic openedWorkbook = workbook;
+            worksheets = openedWorkbook.Worksheets;
+            dynamic worksheetCollection = worksheets;
+            backgroundSheet = worksheetCollection[request.Profile.WorkingSheetName];
+            teacherSheet = worksheetCollection[request.Profile.TeacherSheetName];
+            studentSheet = worksheetCollection[request.Profile.StudentSheetName];
+
+            ValidateSheetIdentity(teacherSheet, request.Profile.TeacherSheetName);
+            ValidateSheetIdentity(studentSheet, request.Profile.StudentSheetName);
+
+            cancellationToken.ThrowIfCancellationRequested();
+            PrepareWorkbook(
+                excelApplication,
+                backgroundSheet,
+                teacherSheet,
+                studentSheet,
+                request);
+
+            outputPaths = CreateOutputPaths(request);
+            ExportSheetToPdf(teacherSheet, outputPaths.AnswerPdfPath);
+            cancellationToken.ThrowIfCancellationRequested();
+            ExportSheetToPdf(studentSheet, outputPaths.ProblemPdfPath);
+
+            EnsurePdfCreated(outputPaths.AnswerPdfPath);
+            EnsurePdfCreated(outputPaths.ProblemPdfPath);
+            completed = true;
+            return outputPaths;
+        }
+        finally
+        {
+            if (workbook is not null)
+            {
+                try
+                {
+                    ((dynamic)workbook).Close(SaveChanges: false);
+                }
+                catch (COMException)
+                {
+                }
+            }
+
+            if (excel is not null)
+            {
+                try
+                {
+                    ((dynamic)excel).Quit();
+                }
+                catch (COMException)
+                {
+                }
+            }
+
+            ReleaseComObject(studentSheet);
+            ReleaseComObject(teacherSheet);
+            ReleaseComObject(backgroundSheet);
+            ReleaseComObject(worksheets);
+            ReleaseComObject(workbook);
+            ReleaseComObject(workbooks);
+            ReleaseComObject(excel);
+            CollectReleasedComObjects();
+
+            if (!completed && outputPaths is not null)
+            {
+                TryDeleteFile(outputPaths.ProblemPdfPath);
+                TryDeleteFile(outputPaths.AnswerPdfPath);
+            }
+
+            try
+            {
+                Directory.Delete(temporaryFolder, true);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+        }
+    }
+
+    private static void PrepareWorkbook(
+        dynamic excelApplication,
+        dynamic backgroundSheet,
+        dynamic teacherSheet,
+        dynamic studentSheet,
+        ExcelPdfGenerationRequest request)
+    {
+        foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
+        {
+            dynamic outputRange = sheet.Range["B1:H101"];
+            dynamic borders = outputRange.Borders;
+            try
+            {
+                outputRange.ClearContents();
+                borders.LineStyle = LineStyleNone;
+            }
+            finally
+            {
+                ReleaseComObject(borders);
+                ReleaseComObject(outputRange);
+            }
+        }
+
+        SetCellValue(backgroundSheet, request.Profile.RangeStartCell, request.StartNumber);
+        SetCellValue(backgroundSheet, request.Profile.RangeEndCell, request.EndNumber);
+        excelApplication.CalculateFullRebuild();
+
+        var firstPageCount = Math.Min(request.QuestionCount, 50);
+        var secondPageCount = Math.Max(request.QuestionCount - 50, 0);
+        var titles = new object[,] { { "番号", "問題", "解答" } };
+
+        foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
+        {
+            SetRangeValue(sheet, "B1:D1", titles);
+            SetRightHeader(
+                sheet,
+                $"&20 範囲：{request.StartNumber}-{request.EndNumber}");
+        }
+
+        CopyValues(
+            backgroundSheet.Range[$"A2:C{firstPageCount + 1}"],
+            teacherSheet.Range[$"B2:D{firstPageCount + 1}"]);
+        CopyValues(
+            backgroundSheet.Range[$"A2:B{firstPageCount + 1}"],
+            studentSheet.Range[$"B2:C{firstPageCount + 1}"]);
+        ApplyBorders(teacherSheet.Range[$"B1:D{firstPageCount + 1}"]);
+        ApplyBorders(studentSheet.Range[$"B1:D{firstPageCount + 1}"]);
+
+        if (secondPageCount > 0)
+        {
+            foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
+            {
+                SetRangeValue(sheet, "F1:H1", titles);
+            }
+
+            CopyValues(
+                backgroundSheet.Range[$"A52:C{secondPageCount + 51}"],
+                teacherSheet.Range[$"F2:H{secondPageCount + 1}"]);
+            CopyValues(
+                backgroundSheet.Range[$"A52:B{secondPageCount + 51}"],
+                studentSheet.Range[$"F2:G{secondPageCount + 1}"]);
+            ApplyBorders(teacherSheet.Range[$"F1:H{secondPageCount + 1}"]);
+            ApplyBorders(studentSheet.Range[$"F1:H{secondPageCount + 1}"]);
+        }
+
+        var printArea = secondPageCount > 0
+            ? "B1:H51"
+            : $"B1:D{firstPageCount + 1}";
+        SetPrintArea(teacherSheet, printArea);
+        SetPrintArea(studentSheet, printArea);
+
+        ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
+        ValidateStudentAnswerCellsAreEmpty(studentSheet, firstPageCount, secondPageCount);
+    }
+
+    private static void SetCellValue(dynamic sheet, string address, object value)
+    {
+        dynamic cell = sheet.Range[address];
+        try
+        {
+            cell.Value2 = value;
+        }
+        finally
+        {
+            ReleaseComObject(cell);
+        }
+    }
+
+    private static void SetRangeValue(dynamic sheet, string address, object value)
+    {
+        dynamic range = sheet.Range[address];
+        try
+        {
+            range.Value2 = value;
+        }
+        finally
+        {
+            ReleaseComObject(range);
+        }
+    }
+
+    private static void SetRightHeader(dynamic sheet, string value)
+    {
+        dynamic pageSetup = sheet.PageSetup;
+        try
+        {
+            pageSetup.RightHeader = value;
+        }
+        finally
+        {
+            ReleaseComObject(pageSetup);
+        }
+    }
+
+    private static void SetPrintArea(dynamic sheet, string value)
+    {
+        dynamic pageSetup = sheet.PageSetup;
+        try
+        {
+            pageSetup.PrintArea = value;
+        }
+        finally
+        {
+            ReleaseComObject(pageSetup);
+        }
+    }
+
+    private static void ValidateSheetIdentity(dynamic sheet, string expectedName)
+    {
+        var actualName = Convert.ToString(sheet.Name, CultureInfo.InvariantCulture);
+        if (!string.Equals(actualName, expectedName, StringComparison.Ordinal))
+        {
+            throw new InvalidOperationException(
+                $"Excelシートを正しく取得できませんでした。期待：{expectedName}、実際：{actualName}");
+        }
+    }
+
+    private static void ValidateStudentAnswerCellsAreEmpty(
+        dynamic studentSheet,
+        int firstPageCount,
+        int secondPageCount)
+    {
+        EnsureCellsAreEmpty(studentSheet, "D", firstPageCount);
+        if (secondPageCount > 0)
+        {
+            EnsureCellsAreEmpty(studentSheet, "H", secondPageCount);
+        }
+    }
+
+    private static void EnsureCellsAreEmpty(dynamic sheet, string column, int count)
+    {
+        for (var row = 2; row < count + 2; row++)
+        {
+            dynamic cell = sheet.Range[$"{column}{row}"];
+            try
+            {
+                if (!string.IsNullOrEmpty(Convert.ToString(cell.Value2, CultureInfo.InvariantCulture)))
+                {
+                    throw new InvalidOperationException(
+                        $"生徒用シートの解答欄に値が残っています：{column}{row}");
+                }
+            }
+            finally
+            {
+                ReleaseComObject(cell);
+            }
+        }
+    }
+
+    private static void CopyValues(dynamic source, dynamic destination)
+    {
+        try
+        {
+            destination.Value2 = source.Value2;
+        }
+        finally
+        {
+            ReleaseComObject(destination);
+            ReleaseComObject(source);
+        }
+    }
+
+    private static void ApplyBorders(dynamic range)
+    {
+        dynamic borders = range.Borders;
+        try
+        {
+            borders.LineStyle = LineStyleContinuous;
+            borders.Weight = BorderWeightThin;
+        }
+        finally
+        {
+            ReleaseComObject(borders);
+            ReleaseComObject(range);
+        }
+    }
+
+    private static void ValidateGeneratedQuestions(
+        dynamic teacherSheet,
+        int firstPageCount,
+        int secondPageCount)
+    {
+        var numbers = new List<int>(firstPageCount + secondPageCount);
+        ReadQuestionNumbers(teacherSheet, "B", firstPageCount, numbers);
+        if (secondPageCount > 0)
+        {
+            ReadQuestionNumbers(teacherSheet, "F", secondPageCount, numbers);
+        }
+
+        if (numbers.Count != firstPageCount + secondPageCount ||
+            numbers.Distinct().Count() != numbers.Count)
+        {
+            var duplicateNumbers = numbers
+                .GroupBy(number => number)
+                .Where(group => group.Count() > 1)
+                .Select(group => group.Key)
+                .ToArray();
+            throw new InvalidOperationException(
+                "Excelで問題を正しく生成できませんでした。" +
+                $"生成数：{numbers.Count}、重複：{string.Join(",", duplicateNumbers)}");
+        }
+    }
+
+    private static void ReadQuestionNumbers(
+        dynamic sheet,
+        string column,
+        int count,
+        ICollection<int> destination)
+    {
+        for (var row = 2; row < count + 2; row++)
+        {
+            dynamic cell = sheet.Range[$"{column}{row}"];
+            try
+            {
+                var value = cell.Value2;
+                if (value is not double numericValue)
+                {
+                    throw new InvalidOperationException(
+                        "Excelの問題番号に計算エラーがあります。範囲を確認してください。");
+                }
+
+                destination.Add(Convert.ToInt32(numericValue, CultureInfo.InvariantCulture));
+            }
+            finally
+            {
+                ReleaseComObject(cell);
+            }
+        }
+    }
+
+    private static ExcelPdfGenerationResult CreateOutputPaths(ExcelPdfGenerationRequest request)
+    {
+        var studentName = SanitizeFileName(request.StudentName, "氏名未確認");
+        var materialName = SanitizeFileName(request.MaterialName, "教材");
+        var baseName =
+            $"{studentName}_{materialName}_{request.StartNumber}-{request.EndNumber}_{request.QuestionCount}問";
+        if (baseName.Length > 120)
+        {
+            baseName = baseName[..120];
+        }
+
+        for (var suffix = 1; ; suffix++)
+        {
+            var suffixText = suffix == 1 ? string.Empty : $"_{suffix}";
+            var problemPath = Path.Combine(
+                request.OutputFolder,
+                $"{baseName}{suffixText}_問題.pdf");
+            var answerPath = Path.Combine(
+                request.OutputFolder,
+                $"{baseName}{suffixText}_解答.pdf");
+            if (!File.Exists(problemPath) && !File.Exists(answerPath))
+            {
+                return new ExcelPdfGenerationResult(problemPath, answerPath);
+            }
+        }
+    }
+
+    private static string SanitizeFileName(string value, string fallback)
+    {
+        var invalidCharacters = Path.GetInvalidFileNameChars();
+        var sanitized = new string(value
+            .Trim()
+            .Select(character => invalidCharacters.Contains(character) ? '_' : character)
+            .ToArray());
+        return string.IsNullOrWhiteSpace(sanitized) ? fallback : sanitized;
+    }
+
+    private static void ExportSheetToPdf(dynamic sheet, string outputPath)
+    {
+        // The source workbook is saved with the teacher and student sheets grouped.
+        // Replace the selection so Excel exports only the requested sheet.
+        sheet.Select(Replace: true);
+        sheet.ExportAsFixedFormat(
+            Type: FixedFormatPdf,
+            Filename: outputPath,
+            Quality: QualityStandard,
+            IncludeDocProperties: true,
+            IgnorePrintAreas: false,
+            OpenAfterPublish: false);
+    }
+
+    private static void EnsurePdfCreated(string path)
+    {
+        if (!File.Exists(path) || new FileInfo(path).Length == 0)
+        {
+            throw new InvalidOperationException(
+                $"PDFを作成できませんでした：{Path.GetFileName(path)}");
+        }
+    }
+
+    private static void TryDeleteFile(string path)
+    {
+        try
+        {
+            File.Delete(path);
+        }
+        catch (IOException)
+        {
+        }
+        catch (UnauthorizedAccessException)
+        {
+        }
+    }
+
+    private static void ValidateRequest(ExcelPdfGenerationRequest request)
+    {
+        if (!File.Exists(request.WorkbookPath))
+        {
+            throw new FileNotFoundException("対応するExcelファイルが見つかりません。", request.WorkbookPath);
+        }
+
+        if (request.StartNumber < 1 ||
+            request.EndNumber < request.StartNumber ||
+            request.EndNumber > request.Profile.MaximumQuestionNumber)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(request),
+                "出題範囲が対応範囲外です。");
+        }
+
+        var availableCount = request.EndNumber - request.StartNumber + 1;
+        if (request.QuestionCount < 1 ||
+            request.QuestionCount > request.Profile.MaximumQuestionCount ||
+            request.QuestionCount > availableCount)
+        {
+            throw new ArgumentOutOfRangeException(
+                nameof(request),
+                "問題数が対応範囲外です。");
+        }
+    }
+
+    private static void ReleaseComObject(object? value)
+    {
+        if (value is not null && Marshal.IsComObject(value))
+        {
+            Marshal.FinalReleaseComObject(value);
+        }
+    }
+
+    private static void CollectReleasedComObjects()
+    {
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+        GC.Collect();
+        GC.WaitForPendingFinalizers();
+    }
+}

@@ -179,12 +179,22 @@
                 </Grid.ColumnDefinitions>
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock x:Name="StatusText" FontWeight="SemiBold" Text="設定を確認してください" />
-                <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                               Text="読み取りだけを行います。Excelやプリンターはまだ操作しません。" />
+                    <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                               Text="確認後にPDFを作成できます。プリンターへの印刷は行いません。" />
                 </StackPanel>
-                <Button x:Name="ValidateButton" Grid.Column="1" MinWidth="190"
-                        Style="{StaticResource PrimaryButton}" Click="ValidateButton_Click"
-                        Content="レポートを読み取る" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <CheckBox x:Name="ConfirmResultsCheckBox" Margin="0,0,14,0"
+                              VerticalAlignment="Center"
+                              Checked="ConfirmResultsCheckBox_Changed"
+                              Unchecked="ConfirmResultsCheckBox_Changed"
+                              Content="原本と読み取り結果を確認しました" />
+                    <Button x:Name="ValidateButton" MinWidth="170"
+                            Style="{StaticResource SecondaryButton}" Click="ValidateButton_Click"
+                            Content="レポートを読み取る" />
+                    <Button x:Name="CreatePdfsButton" Margin="10,0,0,0" MinWidth="190"
+                            Style="{StaticResource PrimaryButton}" Click="CreatePdfsButton_Click"
+                            IsEnabled="False" Content="問題・解答PDFを作成" />
+                </StackPanel>
             </Grid>
         </Border>
     </Grid>

@@ -15,6 +15,7 @@ public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ReportFile> _reports = [];
     private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
+    private readonly List<RecognizedReport> _recognizedReports = [];
     private readonly JsonSettingsStore _settingsStore;
 
     public MainWindow()
@@ -54,6 +55,7 @@ public partial class MainWindow : Window
         }
 
         MaterialFolderTextBox.Text = folder;
+        InvalidateRecognitionResults();
         UpdateStatus();
     }
 
@@ -84,9 +86,15 @@ public partial class MainWindow : Window
             return;
         }
 
-        foreach (var report in ReportSelectionService.CreateDistinct(dialog.FileNames, _reports))
+        var addedReports = ReportSelectionService.CreateDistinct(dialog.FileNames, _reports);
+        foreach (var report in addedReports)
         {
             _reports.Add(report);
+        }
+
+        if (addedReports.Count > 0)
+        {
+            InvalidateRecognitionResults();
         }
 
         UpdateReportListState();
@@ -97,6 +105,8 @@ public partial class MainWindow : Window
     {
         _reports.Clear();
         _recognitionResults.Clear();
+        _recognizedReports.Clear();
+        ConfirmResultsCheckBox.IsChecked = false;
         UpdateReportListState();
         UpdateRecognitionResultState();
         UpdateStatus();
@@ -119,6 +129,8 @@ public partial class MainWindow : Window
         await SaveSettingsAsync();
         ValidateButton.IsEnabled = false;
         _recognitionResults.Clear();
+        _recognizedReports.Clear();
+        ConfirmResultsCheckBox.IsChecked = false;
         UpdateRecognitionResultState();
 
         try
@@ -131,6 +143,7 @@ public partial class MainWindow : Window
                 try
                 {
                     var result = await service.RecognizeAsync(report.FullPath, progress);
+                    _recognizedReports.Add(result);
                     _recognitionResults.Add(
                         RecognitionResultItem.Success(result, MaterialFolderTextBox.Text));
                 }
@@ -141,6 +154,7 @@ public partial class MainWindow : Window
                 }
 
                 UpdateRecognitionResultState();
+                UpdatePdfGenerationState();
             }
 
             var failedCount = _recognitionResults.Count(result => result.HasError);
@@ -151,6 +165,85 @@ public partial class MainWindow : Window
         finally
         {
             ValidateButton.IsEnabled = true;
+        }
+    }
+
+    private void ConfirmResultsCheckBox_Changed(object sender, RoutedEventArgs e)
+    {
+        UpdatePdfGenerationState();
+    }
+
+    private async void CreatePdfsButton_Click(object sender, RoutedEventArgs e)
+    {
+        var requests = BuildPdfGenerationRequests();
+        if (requests.Count == 0)
+        {
+            MessageBox.Show(this,
+                "作成できる通常テストがありません。教材フォルダーと読み取り結果を確認してください。",
+                "PDFを作成できません",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        var expectedRequestCount = _recognizedReports.Sum(report => report.TestRequests.Count);
+        if (requests.Count != expectedRequestCount)
+        {
+            MessageBox.Show(this,
+                "未対応または入力エラーのテストがあります。青字のExcel連携表示を確認してください。",
+                "PDFを作成できません",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        var confirmation = MessageBox.Show(this,
+            $"通常テスト {requests.Count}件の問題PDF・解答PDFを作成します。\n" +
+            "プリンターへの印刷は行いません。続けますか？",
+            "PDFを作成します",
+            MessageBoxButton.YesNo,
+            MessageBoxImage.Question);
+        if (confirmation != MessageBoxResult.Yes)
+        {
+            return;
+        }
+
+        CreatePdfsButton.IsEnabled = false;
+        ValidateButton.IsEnabled = false;
+        ConfirmResultsCheckBox.IsEnabled = false;
+        var generatedFiles = new List<string>();
+
+        try
+        {
+            for (var index = 0; index < requests.Count; index++)
+            {
+                StatusText.Text = $"PDFを作成中：{index + 1}/{requests.Count}";
+                var result = await ExcelPdfGenerationService.GenerateAsync(requests[index]);
+                generatedFiles.Add(result.ProblemPdfPath);
+                generatedFiles.Add(result.AnswerPdfPath);
+            }
+
+            StatusText.Text = $"PDF作成完了：{generatedFiles.Count}ファイル";
+            MessageBox.Show(this,
+                $"問題PDFと解答PDFを作成しました。\n\n保存先：{OutputFolderTextBox.Text}",
+                "PDF作成完了",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+        }
+        catch (Exception exception)
+        {
+            StatusText.Text = "PDF作成中にエラーが発生しました";
+            MessageBox.Show(this,
+                exception.Message,
+                "PDFを作成できませんでした",
+                MessageBoxButton.OK,
+                MessageBoxImage.Error);
+        }
+        finally
+        {
+            ValidateButton.IsEnabled = true;
+            ConfirmResultsCheckBox.IsEnabled = true;
+            UpdatePdfGenerationState();
         }
     }
 
@@ -199,6 +292,57 @@ public partial class MainWindow : Window
         RecognitionResultsSection.Visibility = _recognitionResults.Count == 0
             ? Visibility.Collapsed
             : Visibility.Visible;
+    }
+
+    private void UpdatePdfGenerationState()
+    {
+        CreatePdfsButton.IsEnabled =
+            ConfirmResultsCheckBox.IsChecked == true &&
+            _recognizedReports.Count > 0 &&
+            _recognizedReports.SelectMany(report => report.TestRequests).Any();
+    }
+
+    private void InvalidateRecognitionResults()
+    {
+        _recognizedReports.Clear();
+        _recognitionResults.Clear();
+        ConfirmResultsCheckBox.IsChecked = false;
+        UpdateRecognitionResultState();
+        UpdatePdfGenerationState();
+    }
+
+    private List<ExcelPdfGenerationRequest> BuildPdfGenerationRequests()
+    {
+        var requests = new List<ExcelPdfGenerationRequest>();
+        foreach (var report in _recognizedReports)
+        {
+            foreach (var testRequest in report.TestRequests)
+            {
+                var preparation = ExcelTemplateCatalog.Prepare(
+                    testRequest,
+                    MaterialFolderTextBox.Text);
+                if (!preparation.IsValid ||
+                    preparation.Profile is null ||
+                    preparation.WorkbookPath is null ||
+                    preparation.StartNumber is null ||
+                    preparation.EndNumber is null)
+                {
+                    continue;
+                }
+
+                requests.Add(new ExcelPdfGenerationRequest(
+                    report.StudentName,
+                    testRequest.MaterialName,
+                    testRequest.QuestionCount,
+                    preparation.StartNumber.Value,
+                    preparation.EndNumber.Value,
+                    preparation.WorkbookPath,
+                    OutputFolderTextBox.Text,
+                    preparation.Profile));
+            }
+        }
+
+        return requests;
     }
 
     private void UpdateStatus()
