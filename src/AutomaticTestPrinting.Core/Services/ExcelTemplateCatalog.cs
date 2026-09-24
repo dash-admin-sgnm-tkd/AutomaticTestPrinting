@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using AutomaticTestPrinting.Core.Models;
 
@@ -16,18 +17,63 @@ public static partial class ExcelTemplateCatalog
         "作業シート",
         "G1",
         "G2",
+        "問題解答リスト",
         "講師用",
         "生徒用");
 
-    private static readonly IReadOnlyList<ExcelTemplateProfile> Profiles = [Target1900];
+    private static readonly ExcelTemplateProfile EikenPre1Ex = new(
+        "eiken-pre1-ex-second-edition",
+        "英検準1級単熟語EX（第2版）",
+        "準1級単熟語EX",
+        ["英検準1級単熟語EX第2版", "英検準1級単熟語EX", "準1級単熟語EX"],
+        2412,
+        100,
+        "作業シート",
+        "G1",
+        "G2",
+        "問題解答リスト",
+        "講師用",
+        "生徒用");
+
+    private static readonly ExcelTemplateProfile Target1000 = new(
+        "target-1000-fifth-edition",
+        "英熟語ターゲット1000（5訂版）",
+        "英熟語ターゲット1000",
+        ["英熟語ターゲット1000", "ターゲット1000"],
+        1000,
+        100,
+        "作業シート",
+        "G1",
+        "G2",
+        "問題解答リスト",
+        "講師用",
+        "生徒用");
+
+    private static readonly ExcelTemplateProfile Vintage4 = new(
+        "vintage-fourth-edition",
+        "Vintage（4th Edition）",
+        "Vintage",
+        ["Vintage4thEdition", "Vintage"],
+        1596,
+        25,
+        "作業シート",
+        "G1",
+        "G2",
+        "問題解答リスト",
+        "講師用",
+        "生徒用");
+
+    private static readonly IReadOnlyList<ExcelTemplateProfile> Profiles =
+        [Target1900, EikenPre1Ex, Target1000, Vintage4];
 
     public static ExcelRequestPreparation Prepare(
         NormalTestRequestCandidate request,
         string? materialFolder)
     {
+        var normalizedMaterialName = NormalizeName(request.MaterialName);
         var profile = Profiles.FirstOrDefault(candidate =>
             candidate.MaterialNameKeywords.Any(keyword =>
-                request.MaterialName.Contains(keyword, StringComparison.OrdinalIgnoreCase)));
+                normalizedMaterialName.Contains(NormalizeName(keyword), StringComparison.Ordinal)));
 
         if (profile is null)
         {
@@ -105,10 +151,11 @@ public static partial class ExcelTemplateCatalog
 
         try
         {
+            var normalizedKeyword = NormalizeName(fileNameKeyword);
             return Directory.EnumerateFiles(materialFolder, "*.xlsm", SearchOption.AllDirectories)
                 .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
-                .FirstOrDefault(path => Path.GetFileNameWithoutExtension(path)
-                    .Contains(fileNameKeyword, StringComparison.OrdinalIgnoreCase));
+                .FirstOrDefault(path => NormalizeName(Path.GetFileNameWithoutExtension(path))
+                    .Contains(normalizedKeyword, StringComparison.Ordinal));
         }
         catch (UnauthorizedAccessException)
         {
@@ -118,6 +165,14 @@ public static partial class ExcelTemplateCatalog
         {
             return null;
         }
+    }
+
+    private static string NormalizeName(string value)
+    {
+        var normalized = value.Normalize(NormalizationForm.FormKC);
+        return string.Concat(normalized
+            .Where(char.IsLetterOrDigit)
+            .Select(char.ToLowerInvariant));
     }
 
     [GeneratedRegex(@"^\s*(\d+)\s*[-ー〜～~–—]\s*(\d+)\s*$")]

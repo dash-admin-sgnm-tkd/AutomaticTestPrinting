@@ -70,6 +70,7 @@ public static class ExcelPdfGenerationService
         object? workbook = null;
         object? worksheets = null;
         object? backgroundSheet = null;
+        object? questionListSheet = null;
         object? teacherSheet = null;
         object? studentSheet = null;
         ExcelPdfGenerationResult? outputPaths = null;
@@ -104,6 +105,7 @@ public static class ExcelPdfGenerationService
             worksheets = openedWorkbook.Worksheets;
             dynamic worksheetCollection = worksheets;
             backgroundSheet = worksheetCollection[request.Profile.WorkingSheetName];
+            questionListSheet = worksheetCollection[request.Profile.QuestionListSheetName];
             teacherSheet = worksheetCollection[request.Profile.TeacherSheetName];
             studentSheet = worksheetCollection[request.Profile.StudentSheetName];
 
@@ -114,6 +116,7 @@ public static class ExcelPdfGenerationService
             PrepareWorkbook(
                 excelApplication,
                 backgroundSheet,
+                questionListSheet,
                 teacherSheet,
                 studentSheet,
                 request);
@@ -154,6 +157,7 @@ public static class ExcelPdfGenerationService
 
             ReleaseComObject(studentSheet);
             ReleaseComObject(teacherSheet);
+            ReleaseComObject(questionListSheet);
             ReleaseComObject(backgroundSheet);
             ReleaseComObject(worksheets);
             ReleaseComObject(workbook);
@@ -183,6 +187,7 @@ public static class ExcelPdfGenerationService
     private static void PrepareWorkbook(
         dynamic excelApplication,
         dynamic backgroundSheet,
+        dynamic questionListSheet,
         dynamic teacherSheet,
         dynamic studentSheet,
         ExcelPdfGenerationRequest request)
@@ -207,6 +212,10 @@ public static class ExcelPdfGenerationService
         SetCellValue(backgroundSheet, request.Profile.RangeEndCell, request.EndNumber);
         excelApplication.CalculateFullRebuild();
 
+        var questions = ReadQuestions(
+            backgroundSheet,
+            questionListSheet,
+            request.QuestionCount);
         var firstPageCount = Math.Min(request.QuestionCount, 50);
         var secondPageCount = Math.Max(request.QuestionCount - 50, 0);
         var titles = new object[,] { { "番号", "問題", "解答" } };
@@ -219,12 +228,14 @@ public static class ExcelPdfGenerationService
                 $"&20 範囲：{request.StartNumber}-{request.EndNumber}");
         }
 
-        CopyValues(
-            backgroundSheet.Range[$"A2:C{firstPageCount + 1}"],
-            teacherSheet.Range[$"B2:D{firstPageCount + 1}"]);
-        CopyValues(
-            backgroundSheet.Range[$"A2:B{firstPageCount + 1}"],
-            studentSheet.Range[$"B2:C{firstPageCount + 1}"]);
+        SetRangeValue(
+            teacherSheet,
+            $"B2:D{firstPageCount + 1}",
+            CreateOutputValues(questions, 0, firstPageCount, includeAnswers: true));
+        SetRangeValue(
+            studentSheet,
+            $"B2:D{firstPageCount + 1}",
+            CreateOutputValues(questions, 0, firstPageCount, includeAnswers: false));
         ApplyBorders(teacherSheet.Range[$"B1:D{firstPageCount + 1}"]);
         ApplyBorders(studentSheet.Range[$"B1:D{firstPageCount + 1}"]);
 
@@ -235,12 +246,14 @@ public static class ExcelPdfGenerationService
                 SetRangeValue(sheet, "F1:H1", titles);
             }
 
-            CopyValues(
-                backgroundSheet.Range[$"A52:C{secondPageCount + 51}"],
-                teacherSheet.Range[$"F2:H{secondPageCount + 1}"]);
-            CopyValues(
-                backgroundSheet.Range[$"A52:B{secondPageCount + 51}"],
-                studentSheet.Range[$"F2:G{secondPageCount + 1}"]);
+            SetRangeValue(
+                teacherSheet,
+                $"F2:H{secondPageCount + 1}",
+                CreateOutputValues(questions, 50, secondPageCount, includeAnswers: true));
+            SetRangeValue(
+                studentSheet,
+                $"F2:H{secondPageCount + 1}",
+                CreateOutputValues(questions, 50, secondPageCount, includeAnswers: false));
             ApplyBorders(teacherSheet.Range[$"F1:H{secondPageCount + 1}"]);
             ApplyBorders(studentSheet.Range[$"F1:H{secondPageCount + 1}"]);
         }
@@ -266,6 +279,104 @@ public static class ExcelPdfGenerationService
         {
             ReleaseComObject(cell);
         }
+    }
+
+    private static List<QuestionData> ReadQuestions(
+        dynamic backgroundSheet,
+        dynamic questionListSheet,
+        int questionCount)
+    {
+        dynamic selectedNumberRange = backgroundSheet.Range[$"A2:A{questionCount + 1}"];
+        dynamic usedRange = questionListSheet.UsedRange;
+        dynamic usedRows = usedRange.Rows;
+        var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
+            Convert.ToInt32(usedRows.Count, CultureInfo.InvariantCulture) - 1;
+        dynamic sourceRange = questionListSheet.Range[$"B2:D{lastUsedRow}"];
+        try
+        {
+            object? selectedNumbers = selectedNumberRange.Value2;
+            var selectedNumberMatrix = selectedNumbers as object[,];
+            var sourceValues = (object[,])sourceRange.Value2;
+            var sourceByNumber = new Dictionary<int, QuestionData>();
+            for (var row = 1; row <= sourceValues.GetLength(0); row++)
+            {
+                if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number))
+                {
+                    continue;
+                }
+
+                var question = Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture);
+                var answer = Convert.ToString(sourceValues[row, 3], CultureInfo.InvariantCulture);
+                if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
+                {
+                    continue;
+                }
+
+                if (!sourceByNumber.TryAdd(number, new QuestionData(number, question, answer)))
+                {
+                    throw new InvalidOperationException(
+                        $"Excelの問題解答リストに問題番号 {number} が重複しています。");
+                }
+            }
+
+            var questions = new List<QuestionData>(questionCount);
+            for (var row = 1; row <= questionCount; row++)
+            {
+                var selectedValue = selectedNumberMatrix is null
+                    ? selectedNumbers
+                    : selectedNumberMatrix[row, 1];
+                if (!TryConvertQuestionNumber(selectedValue, out int number) ||
+                    !sourceByNumber.TryGetValue(number, out var question))
+                {
+                    throw new InvalidOperationException(
+                        "Excelの問題・解答リストから出題内容を取得できませんでした。");
+                }
+
+                questions.Add(question);
+            }
+
+            return questions;
+        }
+        finally
+        {
+            ReleaseComObject(sourceRange);
+            ReleaseComObject(usedRows);
+            ReleaseComObject(usedRange);
+            ReleaseComObject(selectedNumberRange);
+        }
+    }
+
+    private static bool TryConvertQuestionNumber(object? value, out int number)
+    {
+        if (value is double numericValue)
+        {
+            number = Convert.ToInt32(numericValue, CultureInfo.InvariantCulture);
+            return true;
+        }
+
+        return int.TryParse(
+            Convert.ToString(value, CultureInfo.InvariantCulture),
+            NumberStyles.Integer,
+            CultureInfo.InvariantCulture,
+            out number);
+    }
+
+    private static object[,] CreateOutputValues(
+        IReadOnlyList<QuestionData> questions,
+        int startIndex,
+        int count,
+        bool includeAnswers)
+    {
+        var values = new object[count, 3];
+        for (var index = 0; index < count; index++)
+        {
+            var question = questions[startIndex + index];
+            values[index, 0] = question.Number;
+            values[index, 1] = question.Question;
+            values[index, 2] = includeAnswers ? question.Answer : string.Empty;
+        }
+
+        return values;
     }
 
     private static void SetRangeValue(dynamic sheet, string address, object value)
@@ -346,19 +457,6 @@ public static class ExcelPdfGenerationService
             {
                 ReleaseComObject(cell);
             }
-        }
-    }
-
-    private static void CopyValues(dynamic source, dynamic destination)
-    {
-        try
-        {
-            destination.Value2 = source.Value2;
-        }
-        finally
-        {
-            ReleaseComObject(destination);
-            ReleaseComObject(source);
         }
     }
 
@@ -546,4 +644,6 @@ public static class ExcelPdfGenerationService
         GC.Collect();
         GC.WaitForPendingFinalizers();
     }
+
+    private sealed record QuestionData(int Number, string Question, string Answer);
 }

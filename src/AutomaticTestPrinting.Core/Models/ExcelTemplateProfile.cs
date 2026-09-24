@@ -10,6 +10,7 @@ public sealed record ExcelTemplateProfile(
     string WorkingSheetName,
     string RangeStartCell,
     string RangeEndCell,
+    string QuestionListSheetName,
     string TeacherSheetName,
     string StudentSheetName);
 
