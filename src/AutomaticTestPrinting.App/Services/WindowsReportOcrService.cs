@@ -54,16 +54,16 @@ public sealed class WindowsReportOcrService
             await page.RenderToStreamAsync(stream, options);
             var upright = await RecognizeRotationAsync(stream, BitmapRotation.None);
             var upsideDown = await RecognizeRotationAsync(stream, BitmapRotation.Clockwise180Degrees);
-            var selected = Score(upsideDown) > Score(upright)
-                ? new RecognizedReportPage((int)index + 1, 180, upsideDown)
-                : new RecognizedReportPage((int)index + 1, 0, upright);
+            var selected = Score(upsideDown.Text) > Score(upright.Text)
+                ? CreatePageResult((int)index + 1, 180, upsideDown)
+                : CreatePageResult((int)index + 1, 0, upright);
             pages.Add(selected);
         }
 
         return ReportTextParser.Parse(pdfPath, pages);
     }
 
-    private async Task<string> RecognizeRotationAsync(
+    private async Task<OcrCandidate> RecognizeRotationAsync(
         InMemoryRandomAccessStream stream,
         BitmapRotation rotation)
     {
@@ -77,8 +77,28 @@ public sealed class WindowsReportOcrService
             ExifOrientationMode.IgnoreExifOrientation,
             ColorManagementMode.DoNotColorManage);
         var result = await _ocrEngine.RecognizeAsync(bitmap);
-        return result.Text;
+        var words = result.Lines
+            .SelectMany((line, lineIndex) => line.Words.Select(word => new RecognizedWord(
+                word.Text,
+                word.BoundingRect.X,
+                word.BoundingRect.Y,
+                word.BoundingRect.Width,
+                word.BoundingRect.Height,
+                lineIndex)))
+            .ToArray();
+        return new OcrCandidate(result.Text, bitmap.PixelWidth, bitmap.PixelHeight, words);
     }
+
+    private static RecognizedReportPage CreatePageResult(
+        int pageNumber,
+        int rotationDegrees,
+        OcrCandidate candidate) => new(
+            pageNumber,
+            rotationDegrees,
+            candidate.Text,
+            candidate.PixelWidth,
+            candidate.PixelHeight,
+            candidate.Words);
 
     private static int Score(string text)
     {
@@ -103,4 +123,10 @@ public sealed class WindowsReportOcrService
 
         return count;
     }
+
+    private sealed record OcrCandidate(
+        string Text,
+        int PixelWidth,
+        int PixelHeight,
+        IReadOnlyList<RecognizedWord> Words);
 }

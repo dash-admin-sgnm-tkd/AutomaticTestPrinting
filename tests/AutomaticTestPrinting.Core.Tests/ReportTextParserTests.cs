@@ -23,7 +23,7 @@ public sealed class ReportTextParserTests
         var result = ReportTextParser.Parse("report.pdf", pages);
 
         Assert.Equal("相川創太", result.StudentName);
-        Assert.Equal("問題数のOCR候補：50問・25問・25問（原本確認）", result.NormalTestSummary);
+        Assert.Equal("依頼欄あり（問題数は画面で確認してください）", result.NormalTestSummary);
         Assert.Equal("段階突破の記載あり（内容を確認してください）", result.StageTestSummary);
     }
 
@@ -46,5 +46,40 @@ public sealed class ReportTextParserTests
 
         Assert.Equal("石村光彩", result.StudentName);
         Assert.Equal("段階突破：国語（古文）・2020年度・第2回", result.StageTestSummary);
+    }
+
+    [Fact]
+    public void Parse_LinksCountToMaterialAndRangeByColumnPosition()
+    {
+        var words = new[]
+        {
+            new RecognizedWord("次回までの宿題", 10, 10, 140, 20, 0),
+            new RecognizedWord("高校英語", 370, 50, 100, 20, 1),
+            new RecognizedWord("英単語ターゲット1900", 350, 85, 140, 20, 2),
+            new RecognizedWord("月日", 10, 150, 40, 20, 3),
+            new RecognizedWord("曜日", 60, 150, 40, 20, 4),
+            new RecognizedWord("1-1900", 380, 150, 80, 20, 5),
+            new RecognizedWord("9/20", 10, 200, 50, 20, 6),
+            new RecognizedWord("テスト作成依頼", 10, 300, 160, 20, 7),
+            new RecognizedWord("50", 405, 302, 30, 20, 8)
+        };
+        var pages = new[]
+        {
+            new RecognizedReportPage(
+                1,
+                0,
+                "生徒名:山田太郎 講師名:講師 次回までの宿題 テスト作成依頼",
+                1000,
+                500,
+                words)
+        };
+
+        var result = ReportTextParser.Parse("report.pdf", pages);
+
+        var request = Assert.Single(result.TestRequests);
+        Assert.Equal("英単語ターゲット1900", request.MaterialName);
+        Assert.Equal("1-1900", request.Range);
+        Assert.Equal(50, request.QuestionCount);
+        Assert.Equal("通常テスト候補：1件（原本確認）", result.NormalTestSummary);
     }
 }
