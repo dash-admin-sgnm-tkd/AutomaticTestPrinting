@@ -98,8 +98,44 @@ public static partial class ExcelTemplateCatalog
         AnswerColumnWidth: 44,
         OutputRowHeight: 18);
 
+    private static readonly ExcelTemplateProfile CivicPoliticsEconomicsFifth = new(
+        "civic-politics-economics-fifth-edition",
+        "共通テスト 公共、政治・経済 集中講義（五訂版）",
+        "共通テスト 公共、政治・経済 集中講義",
+        [
+            "新課程共通テスト公共政治経済集中講義五訂版",
+            "共通テスト公共政治経済集中講義五訂版",
+            "公共政治経済集中講義"
+        ],
+        61,
+        25,
+        "作業シート",
+        "",
+        "",
+        "問題解答リスト",
+        "講師用",
+        "生徒用",
+        UseWideAnswerLayout: true,
+        RangeUsesSectionMapping: true,
+        SectionMappingSheetName: "操作シート",
+        SectionMappingUsesGridPairs: true,
+        SourceHasSeparateDisplayNumber: true,
+        QuestionColumnWidth: 100,
+        AnswerColumnWidth: 22,
+        AutoFitOutputRows: true,
+        HeaderTitle: "[五訂版]公共・政治経済 集中講義",
+        FitToSinglePageTall: true);
+
     private static readonly IReadOnlyList<ExcelTemplateProfile> Profiles =
-        [Target1900, EikenPre1Ex, Target1000, Vintage4, Vocabulary1700, RapidReadingIdiomsRevised];
+        [
+            Target1900,
+            EikenPre1Ex,
+            Target1000,
+            Vintage4,
+            Vocabulary1700,
+            RapidReadingIdiomsRevised,
+            CivicPoliticsEconomicsFifth
+        ];
 
     public static ExcelRequestPreparation Prepare(
         NormalTestRequestCandidate request,

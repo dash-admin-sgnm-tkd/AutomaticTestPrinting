@@ -16,9 +16,16 @@ public sealed record ExcelTemplateProfile(
     bool UseWideAnswerLayout = false,
     bool RangeUsesSectionMapping = false,
     string? SectionMappingSheetName = null,
+    bool SectionMappingUsesGridPairs = false,
+    bool SourceHasSeparateDisplayNumber = false,
     double QuestionColumnWidth = 18,
     double AnswerColumnWidth = 72,
-    double OutputRowHeight = 30);
+    double OutputRowHeight = 30,
+    bool AutoFitOutputRows = false,
+    string TeacherHeaderText = "解答",
+    string StudentHeaderText = "問題",
+    string? HeaderTitle = null,
+    bool FitToSinglePageTall = false);
 
 public sealed record ExcelRequestPreparation(
     bool IsSupported,

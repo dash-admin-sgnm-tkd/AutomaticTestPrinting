@@ -91,6 +91,12 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         "17-61",
         25,
         "rapid-reading-idioms-revised")]
+    [InlineData(
+        "【新課程】共通テスト 公共、政治・経済 集中講義 五訂版",
+        "★[五訂版]共通テスト 公共、政治・経済 集中講義 必携一問一答問題集 別冊_20240830本部.xlsm",
+        "1-61",
+        25,
+        "civic-politics-economics-fifth-edition")]
     public void Prepare_AcceptsNewlySupportedReportMaterial(
         string materialName,
         string workbookName,
@@ -179,6 +185,22 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         File.WriteAllBytes(Path.Combine(_directory, "速読英熟語.xlsm"), []);
         var request = new NormalTestRequestCandidate(
             "速読英熟語改訂版", "1-75", 25, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.True(result.IsSupported);
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Prepare_RejectsCivicPoliticsEconomicsSectionOutsideWorkbook()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(
+            Path.Combine(_directory, "共通テスト 公共、政治・経済 集中講義.xlsm"),
+            []);
+        var request = new NormalTestRequestCandidate(
+            "共通テスト公共政治経済集中講義五訂版", "1-62", 25, 1, true);
 
         var result = ExcelTemplateCatalog.Prepare(request, _directory);
 

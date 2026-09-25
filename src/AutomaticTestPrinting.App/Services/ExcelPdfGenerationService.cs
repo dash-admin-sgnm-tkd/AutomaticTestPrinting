@@ -231,7 +231,9 @@ public static class ExcelPdfGenerationService
                 questionListSheet,
                 request.StartNumber,
                 request.EndNumber,
-                request.QuestionCount);
+                request.QuestionCount,
+                request.Profile.SectionMappingUsesGridPairs,
+                request.Profile.SourceHasSeparateDisplayNumber);
         }
         else
         {
@@ -254,8 +256,21 @@ public static class ExcelPdfGenerationService
                 sheet,
                 $"&20 範囲：{request.StartNumber}-{request.EndNumber}");
         }
-        SetCenterHeader(teacherSheet, "&20 解答");
-        SetCenterHeader(studentSheet, "&20 問題");
+        SetCenterHeader(teacherSheet, $"&20 {request.Profile.TeacherHeaderText}");
+        SetCenterHeader(studentSheet, $"&20 {request.Profile.StudentHeaderText}");
+        if (!string.IsNullOrWhiteSpace(request.Profile.HeaderTitle))
+        {
+            SetLeftHeader(teacherSheet, $"&20{request.Profile.HeaderTitle}");
+            SetLeftHeader(studentSheet, $"&20{request.Profile.HeaderTitle}");
+        }
+
+        if (request.Profile.SourceHasSeparateDisplayNumber)
+        {
+            foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
+            {
+                SetRangeNumberFormat(sheet, $"B2:B{firstPageCount + 1}", "@");
+            }
+        }
 
         SetRangeValue(
             teacherSheet,
@@ -301,7 +316,9 @@ public static class ExcelPdfGenerationService
                 firstPageCount,
                 request.Profile.QuestionColumnWidth,
                 request.Profile.AnswerColumnWidth,
-                request.Profile.OutputRowHeight);
+                request.Profile.OutputRowHeight,
+                request.Profile.AutoFitOutputRows,
+                request.Profile.FitToSinglePageTall);
         }
 
         ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
@@ -391,26 +408,25 @@ public static class ExcelPdfGenerationService
         dynamic questionListSheet,
         int startSection,
         int endSection,
-        int questionCount)
+        int questionCount,
+        bool mappingUsesGridPairs,
+        bool sourceHasSeparateDisplayNumber)
     {
-        dynamic firstNumberCell = sectionMappingSheet.Range[$"A{startSection}"];
-        dynamic lastNumberCell = sectionMappingSheet.Range[$"B{endSection}"];
         dynamic usedRange = questionListSheet.UsedRange;
         dynamic usedRows = usedRange.Rows;
         var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
             Convert.ToInt32(usedRows.Count, CultureInfo.InvariantCulture) - 1;
-        dynamic sourceRange = questionListSheet.Range[$"A2:C{lastUsedRow}"];
+        dynamic sourceRange = sourceHasSeparateDisplayNumber
+            ? questionListSheet.Range[$"B2:E{lastUsedRow}"]
+            : questionListSheet.Range[$"A2:C{lastUsedRow}"];
         try
         {
-            object? firstNumberValue = firstNumberCell.Value2;
-            object? lastNumberValue = lastNumberCell.Value2;
-            if (!TryConvertQuestionNumber(firstNumberValue, out int firstNumber) ||
-                !TryConvertQuestionNumber(lastNumberValue, out int lastNumber) ||
-                firstNumber < 1 || lastNumber < firstNumber)
-            {
-                throw new InvalidOperationException(
-                    $"テーマ {startSection}-{endSection} の対応範囲を取得できませんでした。");
-            }
+            SectionMappingData? gridMapping = mappingUsesGridPairs
+                ? ReadGridSectionMapping((object)sectionMappingSheet, startSection, endSection)
+                : null;
+            var (firstNumber, lastNumber) = gridMapping is null
+                ? ReadRowSectionBounds((object)sectionMappingSheet, startSection, endSection)
+                : (gridMapping.FirstNumber, gridMapping.LastNumber);
 
             var sourceValues = (object[,])sourceRange.Value2;
             var candidates = new List<QuestionData>();
@@ -423,8 +439,20 @@ public static class ExcelPdfGenerationService
                     continue;
                 }
 
-                var question = Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture);
-                var answer = Convert.ToString(sourceValues[row, 3], CultureInfo.InvariantCulture);
+                object displayNumber = sourceHasSeparateDisplayNumber &&
+                    gridMapping?.DisplayNumbers.TryGetValue(number, out var mappedNumber) == true
+                        ? mappedNumber
+                        : sourceHasSeparateDisplayNumber
+                            ? Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture) ?? string.Empty
+                            : number;
+                var questionColumn = sourceHasSeparateDisplayNumber ? 3 : 2;
+                var answerColumn = sourceHasSeparateDisplayNumber ? 4 : 3;
+                var question = Convert.ToString(
+                    sourceValues[row, questionColumn],
+                    CultureInfo.InvariantCulture);
+                var answer = Convert.ToString(
+                    sourceValues[row, answerColumn],
+                    CultureInfo.InvariantCulture);
                 if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
                 {
                     continue;
@@ -433,10 +461,15 @@ public static class ExcelPdfGenerationService
                 if (!seenNumbers.Add(number))
                 {
                     throw new InvalidOperationException(
-                        $"Excelの単語リストに問題番号 {number} が重複しています。");
+                        $"Excelの問題リストに問題番号 {number} が重複しています。");
                 }
 
-                candidates.Add(new QuestionData(number, question, answer));
+                candidates.Add(new QuestionData(
+                    string.IsNullOrWhiteSpace(Convert.ToString(displayNumber, CultureInfo.InvariantCulture))
+                        ? number
+                        : displayNumber,
+                    question,
+                    answer));
             }
 
             if (candidates.Count < questionCount)
@@ -459,9 +492,112 @@ public static class ExcelPdfGenerationService
             ReleaseComObject(sourceRange);
             ReleaseComObject(usedRows);
             ReleaseComObject(usedRange);
+        }
+    }
+
+    private static (int FirstNumber, int LastNumber) ReadRowSectionBounds(
+        object sectionMappingSheet,
+        int startSection,
+        int endSection)
+    {
+        dynamic sheet = sectionMappingSheet;
+        dynamic firstNumberCell = sheet.Range[$"A{startSection}"];
+        dynamic lastNumberCell = sheet.Range[$"B{endSection}"];
+        try
+        {
+            object? firstNumberValue = firstNumberCell.Value2;
+            object? lastNumberValue = lastNumberCell.Value2;
+            if (!TryConvertQuestionNumber(firstNumberValue, out int firstNumber) ||
+                !TryConvertQuestionNumber(lastNumberValue, out int lastNumber) ||
+                firstNumber < 1 || lastNumber < firstNumber)
+            {
+                throw new InvalidOperationException(
+                    $"テーマ {startSection}-{endSection} の対応範囲を取得できませんでした。");
+            }
+
+            return (firstNumber, lastNumber);
+        }
+        finally
+        {
             ReleaseComObject(lastNumberCell);
             ReleaseComObject(firstNumberCell);
         }
+    }
+
+    private static SectionMappingData ReadGridSectionMapping(
+        object sectionMappingSheet,
+        int startSection,
+        int endSection)
+    {
+        dynamic sheet = sectionMappingSheet;
+        dynamic mappingRange = sheet.Range["B10:I42"];
+        try
+        {
+            var values = (object[,])mappingRange.Value2;
+            int? firstNumber = null;
+            int? lastNumber = null;
+            var displayNumbers = new Dictionary<int, string>();
+            for (var row = 1; row <= values.GetLength(0); row++)
+            {
+                for (var sectionColumn = 1; sectionColumn <= 7; sectionColumn += 2)
+                {
+                    if (!TryConvertQuestionNumber(
+                            values[row, sectionColumn],
+                            out var sectionNumber) ||
+                        !TryParseNumberRange(
+                            values[row, sectionColumn + 1],
+                            out var rangeStart,
+                            out var rangeEnd))
+                    {
+                        continue;
+                    }
+
+                    if (sectionNumber == startSection)
+                    {
+                        firstNumber = rangeStart;
+                    }
+
+                    if (sectionNumber == endSection)
+                    {
+                        lastNumber = rangeEnd;
+                    }
+
+                    for (var number = rangeStart; number <= rangeEnd; number++)
+                    {
+                        displayNumbers[number] = $"{sectionNumber}-{number - rangeStart + 1}";
+                    }
+                }
+            }
+
+            if (firstNumber is null || lastNumber is null || lastNumber < firstNumber)
+            {
+                throw new InvalidOperationException(
+                    $"見出し {startSection}-{endSection} の対応範囲を取得できませんでした。");
+            }
+
+            return new SectionMappingData(
+                firstNumber.Value,
+                lastNumber.Value,
+                displayNumbers);
+        }
+        finally
+        {
+            ReleaseComObject(mappingRange);
+        }
+    }
+
+    private static bool TryParseNumberRange(
+        object? value,
+        out int startNumber,
+        out int endNumber)
+    {
+        startNumber = 0;
+        endNumber = 0;
+        var text = Convert.ToString(value, CultureInfo.InvariantCulture) ?? string.Empty;
+        var pieces = text.Split('-', StringSplitOptions.TrimEntries);
+        return pieces.Length == 2 &&
+            int.TryParse(pieces[0], NumberStyles.Integer, CultureInfo.InvariantCulture, out startNumber) &&
+            int.TryParse(pieces[1], NumberStyles.Integer, CultureInfo.InvariantCulture, out endNumber);
     }
 
     private static bool TryConvertQuestionNumber(object? value, out int number)
@@ -523,12 +659,41 @@ public static class ExcelPdfGenerationService
         }
     }
 
+    private static void SetRangeNumberFormat(
+        dynamic sheet,
+        string address,
+        string numberFormat)
+    {
+        dynamic range = sheet.Range[address];
+        try
+        {
+            range.NumberFormat = numberFormat;
+        }
+        finally
+        {
+            ReleaseComObject(range);
+        }
+    }
+
     private static void SetCenterHeader(dynamic sheet, string value)
     {
         dynamic pageSetup = sheet.PageSetup;
         try
         {
             pageSetup.CenterHeader = value;
+        }
+        finally
+        {
+            ReleaseComObject(pageSetup);
+        }
+    }
+
+    private static void SetLeftHeader(dynamic sheet, string value)
+    {
+        dynamic pageSetup = sheet.PageSetup;
+        try
+        {
+            pageSetup.LeftHeader = value;
         }
         finally
         {
@@ -555,7 +720,9 @@ public static class ExcelPdfGenerationService
         int rowCount,
         double questionColumnWidth,
         double answerColumnWidth,
-        double outputRowHeight)
+        double outputRowHeight,
+        bool autoFitOutputRows,
+        bool fitToSinglePageTall)
     {
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
         {
@@ -582,7 +749,14 @@ public static class ExcelPdfGenerationService
                 pageSetup.Orientation = 2;
                 pageSetup.Zoom = false;
                 pageSetup.FitToPagesWide = 1;
-                pageSetup.FitToPagesTall = false;
+                if (fitToSinglePageTall)
+                {
+                    pageSetup.FitToPagesTall = 1;
+                }
+                else
+                {
+                    pageSetup.FitToPagesTall = false;
+                }
                 pageSetup.CenterHorizontally = true;
             }
             finally
@@ -596,16 +770,43 @@ public static class ExcelPdfGenerationService
                 ReleaseComObject(numberColumn);
             }
 
-            for (var row = 1; row <= rowCount + 1; row++)
+            dynamic headerRow = sheet.Rows[1];
+            try
             {
-                dynamic outputRow = sheet.Rows[row];
+                headerRow.RowHeight = 20;
+            }
+            finally
+            {
+                ReleaseComObject(headerRow);
+            }
+
+            if (autoFitOutputRows)
+            {
+                dynamic dataRange = sheet.Range[$"B2:D{rowCount + 1}"];
+                dynamic dataRows = dataRange.Rows;
                 try
                 {
-                    outputRow.RowHeight = row == 1 ? 20 : outputRowHeight;
+                    dataRows.AutoFit();
                 }
                 finally
                 {
-                    ReleaseComObject(outputRow);
+                    ReleaseComObject(dataRows);
+                    ReleaseComObject(dataRange);
+                }
+            }
+            else
+            {
+                for (var row = 2; row <= rowCount + 1; row++)
+                {
+                    dynamic outputRow = sheet.Rows[row];
+                    try
+                    {
+                        outputRow.RowHeight = outputRowHeight;
+                    }
+                    finally
+                    {
+                        ReleaseComObject(outputRow);
+                    }
                 }
             }
 
@@ -675,7 +876,7 @@ public static class ExcelPdfGenerationService
         int firstPageCount,
         int secondPageCount)
     {
-        var numbers = new List<int>(firstPageCount + secondPageCount);
+        var numbers = new List<string>(firstPageCount + secondPageCount);
         ReadQuestionNumbers(teacherSheet, "B", firstPageCount, numbers);
         if (secondPageCount > 0)
         {
@@ -700,7 +901,7 @@ public static class ExcelPdfGenerationService
         dynamic sheet,
         string column,
         int count,
-        ICollection<int> destination)
+        ICollection<string> destination)
     {
         for (var row = 2; row < count + 2; row++)
         {
@@ -708,13 +909,14 @@ public static class ExcelPdfGenerationService
             try
             {
                 var value = cell.Value2;
-                if (value is not double numericValue)
+                var number = Convert.ToString(value, CultureInfo.InvariantCulture);
+                if (string.IsNullOrWhiteSpace(number))
                 {
                     throw new InvalidOperationException(
                         "Excelの問題番号に計算エラーがあります。範囲を確認してください。");
                 }
 
-                destination.Add(Convert.ToInt32(numericValue, CultureInfo.InvariantCulture));
+                destination.Add(number);
             }
             finally
             {
@@ -842,5 +1044,10 @@ public static class ExcelPdfGenerationService
         GC.WaitForPendingFinalizers();
     }
 
-    private sealed record QuestionData(int Number, string Question, string Answer);
+    private sealed record SectionMappingData(
+        int FirstNumber,
+        int LastNumber,
+        IReadOnlyDictionary<int, string> DisplayNumbers);
+
+    private sealed record QuestionData(object Number, string Question, string Answer);
 }
