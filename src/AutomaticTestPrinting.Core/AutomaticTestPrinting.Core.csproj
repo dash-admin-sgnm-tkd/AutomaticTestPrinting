@@ -6,4 +6,13 @@
     <Nullable>enable</Nullable>
   </PropertyGroup>
 
+  <ItemGroup>
+    <Content Include="Configuration\materials.json"
+             Link="materials.json"
+             CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Configuration\materials.json"
+                      LogicalName="AutomaticTestPrinting.Core.Configuration.materials.json" />
+  </ItemGroup>
+
 </Project>

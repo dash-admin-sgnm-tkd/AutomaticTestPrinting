@@ -208,6 +208,67 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         Assert.False(result.IsValid);
     }
 
+    [Fact]
+    public void MaterialConfiguration_LoadsAllBuiltInProfiles()
+    {
+        var result = ExcelTemplateProfileStore.LoadDefault();
+
+        Assert.True(result.IsValid, result.Message);
+        Assert.Equal(7, result.Profiles.Count);
+        Assert.Contains(
+            result.Profiles,
+            profile => profile.Id == "civic-politics-economics-fifth-edition");
+    }
+
+    [Fact]
+    public void MaterialConfiguration_RejectsDuplicateIds()
+    {
+        Directory.CreateDirectory(_directory);
+        var path = Path.Combine(_directory, "materials.json");
+        File.WriteAllText(
+            path,
+            """
+            {
+              "schemaVersion": 1,
+              "materials": [
+                {
+                  "id": "duplicate",
+                  "displayName": "教材A",
+                  "workbookNameKeyword": "教材A",
+                  "materialNameKeywords": ["教材A"],
+                  "maximumQuestionNumber": 100,
+                  "maximumQuestionCount": 10,
+                  "workingSheetName": "作業シート",
+                  "rangeStartCell": "G1",
+                  "rangeEndCell": "G2",
+                  "questionListSheetName": "問題解答リスト",
+                  "teacherSheetName": "講師用",
+                  "studentSheetName": "生徒用"
+                },
+                {
+                  "id": "duplicate",
+                  "displayName": "教材B",
+                  "workbookNameKeyword": "教材B",
+                  "materialNameKeywords": ["教材B"],
+                  "maximumQuestionNumber": 100,
+                  "maximumQuestionCount": 10,
+                  "workingSheetName": "作業シート",
+                  "rangeStartCell": "G1",
+                  "rangeEndCell": "G2",
+                  "questionListSheetName": "問題解答リスト",
+                  "teacherSheetName": "講師用",
+                  "studentSheetName": "生徒用"
+                }
+              ]
+            }
+            """);
+
+        var result = ExcelTemplateProfileStore.LoadFromFile(path);
+
+        Assert.False(result.IsValid);
+        Assert.Contains("重複", result.Message);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))

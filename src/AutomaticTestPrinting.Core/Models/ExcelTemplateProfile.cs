@@ -1,31 +1,33 @@
 namespace AutomaticTestPrinting.Core.Models;
 
-public sealed record ExcelTemplateProfile(
-    string Id,
-    string DisplayName,
-    string WorkbookNameKeyword,
-    IReadOnlyList<string> MaterialNameKeywords,
-    int MaximumQuestionNumber,
-    int MaximumQuestionCount,
-    string WorkingSheetName,
-    string RangeStartCell,
-    string RangeEndCell,
-    string QuestionListSheetName,
-    string TeacherSheetName,
-    string StudentSheetName,
-    bool UseWideAnswerLayout = false,
-    bool RangeUsesSectionMapping = false,
-    string? SectionMappingSheetName = null,
-    bool SectionMappingUsesGridPairs = false,
-    bool SourceHasSeparateDisplayNumber = false,
-    double QuestionColumnWidth = 18,
-    double AnswerColumnWidth = 72,
-    double OutputRowHeight = 30,
-    bool AutoFitOutputRows = false,
-    string TeacherHeaderText = "解答",
-    string StudentHeaderText = "問題",
-    string? HeaderTitle = null,
-    bool FitToSinglePageTall = false);
+public sealed record ExcelTemplateProfile
+{
+    public string Id { get; init; } = string.Empty;
+    public string DisplayName { get; init; } = string.Empty;
+    public string WorkbookNameKeyword { get; init; } = string.Empty;
+    public IReadOnlyList<string> MaterialNameKeywords { get; init; } = [];
+    public int MaximumQuestionNumber { get; init; }
+    public int MaximumQuestionCount { get; init; }
+    public string WorkingSheetName { get; init; } = string.Empty;
+    public string RangeStartCell { get; init; } = string.Empty;
+    public string RangeEndCell { get; init; } = string.Empty;
+    public string QuestionListSheetName { get; init; } = string.Empty;
+    public string TeacherSheetName { get; init; } = string.Empty;
+    public string StudentSheetName { get; init; } = string.Empty;
+    public bool UseWideAnswerLayout { get; init; }
+    public bool RangeUsesSectionMapping { get; init; }
+    public string? SectionMappingSheetName { get; init; }
+    public bool SectionMappingUsesGridPairs { get; init; }
+    public bool SourceHasSeparateDisplayNumber { get; init; }
+    public double QuestionColumnWidth { get; init; } = 18;
+    public double AnswerColumnWidth { get; init; } = 72;
+    public double OutputRowHeight { get; init; } = 30;
+    public bool AutoFitOutputRows { get; init; }
+    public string TeacherHeaderText { get; init; } = "解答";
+    public string StudentHeaderText { get; init; } = "問題";
+    public string? HeaderTitle { get; init; }
+    public bool FitToSinglePageTall { get; init; }
+}
 
 public sealed record ExcelRequestPreparation(
     bool IsSupported,
