@@ -78,8 +78,28 @@ public static partial class ExcelTemplateCatalog
         "生徒用",
         UseWideAnswerLayout: true);
 
+    private static readonly ExcelTemplateProfile RapidReadingIdiomsRevised = new(
+        "rapid-reading-idioms-revised",
+        "速読英熟語（新版・改訂版）",
+        "速読英熟語",
+        ["速読英熟語改訂版", "速読英熟語"],
+        74,
+        50,
+        "操作シート",
+        "",
+        "",
+        "単語リスト",
+        "講師用",
+        "テスト用",
+        UseWideAnswerLayout: true,
+        RangeUsesSectionMapping: true,
+        SectionMappingSheetName: "対応リスト",
+        QuestionColumnWidth: 44,
+        AnswerColumnWidth: 44,
+        OutputRowHeight: 18);
+
     private static readonly IReadOnlyList<ExcelTemplateProfile> Profiles =
-        [Target1900, EikenPre1Ex, Target1000, Vintage4, Vocabulary1700];
+        [Target1900, EikenPre1Ex, Target1000, Vintage4, Vocabulary1700, RapidReadingIdiomsRevised];
 
     public static ExcelRequestPreparation Prepare(
         NormalTestRequestCandidate request,
@@ -121,7 +141,9 @@ public static partial class ExcelTemplateCatalog
                 EndNumber: end);
         }
 
-        var availableCount = end - start + 1;
+        var availableCount = profile.RangeUsesSectionMapping
+            ? profile.MaximumQuestionCount
+            : end - start + 1;
         if (request.QuestionCount < 1 ||
             request.QuestionCount > profile.MaximumQuestionCount ||
             request.QuestionCount > availableCount)

@@ -13,7 +13,12 @@ public sealed record ExcelTemplateProfile(
     string QuestionListSheetName,
     string TeacherSheetName,
     string StudentSheetName,
-    bool UseWideAnswerLayout = false);
+    bool UseWideAnswerLayout = false,
+    bool RangeUsesSectionMapping = false,
+    string? SectionMappingSheetName = null,
+    double QuestionColumnWidth = 18,
+    double AnswerColumnWidth = 72,
+    double OutputRowHeight = 30);
 
 public sealed record ExcelRequestPreparation(
     bool IsSupported,

@@ -85,6 +85,12 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         "1011-1310",
         25,
         "vocabulary-1700-sigma-best")]
+    [InlineData(
+        "[新版] 速読英熟語 改訂版",
+        "新版][改訂版]速読英熟語（単元番号指定可_～100問）.xlsm",
+        "17-61",
+        25,
+        "rapid-reading-idioms-revised")]
     public void Prepare_AcceptsNewlySupportedReportMaterial(
         string materialName,
         string workbookName,
@@ -143,6 +149,36 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         File.WriteAllBytes(Path.Combine(_directory, "国語力を伸ばす 語彙1700.xlsm"), []);
         var request = new NormalTestRequestCandidate(
             "国語力を伸ばす語彙1700(シグマベスト)", "1-100", 51, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.True(result.IsSupported);
+        Assert.False(result.IsValid);
+    }
+
+    [Fact]
+    public void Prepare_AcceptsQuestionCountLargerThanSectionCountForRapidReadingIdioms()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(Path.Combine(_directory, "速読英熟語.xlsm"), []);
+        var request = new NormalTestRequestCandidate(
+            "速読英熟語改訂版", "17-18", 25, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.True(result.IsSupported);
+        Assert.True(result.IsValid);
+        Assert.True(result.Profile?.RangeUsesSectionMapping);
+        Assert.Equal("対応リスト", result.Profile?.SectionMappingSheetName);
+    }
+
+    [Fact]
+    public void Prepare_RejectsRapidReadingIdiomsSectionOutsideWorkbook()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(Path.Combine(_directory, "速読英熟語.xlsm"), []);
+        var request = new NormalTestRequestCandidate(
+            "速読英熟語改訂版", "1-75", 25, 1, true);
 
         var result = ExcelTemplateCatalog.Prepare(request, _directory);
 

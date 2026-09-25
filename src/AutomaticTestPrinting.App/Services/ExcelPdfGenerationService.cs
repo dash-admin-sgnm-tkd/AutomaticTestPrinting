@@ -70,6 +70,7 @@ public static class ExcelPdfGenerationService
         object? workbook = null;
         object? worksheets = null;
         object? backgroundSheet = null;
+        object? sectionMappingSheet = null;
         object? questionListSheet = null;
         object? teacherSheet = null;
         object? studentSheet = null;
@@ -105,6 +106,12 @@ public static class ExcelPdfGenerationService
             worksheets = openedWorkbook.Worksheets;
             dynamic worksheetCollection = worksheets;
             backgroundSheet = worksheetCollection[request.Profile.WorkingSheetName];
+            if (request.Profile.RangeUsesSectionMapping)
+            {
+                sectionMappingSheet = worksheetCollection[
+                    request.Profile.SectionMappingSheetName
+                    ?? throw new InvalidOperationException("教材の対応表設定がありません。")];
+            }
             questionListSheet = worksheetCollection[request.Profile.QuestionListSheetName];
             teacherSheet = worksheetCollection[request.Profile.TeacherSheetName];
             studentSheet = worksheetCollection[request.Profile.StudentSheetName];
@@ -116,6 +123,7 @@ public static class ExcelPdfGenerationService
             PrepareWorkbook(
                 excelApplication,
                 backgroundSheet,
+                sectionMappingSheet,
                 questionListSheet,
                 teacherSheet,
                 studentSheet,
@@ -158,6 +166,7 @@ public static class ExcelPdfGenerationService
             ReleaseComObject(studentSheet);
             ReleaseComObject(teacherSheet);
             ReleaseComObject(questionListSheet);
+            ReleaseComObject(sectionMappingSheet);
             ReleaseComObject(backgroundSheet);
             ReleaseComObject(worksheets);
             ReleaseComObject(workbook);
@@ -187,6 +196,7 @@ public static class ExcelPdfGenerationService
     private static void PrepareWorkbook(
         dynamic excelApplication,
         dynamic backgroundSheet,
+        dynamic? sectionMappingSheet,
         dynamic questionListSheet,
         dynamic teacherSheet,
         dynamic studentSheet,
@@ -208,14 +218,31 @@ public static class ExcelPdfGenerationService
             }
         }
 
-        SetCellValue(backgroundSheet, request.Profile.RangeStartCell, request.StartNumber);
-        SetCellValue(backgroundSheet, request.Profile.RangeEndCell, request.EndNumber);
-        excelApplication.CalculateFullRebuild();
+        List<QuestionData> questions;
+        if (request.Profile.RangeUsesSectionMapping)
+        {
+            if (sectionMappingSheet is null)
+            {
+                throw new InvalidOperationException("教材の対応表シートが見つかりません。");
+            }
 
-        var questions = ReadQuestions(
-            backgroundSheet,
-            questionListSheet,
-            request.QuestionCount);
+            questions = ReadQuestionsFromSectionRange(
+                sectionMappingSheet,
+                questionListSheet,
+                request.StartNumber,
+                request.EndNumber,
+                request.QuestionCount);
+        }
+        else
+        {
+            SetCellValue(backgroundSheet, request.Profile.RangeStartCell, request.StartNumber);
+            SetCellValue(backgroundSheet, request.Profile.RangeEndCell, request.EndNumber);
+            excelApplication.CalculateFullRebuild();
+            questions = ReadQuestions(
+                backgroundSheet,
+                questionListSheet,
+                request.QuestionCount);
+        }
         var firstPageCount = Math.Min(request.QuestionCount, 50);
         var secondPageCount = Math.Max(request.QuestionCount - 50, 0);
         var titles = new object[,] { { "番号", "問題", "解答" } };
@@ -227,6 +254,8 @@ public static class ExcelPdfGenerationService
                 sheet,
                 $"&20 範囲：{request.StartNumber}-{request.EndNumber}");
         }
+        SetCenterHeader(teacherSheet, "&20 解答");
+        SetCenterHeader(studentSheet, "&20 問題");
 
         SetRangeValue(
             teacherSheet,
@@ -266,7 +295,13 @@ public static class ExcelPdfGenerationService
 
         if (request.Profile.UseWideAnswerLayout)
         {
-            ApplyWideAnswerLayout(teacherSheet, studentSheet, firstPageCount);
+            ApplyWideAnswerLayout(
+                teacherSheet,
+                studentSheet,
+                firstPageCount,
+                request.Profile.QuestionColumnWidth,
+                request.Profile.AnswerColumnWidth,
+                request.Profile.OutputRowHeight);
         }
 
         ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
@@ -351,6 +386,84 @@ public static class ExcelPdfGenerationService
         }
     }
 
+    private static List<QuestionData> ReadQuestionsFromSectionRange(
+        dynamic sectionMappingSheet,
+        dynamic questionListSheet,
+        int startSection,
+        int endSection,
+        int questionCount)
+    {
+        dynamic firstNumberCell = sectionMappingSheet.Range[$"A{startSection}"];
+        dynamic lastNumberCell = sectionMappingSheet.Range[$"B{endSection}"];
+        dynamic usedRange = questionListSheet.UsedRange;
+        dynamic usedRows = usedRange.Rows;
+        var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
+            Convert.ToInt32(usedRows.Count, CultureInfo.InvariantCulture) - 1;
+        dynamic sourceRange = questionListSheet.Range[$"A2:C{lastUsedRow}"];
+        try
+        {
+            object? firstNumberValue = firstNumberCell.Value2;
+            object? lastNumberValue = lastNumberCell.Value2;
+            if (!TryConvertQuestionNumber(firstNumberValue, out int firstNumber) ||
+                !TryConvertQuestionNumber(lastNumberValue, out int lastNumber) ||
+                firstNumber < 1 || lastNumber < firstNumber)
+            {
+                throw new InvalidOperationException(
+                    $"テーマ {startSection}-{endSection} の対応範囲を取得できませんでした。");
+            }
+
+            var sourceValues = (object[,])sourceRange.Value2;
+            var candidates = new List<QuestionData>();
+            var seenNumbers = new HashSet<int>();
+            for (var row = 1; row <= sourceValues.GetLength(0); row++)
+            {
+                if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number) ||
+                    number < firstNumber || number > lastNumber)
+                {
+                    continue;
+                }
+
+                var question = Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture);
+                var answer = Convert.ToString(sourceValues[row, 3], CultureInfo.InvariantCulture);
+                if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
+                {
+                    continue;
+                }
+
+                if (!seenNumbers.Add(number))
+                {
+                    throw new InvalidOperationException(
+                        $"Excelの単語リストに問題番号 {number} が重複しています。");
+                }
+
+                candidates.Add(new QuestionData(number, question, answer));
+            }
+
+            if (candidates.Count < questionCount)
+            {
+                throw new InvalidOperationException(
+                    $"テーマ {startSection}-{endSection} からは{candidates.Count}問しか作成できません。問題数を減らしてください。");
+            }
+
+            for (var index = candidates.Count - 1; index > 0; index--)
+            {
+                var replacementIndex = Random.Shared.Next(index + 1);
+                (candidates[index], candidates[replacementIndex]) =
+                    (candidates[replacementIndex], candidates[index]);
+            }
+
+            return candidates.Take(questionCount).ToList();
+        }
+        finally
+        {
+            ReleaseComObject(sourceRange);
+            ReleaseComObject(usedRows);
+            ReleaseComObject(usedRange);
+            ReleaseComObject(lastNumberCell);
+            ReleaseComObject(firstNumberCell);
+        }
+    }
+
     private static bool TryConvertQuestionNumber(object? value, out int number)
     {
         if (value is double numericValue)
@@ -410,6 +523,19 @@ public static class ExcelPdfGenerationService
         }
     }
 
+    private static void SetCenterHeader(dynamic sheet, string value)
+    {
+        dynamic pageSetup = sheet.PageSetup;
+        try
+        {
+            pageSetup.CenterHeader = value;
+        }
+        finally
+        {
+            ReleaseComObject(pageSetup);
+        }
+    }
+
     private static void SetPrintArea(dynamic sheet, string value)
     {
         dynamic pageSetup = sheet.PageSetup;
@@ -426,7 +552,10 @@ public static class ExcelPdfGenerationService
     private static void ApplyWideAnswerLayout(
         dynamic teacherSheet,
         dynamic studentSheet,
-        int rowCount)
+        int rowCount,
+        double questionColumnWidth,
+        double answerColumnWidth,
+        double outputRowHeight)
     {
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
         {
@@ -442,8 +571,8 @@ public static class ExcelPdfGenerationService
                 layoutRange.UnMerge();
                 outputRange.ClearFormats();
                 numberColumn.ColumnWidth = 9;
-                questionColumn.ColumnWidth = 18;
-                answerColumn.ColumnWidth = 72;
+                questionColumn.ColumnWidth = questionColumnWidth;
+                answerColumn.ColumnWidth = answerColumnWidth;
                 font.Name = "Yu Gothic UI";
                 font.Size = 10;
                 outputRange.WrapText = true;
@@ -472,7 +601,7 @@ public static class ExcelPdfGenerationService
                 dynamic outputRow = sheet.Rows[row];
                 try
                 {
-                    outputRow.RowHeight = row == 1 ? 20 : 30;
+                    outputRow.RowHeight = row == 1 ? 20 : outputRowHeight;
                 }
                 finally
                 {
@@ -684,7 +813,9 @@ public static class ExcelPdfGenerationService
                 "出題範囲が対応範囲外です。");
         }
 
-        var availableCount = request.EndNumber - request.StartNumber + 1;
+        var availableCount = request.Profile.RangeUsesSectionMapping
+            ? request.Profile.MaximumQuestionCount
+            : request.EndNumber - request.StartNumber + 1;
         if (request.QuestionCount < 1 ||
             request.QuestionCount > request.Profile.MaximumQuestionCount ||
             request.QuestionCount > availableCount)
