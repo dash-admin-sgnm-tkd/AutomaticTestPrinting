@@ -15,13 +15,34 @@ public static class ExcelTemplateProfileStore
     {
         AllowTrailingCommas = true,
         PropertyNameCaseInsensitive = true,
-        ReadCommentHandling = JsonCommentHandling.Skip
+        PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+        ReadCommentHandling = JsonCommentHandling.Skip,
+        WriteIndented = true
     };
 
-    private static readonly Lazy<ExcelTemplateProfileLoadResult> DefaultProfiles =
-        new(LoadDefaultCore, LazyThreadSafetyMode.ExecutionAndPublication);
+    private static readonly object CacheLock = new();
+    private static ExcelTemplateProfileLoadResult? _cachedDefault;
 
-    public static ExcelTemplateProfileLoadResult LoadDefault() => DefaultProfiles.Value;
+    public static string UserConfigurationPath => Path.Combine(
+        Environment.GetFolderPath(Environment.SpecialFolder.LocalApplicationData),
+        "AutomaticTestPrinting",
+        DefaultFileName);
+
+    public static ExcelTemplateProfileLoadResult LoadDefault()
+    {
+        lock (CacheLock)
+        {
+            return _cachedDefault ??= LoadDefaultCore();
+        }
+    }
+
+    public static ExcelTemplateProfileLoadResult ReloadDefault()
+    {
+        lock (CacheLock)
+        {
+            return _cachedDefault = LoadDefaultCore();
+        }
+    }
 
     public static ExcelTemplateProfileLoadResult LoadFromFile(string path)
     {
@@ -51,19 +72,104 @@ public static class ExcelTemplateProfileStore
         }
     }
 
+    public static ExcelTemplateProfileLoadResult SaveUserProfiles(
+        IReadOnlyList<ExcelTemplateProfile> profiles)
+    {
+        var configuration = new ExcelTemplateConfiguration
+        {
+            SchemaVersion = 1,
+            Materials = profiles
+        };
+        var validationMessage = Validate(configuration);
+        if (validationMessage is not null)
+        {
+            return Failure(validationMessage, UserConfigurationPath);
+        }
+
+        var path = UserConfigurationPath;
+        var temporaryPath = $"{path}.{Guid.NewGuid():N}.tmp";
+        try
+        {
+            var directory = Path.GetDirectoryName(path)
+                ?? throw new InvalidOperationException("教材設定の保存先を作成できません。");
+            Directory.CreateDirectory(directory);
+
+            if (File.Exists(path))
+            {
+                File.Copy(path, $"{path}.backup", true);
+            }
+            File.WriteAllText(
+                temporaryPath,
+                JsonSerializer.Serialize(configuration, SerializerOptions));
+            File.Move(temporaryPath, path, true);
+
+            lock (CacheLock)
+            {
+                _cachedDefault = LoadDefaultCore();
+                return _cachedDefault;
+            }
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return Failure("教材設定を保存する権限がありません。", path);
+        }
+        catch (IOException exception)
+        {
+            return Failure($"教材設定を保存できませんでした：{exception.Message}", path);
+        }
+        finally
+        {
+            try
+            {
+                File.Delete(temporaryPath);
+            }
+            catch (IOException)
+            {
+            }
+            catch (UnauthorizedAccessException)
+            {
+            }
+        }
+    }
+
     private static ExcelTemplateProfileLoadResult LoadDefaultCore()
     {
         var externalPath = Path.Combine(AppContext.BaseDirectory, DefaultFileName);
+        ExcelTemplateProfileLoadResult baseConfiguration;
         if (File.Exists(externalPath))
         {
-            return LoadFromFile(externalPath);
+            baseConfiguration = LoadFromFile(externalPath);
+        }
+        else
+        {
+            var assembly = Assembly.GetExecutingAssembly();
+            using var stream = assembly.GetManifestResourceStream(EmbeddedResourceName);
+            baseConfiguration = stream is null
+                ? Failure("内蔵の教材設定を読み込めませんでした。アプリを再配置してください。", externalPath)
+                : Load(stream, "内蔵設定");
         }
 
-        var assembly = Assembly.GetExecutingAssembly();
-        using var stream = assembly.GetManifestResourceStream(EmbeddedResourceName);
-        return stream is null
-            ? Failure("内蔵の教材設定を読み込めませんでした。アプリを再配置してください。", externalPath)
-            : Load(stream, "内蔵設定");
+        if (!baseConfiguration.IsValid || !File.Exists(UserConfigurationPath))
+        {
+            return baseConfiguration;
+        }
+
+        var userConfiguration = LoadFromFile(UserConfigurationPath);
+        if (!userConfiguration.IsValid)
+        {
+            return userConfiguration;
+        }
+
+        var merged = baseConfiguration.Profiles
+            .Concat(userConfiguration.Profiles)
+            .GroupBy(profile => profile.Id, StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.Last())
+            .ToArray();
+        return new ExcelTemplateProfileLoadResult(
+            true,
+            $"教材設定を{merged.Length}件読み込みました。",
+            merged,
+            $"{baseConfiguration.Source} + {userConfiguration.Source}");
     }
 
     private static ExcelTemplateProfileLoadResult Load(Stream stream, string source)

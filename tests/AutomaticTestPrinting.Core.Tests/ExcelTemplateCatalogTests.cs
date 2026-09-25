@@ -211,7 +211,8 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     [Fact]
     public void MaterialConfiguration_LoadsAllBuiltInProfiles()
     {
-        var result = ExcelTemplateProfileStore.LoadDefault();
+        var result = ExcelTemplateProfileStore.LoadFromFile(
+            Path.Combine(AppContext.BaseDirectory, "materials.json"));
 
         Assert.True(result.IsValid, result.Message);
         Assert.Equal(7, result.Profiles.Count);

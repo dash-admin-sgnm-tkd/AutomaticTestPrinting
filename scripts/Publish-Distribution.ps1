@@ -64,6 +64,8 @@ foreach ($target in @($stageDirectory, $zipPath, $checksumPath)) {
 New-Item -ItemType Directory -Force -Path $stageDirectory | Out-Null
 Copy-Item -LiteralPath (Join-Path $publishDirectory "AutomaticTestPrinting.App.exe") `
     -Destination $stageDirectory
+Copy-Item -LiteralPath (Join-Path $publishDirectory "materials.json") `
+    -Destination $stageDirectory
 Copy-Item -LiteralPath $readmePath -Destination $stageDirectory
 
 Compress-Archive -LiteralPath $stageDirectory -DestinationPath $zipPath -CompressionLevel Optimal

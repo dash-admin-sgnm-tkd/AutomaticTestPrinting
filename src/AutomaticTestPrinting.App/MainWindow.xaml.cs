@@ -60,6 +60,38 @@ public partial class MainWindow : Window
         UpdateStatus();
     }
 
+    private void RegisterMaterial_Click(object sender, RoutedEventArgs e)
+    {
+        var materialFolder = MaterialFolderTextBox.Text;
+        if (string.IsNullOrWhiteSpace(materialFolder) || !Directory.Exists(materialFolder))
+        {
+            MessageBox.Show(this,
+                "先に教材フォルダーを設定してください。",
+                "教材フォルダーが必要です",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return;
+        }
+
+        var registrationWindow = new MaterialRegistrationWindow(materialFolder)
+        {
+            Owner = this
+        };
+        if (registrationWindow.ShowDialog() != true)
+        {
+            return;
+        }
+
+        InvalidateRecognitionResults();
+        StatusText.Text = $"教材「{registrationWindow.RegisteredDisplayName}」を登録しました";
+        MessageBox.Show(this,
+            $"教材「{registrationWindow.RegisteredDisplayName}」を登録しました。\n" +
+            "次回からレポートの読み取り候補として使用されます。",
+            "教材を登録しました",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private void BrowseReportInboxFolder_Click(object sender, RoutedEventArgs e)
     {
         var folder = SelectFolder(

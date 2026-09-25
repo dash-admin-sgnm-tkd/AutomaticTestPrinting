@@ -23,10 +23,14 @@
                     <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
                                Text="レポートを読み込み、内容を確認してからテストを作成します。" />
                 </StackPanel>
-                <Border Grid.Column="1" VerticalAlignment="Center" Background="#ECFDF3"
-                        BorderBrush="#ABEFC6" BorderThickness="1" CornerRadius="12" Padding="12,5">
-                    <TextBlock Foreground="#067647" FontWeight="SemiBold" Text="初期設定" />
-                </Border>
+                <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                    <Button Margin="0,0,12,0" Style="{StaticResource SecondaryButton}"
+                            Click="RegisterMaterial_Click" Content="教材を登録" />
+                    <Border VerticalAlignment="Center" Background="#ECFDF3"
+                            BorderBrush="#ABEFC6" BorderThickness="1" CornerRadius="12" Padding="12,5">
+                        <TextBlock Foreground="#067647" FontWeight="SemiBold" Text="初期設定" />
+                    </Border>
+                </StackPanel>
             </Grid>
         </Border>
 

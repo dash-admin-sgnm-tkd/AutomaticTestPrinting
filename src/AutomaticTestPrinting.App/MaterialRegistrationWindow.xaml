@@ -1,0 +1,103 @@
+<Window x:Class="AutomaticTestPrinting.App.MaterialRegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="教材を登録"
+        Width="760" Height="760" MinWidth="680" MinHeight="640"
+        WindowStartupLocation="CenterOwner" Background="#F2F4F7"
+        ShowInTaskbar="False">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Background="White" BorderBrush="#EAECF0" BorderThickness="0,0,0,1" Padding="30,22">
+            <StackPanel>
+                <TextBlock FontSize="23" FontWeight="Bold" Text="新しい教材を登録" />
+                <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
+                           Text="既存教材に近い形式を選び、教材のExcelファイルを登録します。" />
+            </StackPanel>
+        </Border>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
+            <StackPanel Margin="30,24">
+                <Border Background="White" BorderBrush="{StaticResource BorderBrush}"
+                        BorderThickness="1" CornerRadius="10" Padding="24">
+                    <StackPanel>
+                        <TextBlock FontWeight="SemiBold" Text="形式が近い教材" />
+                        <TextBlock Margin="0,5,0,8" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="シート構成やPDFのレイアウトが同じ教材を選んでください。" />
+                        <ComboBox x:Name="ReferenceProfileComboBox" Height="40" Padding="10,7"
+                                  DisplayMemberPath="DisplayName" SelectionChanged="ReferenceProfileComboBox_SelectionChanged" />
+
+                        <TextBlock Margin="0,18,0,0" FontWeight="SemiBold" Text="教材名" />
+                        <TextBox x:Name="DisplayNameTextBox" Margin="0,8,0,0" Height="40" Padding="10,8"
+                                 VerticalContentAlignment="Center" />
+
+                        <TextBlock Margin="0,18,0,0" FontWeight="SemiBold" Text="レポートに書かれる教材名・略称" />
+                        <TextBlock Margin="0,5,0,8" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="1行に1つ入力してください。教材名は自動的に追加されます。" />
+                        <TextBox x:Name="KeywordsTextBox" Height="82" Padding="10,8"
+                                 AcceptsReturn="True" VerticalScrollBarVisibility="Auto" TextWrapping="Wrap" />
+
+                        <TextBlock Margin="0,18,0,0" FontWeight="SemiBold" Text="Excelファイル" />
+                        <TextBlock Margin="0,5,0,8" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="最初の画面で指定した教材フォルダー内の .xlsm ファイルを選んでください。" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBox x:Name="WorkbookPathTextBox" Height="40" Padding="10,8"
+                                     VerticalContentAlignment="Center" IsReadOnly="True" />
+                            <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="BrowseWorkbook_Click" Content="ファイルを選択" />
+                        </Grid>
+
+                        <Grid Margin="0,18,0,0">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="18" />
+                                <ColumnDefinition Width="*" />
+                            </Grid.ColumnDefinitions>
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="最大の問題番号" />
+                                <TextBox x:Name="MaximumRangeTextBox" Margin="0,8,0,0" Height="40" Padding="10,8"
+                                         VerticalContentAlignment="Center" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="2">
+                                <TextBlock FontWeight="SemiBold" Text="1回の最大問題数" />
+                                <TextBox x:Name="MaximumQuestionCountTextBox" Margin="0,8,0,0" Height="40" Padding="10,8"
+                                         VerticalContentAlignment="Center" />
+                            </StackPanel>
+                        </Grid>
+                    </StackPanel>
+                </Border>
+
+                <Border Margin="0,16,0,0" Padding="16" Background="#EFF8FF"
+                        BorderBrush="#B2DDFF" BorderThickness="1" CornerRadius="8">
+                    <TextBlock Foreground="#175CD3" TextWrapping="Wrap"
+                               Text="登録前にExcelを安全な読み取り専用で開き、必要なシートがあるか確認します。マクロは実行しません。" />
+                </Border>
+            </StackPanel>
+        </ScrollViewer>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#EAECF0" BorderThickness="0,1,0,0">
+            <Grid Margin="30,17">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="RegistrationStatusText" Margin="0,0,16,0" VerticalAlignment="Center"
+                           Foreground="{StaticResource MutedTextBrush}" Text="必要な項目を入力してください" />
+                <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
+                    <Button Margin="0,0,10,0" Style="{StaticResource SecondaryButton}"
+                            Click="Cancel_Click" Content="キャンセル" />
+                    <Button x:Name="RegisterButton" MinWidth="130" Style="{StaticResource PrimaryButton}"
+                            Click="Register_Click" Content="確認して登録" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
