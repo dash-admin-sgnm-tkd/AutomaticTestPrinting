@@ -203,7 +203,7 @@
                                                                 <StackPanel>
                                                                     <CheckBox FontWeight="SemiBold" IsChecked="{Binding IsIncluded}">
                                                                         <TextBlock>
-                                                                            <Run Text="テスト " /><Run Text="{Binding DisplayNumber}" />
+                                                                            <Run Text="テスト " /><Run Text="{Binding DisplayNumber, Mode=OneWay}" />
                                                                             <Run Text=" を作成する" />
                                                                         </TextBlock>
                                                                     </CheckBox>
