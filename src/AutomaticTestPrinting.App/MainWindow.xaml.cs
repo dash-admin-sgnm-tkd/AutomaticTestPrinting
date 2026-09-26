@@ -326,6 +326,22 @@ public partial class MainWindow : Window
         UpdatePdfGenerationState();
     }
 
+    private async void SaveSkippedLogButton_Click(object sender, RoutedEventArgs e)
+    {
+        var logPath = await SaveSkippedLogAsync(showWhenEmpty: true);
+        if (logPath is null)
+        {
+            return;
+        }
+
+        StatusText.Text = $"スキップ一覧を保存しました：{Path.GetFileName(logPath)}";
+        MessageBox.Show(this,
+            $"スキップ一覧を保存しました。\n\n{logPath}",
+            "スキップ一覧を保存しました",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private void AttentionFilterButton_Click(object sender, RoutedEventArgs e)
     {
         _showOnlyNeedsAttention = !_showOnlyNeedsAttention;
@@ -379,9 +395,11 @@ public partial class MainWindow : Window
         ValidateButton.IsEnabled = false;
         ConfirmResultsCheckBox.IsEnabled = false;
         var generatedFiles = new List<string>();
+        string? skippedLogPath = null;
 
         try
         {
+            skippedLogPath = await SaveSkippedLogAsync(showWhenEmpty: false);
             for (var index = 0; index < requests.Count; index++)
             {
                 StatusText.Text = $"PDFを作成中：{index + 1}/{requests.Count}";
@@ -392,7 +410,8 @@ public partial class MainWindow : Window
 
             StatusText.Text = $"PDF作成完了：{generatedFiles.Count}ファイル";
             MessageBox.Show(this,
-                $"問題PDFと解答PDFを作成しました。\n\n保存先：{OutputFolderTextBox.Text}",
+                $"問題PDFと解答PDFを作成しました。\n\n保存先：{OutputFolderTextBox.Text}" +
+                (skippedLogPath is null ? string.Empty : $"\nスキップ一覧：{skippedLogPath}"),
                 "PDF作成完了",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);
@@ -464,6 +483,7 @@ public partial class MainWindow : Window
 
     private void UpdatePdfGenerationState()
     {
+        SaveSkippedLogButton.IsEnabled = GetSkippedLogEntries(DateTimeOffset.Now).Count > 0;
         CreatePdfsButton.IsEnabled =
             ConfirmResultsCheckBox.IsChecked == true &&
             _recognitionResults.Count > 0 &&
@@ -523,6 +543,108 @@ public partial class MainWindow : Window
 
         return requests;
     }
+
+    private async Task<string?> SaveSkippedLogAsync(bool showWhenEmpty)
+    {
+        var outputFolder = OutputFolderTextBox.Text.Trim();
+        if (string.IsNullOrWhiteSpace(outputFolder) || !Directory.Exists(outputFolder))
+        {
+            if (showWhenEmpty)
+            {
+                MessageBox.Show(this,
+                    "先に出力フォルダーを設定してください。",
+                    "出力フォルダーが必要です",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            return null;
+        }
+
+        var now = DateTimeOffset.Now;
+        var entries = GetSkippedLogEntries(now);
+        if (entries.Count == 0)
+        {
+            if (showWhenEmpty)
+            {
+                MessageBox.Show(this,
+                    "現在スキップされているレポートやテストはありません。",
+                    "スキップ項目はありません",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            return null;
+        }
+
+        try
+        {
+            return await SkippedTestLogService.SaveAsync(outputFolder, entries, now);
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(this,
+                $"スキップ一覧を保存できませんでした。\n\n{exception.Message}",
+                "ログを保存できませんでした",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return null;
+        }
+    }
+
+    private List<SkippedTestLogEntry> GetSkippedLogEntries(DateTimeOffset loggedAt)
+    {
+        var entries = new List<SkippedTestLogEntry>();
+        foreach (var result in _recognitionResults)
+        {
+            if (!result.IsIncluded)
+            {
+                if (result.Requests.Count == 0)
+                {
+                    entries.Add(new SkippedTestLogEntry(
+                        loggedAt,
+                        result.StudentName.Trim(),
+                        result.FileName,
+                        null,
+                        string.Empty,
+                        string.Empty,
+                        string.Empty,
+                        result.HasError ? result.NormalTestSummary : "レポート単位でスキップ"));
+                }
+                else
+                {
+                    entries.AddRange(result.Requests.Select(request => CreateSkippedLogEntry(
+                        loggedAt,
+                        result,
+                        request,
+                        "レポート単位でスキップ")));
+                }
+                continue;
+            }
+
+            entries.AddRange(result.Requests
+                .Where(request => !request.IsIncluded)
+                .Select(request => CreateSkippedLogEntry(
+                    loggedAt,
+                    result,
+                    request,
+                    request.IsValid ? "手動でスキップ" : request.ValidationMessage)));
+        }
+
+        return entries;
+    }
+
+    private static SkippedTestLogEntry CreateSkippedLogEntry(
+        DateTimeOffset loggedAt,
+        RecognitionResultItem result,
+        EditableTestRequestItem request,
+        string reason) => new(
+            loggedAt,
+            result.StudentName.Trim(),
+            result.FileName,
+            request.DisplayNumber,
+            request.MaterialName.Trim(),
+            $"{request.StartNumber.Trim()}-{request.EndNumber.Trim()}",
+            request.QuestionCount.Trim(),
+            reason);
 
     private void AddRecognitionResult(RecognitionResultItem result)
     {

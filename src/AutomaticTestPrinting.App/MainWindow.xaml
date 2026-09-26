@@ -151,6 +151,7 @@
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
                                 <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
                             <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
                             <Button Grid.Column="1" Margin="12,0,0,0" Style="{StaticResource SecondaryButton}"
@@ -160,6 +161,9 @@
                             <Button x:Name="AttentionFilterButton" Grid.Column="3" Margin="8,0,0,0"
                                     Style="{StaticResource SecondaryButton}"
                                     Click="AttentionFilterButton_Click" Content="要確認だけ表示" />
+                            <Button x:Name="SaveSkippedLogButton" Grid.Column="4" Margin="8,0,0,0"
+                                    Style="{StaticResource SecondaryButton}" IsEnabled="False"
+                                    Click="SaveSkippedLogButton_Click" Content="スキップ一覧を保存" />
                         </Grid>
                         <TextBlock Margin="0,6,0,18" Foreground="{StaticResource MutedTextBrush}"
                                    Text="原本と比べ、誤りがあれば入力欄を修正してください。修正後は自動で再検査します。" />
