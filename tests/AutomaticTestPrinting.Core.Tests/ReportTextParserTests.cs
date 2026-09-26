@@ -82,4 +82,37 @@ public sealed class ReportTextParserTests
         Assert.Equal(50, request.QuestionCount);
         Assert.Equal("通常テスト候補：1件（原本確認）", result.NormalTestSummary);
     }
+
+    [Fact]
+    public void Parse_RepairsKnownTarget1900OcrErrors()
+    {
+        var words = new[]
+        {
+            new RecognizedWord("次回までの宿題", 10, 10, 140, 20, 0),
+            new RecognizedWord("周校英語", 370, 50, 100, 20, 1),
+            new RecognizedWord("[六]英単語ターゲット1900", 350, 85, 160, 20, 2),
+            new RecognizedWord("月日", 10, 150, 40, 20, 3),
+            new RecognizedWord("曜日", 60, 150, 40, 20, 4),
+            new RecognizedWord("1901-1900", 370, 150, 100, 20, 5),
+            new RecognizedWord("テスト作成依頼", 10, 300, 160, 20, 6),
+            new RecognizedWord("50", 405, 302, 30, 20, 7)
+        };
+        var pages = new[]
+        {
+            new RecognizedReportPage(
+                1,
+                0,
+                "生徒名:来栖凜奈 次回までの宿題 テスト作成依頼",
+                1000,
+                500,
+                words)
+        };
+
+        var result = ReportTextParser.Parse("report.pdf", pages);
+
+        var request = Assert.Single(result.TestRequests);
+        Assert.Equal("[六]英単語ターゲット1900", request.MaterialName);
+        Assert.Equal("1101-1900", request.Range);
+        Assert.Equal(50, request.QuestionCount);
+    }
 }

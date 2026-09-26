@@ -108,7 +108,7 @@ public static partial class ReportTableExtractor
             .Select(ToLine)
             .Where(line =>
                 !string.IsNullOrWhiteSpace(line.Text) &&
-                !line.Text.StartsWith("高校", StringComparison.Ordinal))
+                !IsSubjectHeading(line.Text))
             .OrderBy(line => line.Top)
             .Select(line => line.Text)
             .ToArray();
@@ -172,11 +172,25 @@ public static partial class ReportTableExtractor
     private static string NormalizeMaterialName(string value) =>
         value.Replace("ー新版】", "【新版】", StringComparison.Ordinal).Trim();
 
-    private static string RepairRangeForMaterial(string range, string materialName) =>
-        materialName.Contains("1900", StringComparison.Ordinal) &&
-        string.Equals(range, "1-900", StringComparison.Ordinal)
-            ? "1-1900"
-            : range;
+    private static bool IsSubjectHeading(string value) =>
+        value.StartsWith("高校", StringComparison.Ordinal) ||
+        (value.Length <= 6 && value.EndsWith("英語", StringComparison.Ordinal)) ||
+        value is "現代文" or "古文" or "漢文" or "日本史" or "世界史" or "政治経済" or "公共";
+
+    private static string RepairRangeForMaterial(string range, string materialName)
+    {
+        if (!materialName.Contains("1900", StringComparison.Ordinal))
+        {
+            return range;
+        }
+
+        return range switch
+        {
+            "1-900" => "1-1900",
+            "1901-1900" => "1101-1900",
+            _ => range
+        };
+    }
 
     [GeneratedRegex(@"^(\d{1,3})(?:問)?$")]
     private static partial Regex CountRegex();
