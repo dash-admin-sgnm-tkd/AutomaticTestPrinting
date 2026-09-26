@@ -28,7 +28,40 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         Assert.Equal("作業シート", result.Profile?.WorkingSheetName);
         Assert.Equal("G1", result.Profile?.RangeStartCell);
         Assert.Equal("G2", result.Profile?.RangeEndCell);
-        Assert.True(result.Profile?.AllowDuplicateQuestionNumbers);
+    }
+
+    [Fact]
+    public void Prepare_IgnoresDerivedWordWorkbookForTarget1900()
+    {
+        Directory.CreateDirectory(_directory);
+        var derivedPath = Path.Combine(_directory, "★【6訂版】ターゲット1900派生語.xlsm");
+        var standardPath = Path.Combine(_directory, "★(6訂版)ターゲット1900_20221007本部.xlsm");
+        File.WriteAllBytes(derivedPath, []);
+        File.WriteAllBytes(standardPath, []);
+        var request = new NormalTestRequestCandidate(
+            "英単語ターゲット1900", "1101-1900", 50, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.True(result.IsValid);
+        Assert.Equal(standardPath, result.WorkbookPath);
+        Assert.Contains("使用Excel：★(6訂版)ターゲット1900_20221007本部.xlsm", result.Message);
+    }
+
+    [Fact]
+    public void Prepare_RejectsFolderContainingOnlyDerivedWordWorkbookForTarget1900()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(
+            Path.Combine(_directory, "★【6訂版】ターゲット1900派生語.xlsm"),
+            []);
+        var request = new NormalTestRequestCandidate(
+            "英単語ターゲット1900", "1101-1900", 50, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(request, _directory);
+
+        Assert.False(result.IsValid);
+        Assert.Null(result.WorkbookPath);
     }
 
     [Theory]

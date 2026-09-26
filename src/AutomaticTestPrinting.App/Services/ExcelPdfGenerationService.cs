@@ -321,11 +321,7 @@ public static class ExcelPdfGenerationService
                 request.Profile.FitToSinglePageTall);
         }
 
-        ValidateGeneratedQuestions(
-            teacherSheet,
-            firstPageCount,
-            secondPageCount,
-            request.Profile.AllowDuplicateQuestionNumbers);
+        ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
         ValidateStudentAnswerCellsAreEmpty(studentSheet, firstPageCount, secondPageCount);
     }
 
@@ -884,8 +880,7 @@ public static class ExcelPdfGenerationService
     private static void ValidateGeneratedQuestions(
         dynamic teacherSheet,
         int firstPageCount,
-        int secondPageCount,
-        bool allowDuplicateQuestionNumbers)
+        int secondPageCount)
     {
         var numbers = new List<string>(firstPageCount + secondPageCount);
         ReadQuestionNumbers(teacherSheet, "B", firstPageCount, numbers);
@@ -901,7 +896,7 @@ public static class ExcelPdfGenerationService
                 $"予定数：{firstPageCount + secondPageCount}、生成数：{numbers.Count}");
         }
 
-        if (!allowDuplicateQuestionNumbers && numbers.Distinct().Count() != numbers.Count)
+        if (numbers.Distinct().Count() != numbers.Count)
         {
             var duplicateNumbers = numbers
                 .GroupBy(number => number)

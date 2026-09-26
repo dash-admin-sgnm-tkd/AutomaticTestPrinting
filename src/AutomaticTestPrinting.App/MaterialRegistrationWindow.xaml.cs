@@ -184,6 +184,7 @@ public partial class MaterialRegistrationWindow : Window
             Id = $"custom-{DateTime.UtcNow:yyyyMMddHHmmss}-{uniqueSuffix}",
             DisplayName = displayName,
             WorkbookNameKeyword = workbookKeyword,
+            WorkbookNameExcludedKeywords = [],
             MaterialNameKeywords = keywords,
             MaximumQuestionNumber = maximumRange,
             MaximumQuestionCount = maximumQuestionCount,

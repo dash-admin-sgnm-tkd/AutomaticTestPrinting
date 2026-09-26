@@ -5,6 +5,7 @@ public sealed record ExcelTemplateProfile
     public string Id { get; init; } = string.Empty;
     public string DisplayName { get; init; } = string.Empty;
     public string WorkbookNameKeyword { get; init; } = string.Empty;
+    public IReadOnlyList<string> WorkbookNameExcludedKeywords { get; init; } = [];
     public IReadOnlyList<string> MaterialNameKeywords { get; init; } = [];
     public int MaximumQuestionNumber { get; init; }
     public int MaximumQuestionCount { get; init; }
@@ -27,7 +28,6 @@ public sealed record ExcelTemplateProfile
     public string StudentHeaderText { get; init; } = "問題";
     public string? HeaderTitle { get; init; }
     public bool FitToSinglePageTall { get; init; }
-    public bool AllowDuplicateQuestionNumbers { get; init; }
 }
 
 public sealed record ExcelRequestPreparation(

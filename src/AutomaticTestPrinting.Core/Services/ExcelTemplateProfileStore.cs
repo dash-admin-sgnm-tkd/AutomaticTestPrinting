@@ -233,6 +233,8 @@ public static class ExcelTemplateProfileStore
                 profile.MaterialNameKeywords is null ||
                 profile.MaterialNameKeywords.Count == 0 ||
                 profile.MaterialNameKeywords.Any(string.IsNullOrWhiteSpace) ||
+                profile.WorkbookNameExcludedKeywords is null ||
+                profile.WorkbookNameExcludedKeywords.Any(string.IsNullOrWhiteSpace) ||
                 profile.MaximumQuestionNumber < 1 ||
                 profile.MaximumQuestionCount < 1 ||
                 string.IsNullOrWhiteSpace(profile.WorkingSheetName) ||

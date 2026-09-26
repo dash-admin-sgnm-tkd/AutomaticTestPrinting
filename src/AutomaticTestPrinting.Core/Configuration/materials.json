@@ -5,6 +5,7 @@
       "id": "target-1900-sixth-edition",
       "displayName": "ターゲット1900（6訂版）",
       "workbookNameKeyword": "ターゲット1900",
+      "workbookNameExcludedKeywords": ["派生語"],
       "materialNameKeywords": ["英単語ターゲット1900", "ターゲット1900"],
       "maximumQuestionNumber": 1900,
       "maximumQuestionCount": 100,
@@ -13,8 +14,7 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用",
-      "allowDuplicateQuestionNumbers": true
+      "studentSheetName": "生徒用"
     },
     {
       "id": "eiken-pre1-ex-second-edition",

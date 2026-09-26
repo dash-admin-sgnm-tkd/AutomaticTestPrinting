@@ -72,7 +72,7 @@ public static partial class ExcelTemplateCatalog
                 EndNumber: end);
         }
 
-        var workbookPath = FindWorkbook(materialFolder, profile.WorkbookNameKeyword);
+        var workbookPath = FindWorkbook(materialFolder, profile);
         if (workbookPath is null)
         {
             return new ExcelRequestPreparation(
@@ -87,14 +87,17 @@ public static partial class ExcelTemplateCatalog
         return new ExcelRequestPreparation(
             true,
             true,
-            $"Excel連携準備OK：範囲 {start}-{end}／{request.QuestionCount}問",
+            $"Excel連携準備OK：範囲 {start}-{end}／{request.QuestionCount}問／" +
+            $"使用Excel：{Path.GetFileName(workbookPath)}",
             profile,
             workbookPath,
             start,
             end);
     }
 
-    private static string? FindWorkbook(string? materialFolder, string fileNameKeyword)
+    private static string? FindWorkbook(
+        string? materialFolder,
+        ExcelTemplateProfile profile)
     {
         if (string.IsNullOrWhiteSpace(materialFolder) || !Directory.Exists(materialFolder))
         {
@@ -103,11 +106,20 @@ public static partial class ExcelTemplateCatalog
 
         try
         {
-            var normalizedKeyword = NormalizeName(fileNameKeyword);
+            var normalizedKeyword = NormalizeName(profile.WorkbookNameKeyword);
+            var excludedKeywords = profile.WorkbookNameExcludedKeywords
+                .Select(NormalizeName)
+                .Where(keyword => keyword.Length > 0)
+                .ToArray();
             return Directory.EnumerateFiles(materialFolder, "*.xlsm", SearchOption.AllDirectories)
                 .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
-                .FirstOrDefault(path => NormalizeName(Path.GetFileNameWithoutExtension(path))
-                    .Contains(normalizedKeyword, StringComparison.Ordinal));
+                .FirstOrDefault(path =>
+                {
+                    var normalizedFileName = NormalizeName(Path.GetFileNameWithoutExtension(path));
+                    return normalizedFileName.Contains(normalizedKeyword, StringComparison.Ordinal) &&
+                        !excludedKeywords.Any(excluded =>
+                            normalizedFileName.Contains(excluded, StringComparison.Ordinal));
+                });
         }
         catch (UnauthorizedAccessException)
         {
