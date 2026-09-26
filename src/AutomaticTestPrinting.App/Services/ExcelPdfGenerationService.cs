@@ -321,7 +321,11 @@ public static class ExcelPdfGenerationService
                 request.Profile.FitToSinglePageTall);
         }
 
-        ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
+        ValidateGeneratedQuestions(
+            teacherSheet,
+            firstPageCount,
+            secondPageCount,
+            request.Profile.AllowDuplicateQuestionNumbers);
         ValidateStudentAnswerCellsAreEmpty(studentSheet, firstPageCount, secondPageCount);
     }
 
@@ -343,7 +347,7 @@ public static class ExcelPdfGenerationService
         dynamic questionListSheet,
         int questionCount)
     {
-        dynamic selectedNumberRange = backgroundSheet.Range[$"A2:A{questionCount + 1}"];
+        dynamic selectedQuestionRange = backgroundSheet.Range[$"A2:C{questionCount + 1}"];
         dynamic usedRange = questionListSheet.UsedRange;
         dynamic usedRows = usedRange.Rows;
         var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
@@ -351,10 +355,9 @@ public static class ExcelPdfGenerationService
         dynamic sourceRange = questionListSheet.Range[$"B2:D{lastUsedRow}"];
         try
         {
-            object? selectedNumbers = selectedNumberRange.Value2;
-            var selectedNumberMatrix = selectedNumbers as object[,];
+            var selectedValues = (object[,])selectedQuestionRange.Value2;
             var sourceValues = (object[,])sourceRange.Value2;
-            var sourceByNumber = new Dictionary<int, QuestionData>();
+            var sourceQuestions = new HashSet<QuestionSourceKey>();
             for (var row = 1; row <= sourceValues.GetLength(0); row++)
             {
                 if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number))
@@ -369,27 +372,34 @@ public static class ExcelPdfGenerationService
                     continue;
                 }
 
-                if (!sourceByNumber.TryAdd(number, new QuestionData(number, question, answer)))
-                {
-                    throw new InvalidOperationException(
-                        $"Excelの問題解答リストに問題番号 {number} が重複しています。");
-                }
+                sourceQuestions.Add(new QuestionSourceKey(number, question, answer));
             }
 
             var questions = new List<QuestionData>(questionCount);
             for (var row = 1; row <= questionCount; row++)
             {
-                var selectedValue = selectedNumberMatrix is null
-                    ? selectedNumbers
-                    : selectedNumberMatrix[row, 1];
-                if (!TryConvertQuestionNumber(selectedValue, out int number) ||
-                    !sourceByNumber.TryGetValue(number, out var question))
+                if (!TryConvertQuestionNumber(selectedValues[row, 1], out int number))
                 {
                     throw new InvalidOperationException(
-                        "Excelの問題・解答リストから出題内容を取得できませんでした。");
+                        $"Excelの作業シートで{row}問目の問題番号を取得できませんでした。");
                 }
 
-                questions.Add(question);
+                var question = Convert.ToString(selectedValues[row, 2], CultureInfo.InvariantCulture);
+                var answer = Convert.ToString(selectedValues[row, 3], CultureInfo.InvariantCulture);
+                if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
+                {
+                    throw new InvalidOperationException(
+                        $"Excelの作業シートで{row}問目の問題または解答が空欄です。");
+                }
+
+                if (!sourceQuestions.Contains(new QuestionSourceKey(number, question, answer)))
+                {
+                    throw new InvalidOperationException(
+                        $"Excelの作業シートで選ばれた{row}問目が問題解答リストと一致しません。" +
+                        $"問題番号：{number}、問題：{question}");
+                }
+
+                questions.Add(new QuestionData(number, question, answer));
             }
 
             return questions;
@@ -399,7 +409,7 @@ public static class ExcelPdfGenerationService
             ReleaseComObject(sourceRange);
             ReleaseComObject(usedRows);
             ReleaseComObject(usedRange);
-            ReleaseComObject(selectedNumberRange);
+            ReleaseComObject(selectedQuestionRange);
         }
     }
 
@@ -874,7 +884,8 @@ public static class ExcelPdfGenerationService
     private static void ValidateGeneratedQuestions(
         dynamic teacherSheet,
         int firstPageCount,
-        int secondPageCount)
+        int secondPageCount,
+        bool allowDuplicateQuestionNumbers)
     {
         var numbers = new List<string>(firstPageCount + secondPageCount);
         ReadQuestionNumbers(teacherSheet, "B", firstPageCount, numbers);
@@ -883,8 +894,14 @@ public static class ExcelPdfGenerationService
             ReadQuestionNumbers(teacherSheet, "F", secondPageCount, numbers);
         }
 
-        if (numbers.Count != firstPageCount + secondPageCount ||
-            numbers.Distinct().Count() != numbers.Count)
+        if (numbers.Count != firstPageCount + secondPageCount)
+        {
+            throw new InvalidOperationException(
+                "Excelで問題を正しく生成できませんでした。" +
+                $"予定数：{firstPageCount + secondPageCount}、生成数：{numbers.Count}");
+        }
+
+        if (!allowDuplicateQuestionNumbers && numbers.Distinct().Count() != numbers.Count)
         {
             var duplicateNumbers = numbers
                 .GroupBy(number => number)
@@ -1050,4 +1067,6 @@ public static class ExcelPdfGenerationService
         IReadOnlyDictionary<int, string> DisplayNumbers);
 
     private sealed record QuestionData(object Number, string Question, string Answer);
+
+    private sealed record QuestionSourceKey(int Number, string Question, string Answer);
 }

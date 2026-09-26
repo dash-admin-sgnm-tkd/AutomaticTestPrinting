@@ -13,7 +13,8 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用"
+      "studentSheetName": "生徒用",
+      "allowDuplicateQuestionNumbers": true
     },
     {
       "id": "eiken-pre1-ex-second-edition",

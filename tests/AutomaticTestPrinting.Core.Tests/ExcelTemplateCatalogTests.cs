@@ -28,6 +28,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         Assert.Equal("作業シート", result.Profile?.WorkingSheetName);
         Assert.Equal("G1", result.Profile?.RangeStartCell);
         Assert.Equal("G2", result.Profile?.RangeEndCell);
+        Assert.True(result.Profile?.AllowDuplicateQuestionNumbers);
     }
 
     [Theory]

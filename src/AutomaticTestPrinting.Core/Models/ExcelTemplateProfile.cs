@@ -27,6 +27,7 @@ public sealed record ExcelTemplateProfile
     public string StudentHeaderText { get; init; } = "問題";
     public string? HeaderTitle { get; init; }
     public bool FitToSinglePageTall { get; init; }
+    public bool AllowDuplicateQuestionNumbers { get; init; }
 }
 
 public sealed record ExcelRequestPreparation(
