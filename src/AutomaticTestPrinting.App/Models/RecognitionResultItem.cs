@@ -8,6 +8,7 @@ namespace AutomaticTestPrinting.App.Models;
 public sealed class RecognitionResultItem : INotifyPropertyChanged
 {
     private string _studentName;
+    private bool _isIncluded = true;
 
     private RecognitionResultItem(
         string sourcePath,
@@ -43,6 +44,25 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
     public bool HasError { get; }
     public ObservableCollection<EditableTestRequestItem> Requests { get; }
 
+    public bool IsIncluded
+    {
+        get => _isIncluded;
+        set
+        {
+            if (_isIncluded == value)
+            {
+                return;
+            }
+
+            _isIncluded = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIncluded)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasIncludedRequests)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NeedsAttention)));
+            Edited?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
     public string StudentName
     {
         get => _studentName;
@@ -61,10 +81,18 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
     }
 
     public bool IsReady =>
-        !HasError &&
-        !string.IsNullOrWhiteSpace(StudentName) &&
-        Requests.Count > 0 &&
-        Requests.All(request => request.IsValid);
+        !IsIncluded ||
+        (!HasError &&
+         (!Requests.Any(request => request.IsIncluded) ||
+          (!string.IsNullOrWhiteSpace(StudentName) &&
+           Requests.All(request => request.IsReady))));
+
+    public bool HasIncludedRequests =>
+        IsIncluded && Requests.Any(request => request.IsIncluded);
+
+    public bool NeedsAttention =>
+        IsIncluded &&
+        (HasError || Requests.Any(request => request.IsIncluded && !request.IsValid));
 
     public static RecognitionResultItem Success(RecognizedReport report, string? materialFolder)
     {
@@ -93,6 +121,8 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
     private void Request_Edited(object? sender, EventArgs e)
     {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasIncludedRequests)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NeedsAttention)));
         Edited?.Invoke(this, EventArgs.Empty);
     }
 }

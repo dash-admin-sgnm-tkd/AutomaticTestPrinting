@@ -145,10 +145,25 @@
                         Background="{StaticResource SurfaceBrush}" BorderBrush="{StaticResource BorderBrush}"
                         BorderThickness="1" CornerRadius="10" Padding="26">
                     <StackPanel>
-                        <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                                <ColumnDefinition Width="Auto" />
+                            </Grid.ColumnDefinitions>
+                            <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
+                            <Button Grid.Column="1" Margin="12,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="SkipInvalidRequests_Click" Content="エラー・未対応を一括スキップ" />
+                            <Button Grid.Column="2" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}"
+                                    Click="RestoreAllRequests_Click" Content="全件を対象に戻す" />
+                            <Button x:Name="AttentionFilterButton" Grid.Column="3" Margin="8,0,0,0"
+                                    Style="{StaticResource SecondaryButton}"
+                                    Click="AttentionFilterButton_Click" Content="要確認だけ表示" />
+                        </Grid>
                         <TextBlock Margin="0,6,0,18" Foreground="{StaticResource MutedTextBrush}"
                                    Text="原本と比べ、誤りがあれば入力欄を修正してください。修正後は自動で再検査します。" />
-                        <ItemsControl ItemsSource="{Binding RecognitionResults}">
+                        <ItemsControl ItemsSource="{Binding RecognitionResultsView}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
                                     <Border Margin="0,0,0,12" Padding="16" Background="#F9FAFB"
@@ -159,8 +174,12 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
+                                                <CheckBox Margin="0,0,12,10" FontWeight="SemiBold"
+                                                          IsChecked="{Binding IsIncluded}"
+                                                          Content="このレポートを処理対象にする" />
                                                 <TextBlock FontSize="12" FontWeight="SemiBold" Text="生徒名" />
                                                 <TextBox Margin="0,5,12,0" Padding="8,6" FontSize="15" FontWeight="SemiBold"
+                                                         IsEnabled="{Binding IsIncluded}"
                                                          Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}" />
                                                 <TextBlock Margin="0,5,12,0" FontSize="12"
                                                            Foreground="{StaticResource MutedTextBrush}"
@@ -178,9 +197,12 @@
                                                             <Border Margin="0,0,0,10" Padding="12" Background="White"
                                                                     BorderBrush="#D0D5DD" BorderThickness="1" CornerRadius="7">
                                                                 <StackPanel>
-                                                                    <TextBlock FontWeight="SemiBold">
-                                                                        <Run Text="テスト " /><Run Text="{Binding DisplayNumber}" />
-                                                                    </TextBlock>
+                                                                    <CheckBox FontWeight="SemiBold" IsChecked="{Binding IsIncluded}">
+                                                                        <TextBlock>
+                                                                            <Run Text="テスト " /><Run Text="{Binding DisplayNumber}" />
+                                                                            <Run Text=" を作成する" />
+                                                                        </TextBlock>
+                                                                    </CheckBox>
                                                                     <Grid Margin="0,8,0,0">
                                                                         <Grid.ColumnDefinitions>
                                                                             <ColumnDefinition Width="*" />
@@ -193,22 +215,22 @@
                                                                         </Grid.ColumnDefinitions>
                                                                         <StackPanel>
                                                                             <TextBlock FontSize="12" Text="教材名" />
-                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6" IsEnabled="{Binding IsIncluded}"
                                                                                      Text="{Binding MaterialName, UpdateSourceTrigger=PropertyChanged}" />
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Column="2">
                                                                             <TextBlock FontSize="12" Text="開始番号" />
-                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6" IsEnabled="{Binding IsIncluded}"
                                                                                      Text="{Binding StartNumber, UpdateSourceTrigger=PropertyChanged}" />
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Column="4">
                                                                             <TextBlock FontSize="12" Text="終了番号" />
-                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6" IsEnabled="{Binding IsIncluded}"
                                                                                      Text="{Binding EndNumber, UpdateSourceTrigger=PropertyChanged}" />
                                                                         </StackPanel>
                                                                         <StackPanel Grid.Column="6">
                                                                             <TextBlock FontSize="12" Text="問題数" />
-                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6" IsEnabled="{Binding IsIncluded}"
                                                                                      Text="{Binding QuestionCount, UpdateSourceTrigger=PropertyChanged}" />
                                                                         </StackPanel>
                                                                     </Grid>

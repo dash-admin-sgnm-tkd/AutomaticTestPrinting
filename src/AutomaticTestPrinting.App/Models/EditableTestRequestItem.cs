@@ -15,6 +15,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     private string _questionCount;
     private string _validationMessage = string.Empty;
     private bool _isValid;
+    private bool _isIncluded = true;
 
     public EditableTestRequestItem(
         NormalTestRequestCandidate request,
@@ -71,8 +72,37 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     public bool IsValid
     {
         get => _isValid;
-        private set => SetValue(ref _isValid, value);
+        private set
+        {
+            if (_isValid == value)
+            {
+                return;
+            }
+
+            _isValid = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
+        }
     }
+
+    public bool IsIncluded
+    {
+        get => _isIncluded;
+        set
+        {
+            if (_isIncluded == value)
+            {
+                return;
+            }
+
+            _isIncluded = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsIncluded)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
+            Edited?.Invoke(this, EventArgs.Empty);
+        }
+    }
+
+    public bool IsReady => !IsIncluded || IsValid;
 
     public NormalTestRequestCandidate? BuildCandidate()
     {

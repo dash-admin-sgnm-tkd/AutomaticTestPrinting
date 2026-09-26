@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Diagnostics;
 using System.IO;
 using System.Windows;
+using System.Windows.Data;
 using AutomaticTestPrinting.App.Models;
 using AutomaticTestPrinting.App.Services;
 using AutomaticTestPrinting.Core.Models;
@@ -15,7 +16,9 @@ public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ReportFile> _reports = [];
     private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
+    private readonly ICollectionView _recognitionResultsView;
     private readonly JsonSettingsStore _settingsStore;
+    private bool _showOnlyNeedsAttention;
 
     public MainWindow()
     {
@@ -27,7 +30,8 @@ public partial class MainWindow : Window
             "settings.json");
 
         _settingsStore = new JsonSettingsStore(settingsPath);
-        DataContext = new { Reports = _reports, RecognitionResults = _recognitionResults };
+        _recognitionResultsView = CollectionViewSource.GetDefaultView(_recognitionResults);
+        DataContext = new { Reports = _reports, RecognitionResultsView = _recognitionResultsView };
         UpdateReportListState();
         UpdateRecognitionResultState();
     }
@@ -227,26 +231,39 @@ public partial class MainWindow : Window
 
         try
         {
-            var service = new WindowsReportOcrService();
-            var progress = new Progress<string>(message => StatusText.Text = message);
-
-            foreach (var report in _reports)
+            var reports = _reports.ToArray();
+            IProgress<string> progress = new Progress<string>(message => StatusText.Text = message);
+            using var concurrencyGate = new SemaphoreSlim(2);
+            var completedCount = 0;
+            var recognitionTasks = reports.Select(async report =>
             {
+                await concurrencyGate.WaitAsync();
                 try
                 {
-                    var result = await service.RecognizeAsync(report.FullPath, progress);
-                    AddRecognitionResult(
-                        RecognitionResultItem.Success(result, MaterialFolderTextBox.Text));
+                    var service = new WindowsReportOcrService();
+                    var recognized = await service.RecognizeAsync(report.FullPath, progress);
+                    return RecognitionResultItem.Success(recognized, MaterialFolderTextBox.Text);
                 }
                 catch (Exception exception)
                 {
-                    AddRecognitionResult(
-                        RecognitionResultItem.Failure(report.FullPath, exception.Message));
+                    return RecognitionResultItem.Failure(report.FullPath, exception.Message);
                 }
+                finally
+                {
+                    concurrencyGate.Release();
+                    var current = Interlocked.Increment(ref completedCount);
+                    progress.Report($"読み取り中：{current}/{reports.Length}件完了");
+                }
+            }).ToArray();
 
-                UpdateRecognitionResultState();
-                UpdatePdfGenerationState();
+            var recognitionResults = await Task.WhenAll(recognitionTasks);
+            foreach (var result in recognitionResults)
+            {
+                AddRecognitionResult(result);
             }
+
+            UpdateRecognitionResultState();
+            UpdatePdfGenerationState();
 
             var failedCount = _recognitionResults.Count(result => result.HasError);
             StatusText.Text = failedCount == 0
@@ -264,6 +281,63 @@ public partial class MainWindow : Window
         UpdatePdfGenerationState();
     }
 
+    private void SkipInvalidRequests_Click(object sender, RoutedEventArgs e)
+    {
+        var skippedCount = 0;
+        ConfirmResultsCheckBox.IsChecked = false;
+        foreach (var result in _recognitionResults)
+        {
+            if (result.HasError)
+            {
+                if (result.IsIncluded)
+                {
+                    result.IsIncluded = false;
+                    skippedCount++;
+                }
+                continue;
+            }
+
+            foreach (var request in result.Requests.Where(request => request.IsIncluded && !request.IsValid))
+            {
+                request.IsIncluded = false;
+                skippedCount++;
+            }
+        }
+
+        StatusText.Text = skippedCount == 0
+            ? "スキップが必要な依頼はありません"
+            : $"エラー・未対応の依頼を{skippedCount}件スキップしました";
+        UpdatePdfGenerationState();
+    }
+
+    private void RestoreAllRequests_Click(object sender, RoutedEventArgs e)
+    {
+        ConfirmResultsCheckBox.IsChecked = false;
+        foreach (var result in _recognitionResults)
+        {
+            result.IsIncluded = true;
+            foreach (var request in result.Requests)
+            {
+                request.IsIncluded = true;
+            }
+        }
+
+        StatusText.Text = "すべてのレポートとテストを処理対象に戻しました";
+        UpdatePdfGenerationState();
+    }
+
+    private void AttentionFilterButton_Click(object sender, RoutedEventArgs e)
+    {
+        _showOnlyNeedsAttention = !_showOnlyNeedsAttention;
+        _recognitionResultsView.Filter = _showOnlyNeedsAttention
+            ? item => item is RecognitionResultItem result && result.NeedsAttention
+            : null;
+        AttentionFilterButton.Content = _showOnlyNeedsAttention
+            ? "すべて表示"
+            : "要確認だけ表示";
+        _recognitionResultsView.Refresh();
+    }
+
     private async void CreatePdfsButton_Click(object sender, RoutedEventArgs e)
     {
         var requests = BuildPdfGenerationRequests();
@@ -277,7 +351,9 @@ public partial class MainWindow : Window
             return;
         }
 
-        var expectedRequestCount = _recognitionResults.Sum(result => result.Requests.Count);
+        var expectedRequestCount = _recognitionResults
+            .Where(result => result.IsIncluded)
+            .Sum(result => result.Requests.Count(request => request.IsIncluded));
         if (requests.Count != expectedRequestCount)
         {
             MessageBox.Show(this,
@@ -392,7 +468,7 @@ public partial class MainWindow : Window
             ConfirmResultsCheckBox.IsChecked == true &&
             _recognitionResults.Count > 0 &&
             _recognitionResults.All(result => result.IsReady) &&
-            _recognitionResults.SelectMany(result => result.Requests).Any();
+            _recognitionResults.Any(result => result.HasIncludedRequests);
     }
 
     private void InvalidateRecognitionResults()
@@ -408,7 +484,12 @@ public partial class MainWindow : Window
         var requests = new List<ExcelPdfGenerationRequest>();
         foreach (var result in _recognitionResults)
         {
-            foreach (var editableRequest in result.Requests)
+            if (!result.IsIncluded)
+            {
+                continue;
+            }
+
+            foreach (var editableRequest in result.Requests.Where(request => request.IsIncluded))
             {
                 var testRequest = editableRequest.BuildCandidate();
                 if (testRequest is null)
@@ -453,6 +534,7 @@ public partial class MainWindow : Window
     {
         ConfirmResultsCheckBox.IsChecked = false;
         StatusText.Text = "修正内容を原本と照合し、確認チェックを入れ直してください";
+        _recognitionResultsView.Refresh();
         UpdatePdfGenerationState();
     }
 
