@@ -147,7 +147,7 @@
                     <StackPanel>
                         <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
                         <TextBlock Margin="0,6,0,18" Foreground="{StaticResource MutedTextBrush}"
-                                   Text="印刷前に、生徒名・依頼の有無・問題数を必ず確認してください。" />
+                                   Text="原本と比べ、誤りがあれば入力欄を修正してください。修正後は自動で再検査します。" />
                         <ItemsControl ItemsSource="{Binding RecognitionResults}">
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
@@ -159,7 +159,9 @@
                                                 <ColumnDefinition Width="*" />
                                             </Grid.ColumnDefinitions>
                                             <StackPanel>
-                                                <TextBlock FontSize="16" FontWeight="Bold" Text="{Binding StudentName}" />
+                                                <TextBlock FontSize="12" FontWeight="SemiBold" Text="生徒名" />
+                                                <TextBox Margin="0,5,12,0" Padding="8,6" FontSize="15" FontWeight="SemiBold"
+                                                         Text="{Binding StudentName, UpdateSourceTrigger=PropertyChanged}" />
                                                 <TextBlock Margin="0,5,12,0" FontSize="12"
                                                            Foreground="{StaticResource MutedTextBrush}"
                                                            Text="{Binding FileName}" TextWrapping="Wrap" />
@@ -170,12 +172,64 @@
                                             </StackPanel>
                                             <StackPanel Grid.Column="1">
                                                 <TextBlock FontWeight="SemiBold" Text="{Binding NormalTestSummary}" />
-                                                <TextBlock Margin="0,6,0,0" Text="{Binding NormalTestDetails}"
-                                                           TextWrapping="Wrap" LineHeight="21" />
-                                                <TextBlock Margin="0,7,0,0" Foreground="#175CD3"
-                                                           FontWeight="SemiBold"
-                                                           Text="{Binding ExcelPreparationDetails}"
-                                                           TextWrapping="Wrap" LineHeight="21" />
+                                                <ItemsControl Margin="0,8,0,0" ItemsSource="{Binding Requests}">
+                                                    <ItemsControl.ItemTemplate>
+                                                        <DataTemplate>
+                                                            <Border Margin="0,0,0,10" Padding="12" Background="White"
+                                                                    BorderBrush="#D0D5DD" BorderThickness="1" CornerRadius="7">
+                                                                <StackPanel>
+                                                                    <TextBlock FontWeight="SemiBold">
+                                                                        <Run Text="テスト " /><Run Text="{Binding DisplayNumber}" />
+                                                                    </TextBlock>
+                                                                    <Grid Margin="0,8,0,0">
+                                                                        <Grid.ColumnDefinitions>
+                                                                            <ColumnDefinition Width="*" />
+                                                                            <ColumnDefinition Width="10" />
+                                                                            <ColumnDefinition Width="90" />
+                                                                            <ColumnDefinition Width="10" />
+                                                                            <ColumnDefinition Width="90" />
+                                                                            <ColumnDefinition Width="10" />
+                                                                            <ColumnDefinition Width="80" />
+                                                                        </Grid.ColumnDefinitions>
+                                                                        <StackPanel>
+                                                                            <TextBlock FontSize="12" Text="教材名" />
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                                     Text="{Binding MaterialName, UpdateSourceTrigger=PropertyChanged}" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="2">
+                                                                            <TextBlock FontSize="12" Text="開始番号" />
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                                     Text="{Binding StartNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="4">
+                                                                            <TextBlock FontSize="12" Text="終了番号" />
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                                     Text="{Binding EndNumber, UpdateSourceTrigger=PropertyChanged}" />
+                                                                        </StackPanel>
+                                                                        <StackPanel Grid.Column="6">
+                                                                            <TextBlock FontSize="12" Text="問題数" />
+                                                                            <TextBox Margin="0,4,0,0" Padding="8,6"
+                                                                                     Text="{Binding QuestionCount, UpdateSourceTrigger=PropertyChanged}" />
+                                                                        </StackPanel>
+                                                                    </Grid>
+                                                                    <TextBlock Margin="0,8,0,0" FontWeight="SemiBold"
+                                                                               Text="{Binding ValidationMessage}" TextWrapping="Wrap">
+                                                                        <TextBlock.Style>
+                                                                            <Style TargetType="TextBlock">
+                                                                                <Setter Property="Foreground" Value="#B42318" />
+                                                                                <Style.Triggers>
+                                                                                    <DataTrigger Binding="{Binding IsValid}" Value="True">
+                                                                                        <Setter Property="Foreground" Value="#067647" />
+                                                                                    </DataTrigger>
+                                                                                </Style.Triggers>
+                                                                            </Style>
+                                                                        </TextBlock.Style>
+                                                                    </TextBlock>
+                                                                </StackPanel>
+                                                            </Border>
+                                                        </DataTemplate>
+                                                    </ItemsControl.ItemTemplate>
+                                                </ItemsControl>
                                                 <TextBlock Margin="0,5,0,0" Text="{Binding StageTestSummary}" />
                                                 <TextBlock Margin="0,7,0,0" FontSize="12"
                                                            Foreground="{StaticResource MutedTextBrush}"

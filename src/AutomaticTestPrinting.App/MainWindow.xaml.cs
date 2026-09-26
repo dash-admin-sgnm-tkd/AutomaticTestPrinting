@@ -15,7 +15,6 @@ public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ReportFile> _reports = [];
     private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
-    private readonly List<RecognizedReport> _recognizedReports = [];
     private readonly JsonSettingsStore _settingsStore;
 
     public MainWindow()
@@ -200,7 +199,6 @@ public partial class MainWindow : Window
     {
         _reports.Clear();
         _recognitionResults.Clear();
-        _recognizedReports.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
         UpdateReportListState();
         UpdateRecognitionResultState();
@@ -224,7 +222,6 @@ public partial class MainWindow : Window
         await SaveSettingsAsync();
         ValidateButton.IsEnabled = false;
         _recognitionResults.Clear();
-        _recognizedReports.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
         UpdateRecognitionResultState();
 
@@ -238,13 +235,12 @@ public partial class MainWindow : Window
                 try
                 {
                     var result = await service.RecognizeAsync(report.FullPath, progress);
-                    _recognizedReports.Add(result);
-                    _recognitionResults.Add(
+                    AddRecognitionResult(
                         RecognitionResultItem.Success(result, MaterialFolderTextBox.Text));
                 }
                 catch (Exception exception)
                 {
-                    _recognitionResults.Add(
+                    AddRecognitionResult(
                         RecognitionResultItem.Failure(report.FullPath, exception.Message));
                 }
 
@@ -281,7 +277,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var expectedRequestCount = _recognizedReports.Sum(report => report.TestRequests.Count);
+        var expectedRequestCount = _recognitionResults.Sum(result => result.Requests.Count);
         if (requests.Count != expectedRequestCount)
         {
             MessageBox.Show(this,
@@ -394,14 +390,13 @@ public partial class MainWindow : Window
     {
         CreatePdfsButton.IsEnabled =
             ConfirmResultsCheckBox.IsChecked == true &&
-            _recognizedReports.Count > 0 &&
-            !_recognitionResults.Any(result => result.HasError) &&
-            _recognizedReports.SelectMany(report => report.TestRequests).Any();
+            _recognitionResults.Count > 0 &&
+            _recognitionResults.All(result => result.IsReady) &&
+            _recognitionResults.SelectMany(result => result.Requests).Any();
     }
 
     private void InvalidateRecognitionResults()
     {
-        _recognizedReports.Clear();
         _recognitionResults.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
         UpdateRecognitionResultState();
@@ -411,10 +406,16 @@ public partial class MainWindow : Window
     private List<ExcelPdfGenerationRequest> BuildPdfGenerationRequests()
     {
         var requests = new List<ExcelPdfGenerationRequest>();
-        foreach (var report in _recognizedReports)
+        foreach (var result in _recognitionResults)
         {
-            foreach (var testRequest in report.TestRequests)
+            foreach (var editableRequest in result.Requests)
             {
+                var testRequest = editableRequest.BuildCandidate();
+                if (testRequest is null)
+                {
+                    continue;
+                }
+
                 var preparation = ExcelTemplateCatalog.Prepare(
                     testRequest,
                     MaterialFolderTextBox.Text);
@@ -428,7 +429,7 @@ public partial class MainWindow : Window
                 }
 
                 requests.Add(new ExcelPdfGenerationRequest(
-                    report.StudentName,
+                    result.StudentName.Trim(),
                     testRequest.MaterialName,
                     testRequest.QuestionCount,
                     preparation.StartNumber.Value,
@@ -440,6 +441,19 @@ public partial class MainWindow : Window
         }
 
         return requests;
+    }
+
+    private void AddRecognitionResult(RecognitionResultItem result)
+    {
+        result.Edited += RecognitionResult_Edited;
+        _recognitionResults.Add(result);
+    }
+
+    private void RecognitionResult_Edited(object? sender, EventArgs e)
+    {
+        ConfirmResultsCheckBox.IsChecked = false;
+        StatusText.Text = "修正内容を原本と照合し、確認チェックを入れ直してください";
+        UpdatePdfGenerationState();
     }
 
     private void UpdateStatus()
