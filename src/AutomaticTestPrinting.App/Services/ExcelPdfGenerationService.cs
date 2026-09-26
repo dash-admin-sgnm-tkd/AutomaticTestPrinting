@@ -343,7 +343,7 @@ public static class ExcelPdfGenerationService
         dynamic questionListSheet,
         int questionCount)
     {
-        dynamic selectedQuestionRange = backgroundSheet.Range[$"A2:C{questionCount + 1}"];
+        dynamic selectedNumberRange = backgroundSheet.Range[$"A2:A{questionCount + 1}"];
         dynamic usedRange = questionListSheet.UsedRange;
         dynamic usedRows = usedRange.Rows;
         var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
@@ -351,9 +351,10 @@ public static class ExcelPdfGenerationService
         dynamic sourceRange = questionListSheet.Range[$"B2:D{lastUsedRow}"];
         try
         {
-            var selectedValues = (object[,])selectedQuestionRange.Value2;
+            object? selectedNumbers = selectedNumberRange.Value2;
+            var selectedNumberMatrix = selectedNumbers as object[,];
             var sourceValues = (object[,])sourceRange.Value2;
-            var sourceQuestions = new HashSet<QuestionSourceKey>();
+            var sourceByNumber = new Dictionary<int, QuestionData>();
             for (var row = 1; row <= sourceValues.GetLength(0); row++)
             {
                 if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number))
@@ -368,34 +369,28 @@ public static class ExcelPdfGenerationService
                     continue;
                 }
 
-                sourceQuestions.Add(new QuestionSourceKey(number, question, answer));
+                if (!sourceByNumber.TryAdd(number, new QuestionData(number, question, answer)))
+                {
+                    throw new InvalidOperationException(
+                        $"Excelの問題解答リストに問題番号 {number} が重複しています。");
+                }
             }
 
             var questions = new List<QuestionData>(questionCount);
             for (var row = 1; row <= questionCount; row++)
             {
-                if (!TryConvertQuestionNumber(selectedValues[row, 1], out int number))
+                var selectedValue = selectedNumberMatrix is null
+                    ? selectedNumbers
+                    : selectedNumberMatrix[row, 1];
+                if (!TryConvertQuestionNumber(selectedValue, out int number) ||
+                    !sourceByNumber.TryGetValue(number, out var question))
                 {
                     throw new InvalidOperationException(
-                        $"Excelの作業シートで{row}問目の問題番号を取得できませんでした。");
+                        $"Excelの問題解答リストから{row}問目を取得できませんでした。" +
+                        $"選択値：{Convert.ToString(selectedValue, CultureInfo.InvariantCulture)}");
                 }
 
-                var question = Convert.ToString(selectedValues[row, 2], CultureInfo.InvariantCulture);
-                var answer = Convert.ToString(selectedValues[row, 3], CultureInfo.InvariantCulture);
-                if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
-                {
-                    throw new InvalidOperationException(
-                        $"Excelの作業シートで{row}問目の問題または解答が空欄です。");
-                }
-
-                if (!sourceQuestions.Contains(new QuestionSourceKey(number, question, answer)))
-                {
-                    throw new InvalidOperationException(
-                        $"Excelの作業シートで選ばれた{row}問目が問題解答リストと一致しません。" +
-                        $"問題番号：{number}、問題：{question}");
-                }
-
-                questions.Add(new QuestionData(number, question, answer));
+                questions.Add(question);
             }
 
             return questions;
@@ -405,7 +400,7 @@ public static class ExcelPdfGenerationService
             ReleaseComObject(sourceRange);
             ReleaseComObject(usedRows);
             ReleaseComObject(usedRange);
-            ReleaseComObject(selectedQuestionRange);
+            ReleaseComObject(selectedNumberRange);
         }
     }
 
@@ -1062,6 +1057,4 @@ public static class ExcelPdfGenerationService
         IReadOnlyDictionary<int, string> DisplayNumbers);
 
     private sealed record QuestionData(object Number, string Question, string Answer);
-
-    private sealed record QuestionSourceKey(int Number, string Question, string Answer);
 }
