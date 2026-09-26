@@ -8,7 +8,9 @@ public sealed record ExcelPdfGenerationRequest(
     int EndNumber,
     string WorkbookPath,
     string OutputFolder,
-    ExcelTemplateProfile Profile);
+    ExcelTemplateProfile Profile,
+    string SourceReportFileName,
+    int TestNumber);
 
 public sealed record ExcelPdfGenerationResult(
     string ProblemPdfPath,

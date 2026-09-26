@@ -146,24 +146,26 @@
                         BorderThickness="1" CornerRadius="10" Padding="26">
                     <StackPanel>
                         <Grid>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                                <ColumnDefinition Width="Auto" />
-                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto" />
+                                <RowDefinition Height="Auto" />
+                            </Grid.RowDefinitions>
                             <TextBlock FontSize="18" FontWeight="SemiBold" Text="3. 読み取り結果を確認" />
-                            <Button Grid.Column="1" Margin="12,0,0,0" Style="{StaticResource SecondaryButton}"
-                                    Click="SkipInvalidRequests_Click" Content="エラー・未対応を一括スキップ" />
-                            <Button Grid.Column="2" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}"
-                                    Click="RestoreAllRequests_Click" Content="全件を対象に戻す" />
-                            <Button x:Name="AttentionFilterButton" Grid.Column="3" Margin="8,0,0,0"
-                                    Style="{StaticResource SecondaryButton}"
-                                    Click="AttentionFilterButton_Click" Content="要確認だけ表示" />
-                            <Button x:Name="SaveSkippedLogButton" Grid.Column="4" Margin="8,0,0,0"
-                                    Style="{StaticResource SecondaryButton}" IsEnabled="False"
-                                    Click="SaveSkippedLogButton_Click" Content="スキップ一覧を保存" />
+                            <WrapPanel Grid.Row="1" Margin="0,10,0,0">
+                                <Button Style="{StaticResource SecondaryButton}"
+                                        Click="SkipInvalidRequests_Click" Content="エラー・未対応を一括スキップ" />
+                                <Button Margin="8,0,0,0" Style="{StaticResource SecondaryButton}"
+                                        Click="RestoreAllRequests_Click" Content="全件を対象に戻す" />
+                                <Button x:Name="AttentionFilterButton" Margin="8,0,0,0"
+                                        Style="{StaticResource SecondaryButton}"
+                                        Click="AttentionFilterButton_Click" Content="要確認だけ表示" />
+                                <Button x:Name="SaveSkippedLogButton" Margin="8,0,0,0"
+                                        Style="{StaticResource SecondaryButton}" IsEnabled="False"
+                                        Click="SaveSkippedLogButton_Click" Content="スキップ一覧を保存" />
+                                <Button x:Name="SaveErrorLogButton" Margin="8,0,0,0"
+                                        Style="{StaticResource SecondaryButton}" IsEnabled="False"
+                                        Click="SaveErrorLogButton_Click" Content="エラー一覧を保存" />
+                            </WrapPanel>
                         </Grid>
                         <TextBlock Margin="0,6,0,18" Foreground="{StaticResource MutedTextBrush}"
                                    Text="原本と比べ、誤りがあれば入力欄を修正してください。修正後は自動で再検査します。" />

@@ -17,6 +17,9 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
         string stageTestSummary,
         string orientationSummary,
         bool hasError,
+        string errorType,
+        string errorCode,
+        string errorDetails,
         IEnumerable<EditableTestRequestItem> requests)
     {
         SourcePath = sourcePath;
@@ -26,6 +29,9 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
         StageTestSummary = stageTestSummary;
         OrientationSummary = orientationSummary;
         HasError = hasError;
+        ErrorType = errorType;
+        ErrorCode = errorCode;
+        ErrorDetails = errorDetails;
         Requests = new ObservableCollection<EditableTestRequestItem>(requests);
         foreach (var request in Requests)
         {
@@ -42,6 +48,9 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
     public string StageTestSummary { get; }
     public string OrientationSummary { get; }
     public bool HasError { get; }
+    public string ErrorType { get; }
+    public string ErrorCode { get; }
+    public string ErrorDetails { get; }
     public ObservableCollection<EditableTestRequestItem> Requests { get; }
 
     public bool IsIncluded
@@ -106,16 +115,22 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
             report.StageTestSummary,
             report.OrientationSummary,
             false,
+            string.Empty,
+            string.Empty,
+            string.Empty,
             requests);
     }
 
-    public static RecognitionResultItem Failure(string sourcePath, string message) => new(
+    public static RecognitionResultItem Failure(string sourcePath, Exception exception) => new(
         sourcePath,
         "読み取りに失敗しました",
-        message,
+        exception.Message,
         "PDFを開けるか確認してください",
         string.Empty,
         true,
+        exception.GetType().FullName ?? exception.GetType().Name,
+        $"0x{exception.HResult:X8}",
+        exception.ToString(),
         []);
 
     private void Request_Edited(object? sender, EventArgs e)

@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Globalization;
 using System.IO;
 using System.Windows;
 using System.Windows.Data;
@@ -246,7 +247,7 @@ public partial class MainWindow : Window
                 }
                 catch (Exception exception)
                 {
-                    return RecognitionResultItem.Failure(report.FullPath, exception.Message);
+                    return RecognitionResultItem.Failure(report.FullPath, exception);
                 }
                 finally
                 {
@@ -266,9 +267,15 @@ public partial class MainWindow : Window
             UpdatePdfGenerationState();
 
             var failedCount = _recognitionResults.Count(result => result.HasError);
+            var errorCount = GetCurrentErrorLogEntries(DateTimeOffset.Now).Count;
+            var errorLogPath = await SaveErrorLogAsync(showWhenEmpty: false);
             StatusText.Text = failedCount == 0
-                ? $"読み取り完了：{_recognitionResults.Count}件"
-                : $"読み取り完了：成功 {_recognitionResults.Count - failedCount}件、要確認 {failedCount}件";
+                ? errorCount == 0
+                    ? $"読み取り完了：{_recognitionResults.Count}件"
+                    : $"読み取り完了：{_recognitionResults.Count}件、要確認 {errorCount}件" +
+                      (errorLogPath is null ? string.Empty : "（詳細ログ保存済み）")
+                : $"読み取り完了：成功 {_recognitionResults.Count - failedCount}件、要確認 {errorCount}件" +
+                  (errorLogPath is null ? string.Empty : "（詳細ログ保存済み）");
         }
         finally
         {
@@ -342,6 +349,22 @@ public partial class MainWindow : Window
             MessageBoxImage.Information);
     }
 
+    private async void SaveErrorLogButton_Click(object sender, RoutedEventArgs e)
+    {
+        var logPath = await SaveErrorLogAsync(showWhenEmpty: true);
+        if (logPath is null)
+        {
+            return;
+        }
+
+        StatusText.Text = $"エラー一覧を保存しました：{Path.GetFileName(logPath)}";
+        MessageBox.Show(this,
+            $"エラーの詳細一覧を保存しました。\n\n{logPath}",
+            "エラー一覧を保存しました",
+            MessageBoxButton.OK,
+            MessageBoxImage.Information);
+    }
+
     private void AttentionFilterButton_Click(object sender, RoutedEventArgs e)
     {
         _showOnlyNeedsAttention = !_showOnlyNeedsAttention;
@@ -396,6 +419,7 @@ public partial class MainWindow : Window
         ConfirmResultsCheckBox.IsEnabled = false;
         var generatedFiles = new List<string>();
         string? skippedLogPath = null;
+        ExcelPdfGenerationRequest? activeRequest = null;
 
         try
         {
@@ -403,7 +427,8 @@ public partial class MainWindow : Window
             for (var index = 0; index < requests.Count; index++)
             {
                 StatusText.Text = $"PDFを作成中：{index + 1}/{requests.Count}";
-                var result = await ExcelPdfGenerationService.GenerateAsync(requests[index]);
+                activeRequest = requests[index];
+                var result = await ExcelPdfGenerationService.GenerateAsync(activeRequest);
                 generatedFiles.Add(result.ProblemPdfPath);
                 generatedFiles.Add(result.AnswerPdfPath);
             }
@@ -418,9 +443,11 @@ public partial class MainWindow : Window
         }
         catch (Exception exception)
         {
+            var errorLogPath = await SaveGenerationErrorLogAsync(activeRequest, exception);
             StatusText.Text = "PDF作成中にエラーが発生しました";
             MessageBox.Show(this,
-                exception.Message,
+                exception.Message +
+                (errorLogPath is null ? string.Empty : $"\n\n詳細ログ：{errorLogPath}"),
                 "PDFを作成できませんでした",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
@@ -484,6 +511,7 @@ public partial class MainWindow : Window
     private void UpdatePdfGenerationState()
     {
         SaveSkippedLogButton.IsEnabled = GetSkippedLogEntries(DateTimeOffset.Now).Count > 0;
+        SaveErrorLogButton.IsEnabled = GetCurrentErrorLogEntries(DateTimeOffset.Now).Count > 0;
         CreatePdfsButton.IsEnabled =
             ConfirmResultsCheckBox.IsChecked == true &&
             _recognitionResults.Count > 0 &&
@@ -537,7 +565,9 @@ public partial class MainWindow : Window
                     preparation.EndNumber.Value,
                     preparation.WorkbookPath,
                     OutputFolderTextBox.Text,
-                    preparation.Profile));
+                    preparation.Profile,
+                    result.FileName,
+                    editableRequest.DisplayNumber));
             }
         }
 
@@ -589,6 +619,146 @@ public partial class MainWindow : Window
             return null;
         }
     }
+
+    private async Task<string?> SaveErrorLogAsync(bool showWhenEmpty)
+    {
+        var now = DateTimeOffset.Now;
+        return await SaveErrorEntriesAsync(
+            GetCurrentErrorLogEntries(now),
+            now,
+            showWhenEmpty);
+    }
+
+    private async Task<string?> SaveGenerationErrorLogAsync(
+        ExcelPdfGenerationRequest? request,
+        Exception exception)
+    {
+        var now = DateTimeOffset.Now;
+        var entry = CreateExceptionErrorLogEntry(
+            now,
+            "PDF作成",
+            request?.StudentName ?? string.Empty,
+            request?.SourceReportFileName ?? string.Empty,
+            request?.TestNumber,
+            request?.MaterialName ?? string.Empty,
+            request is null ? string.Empty : $"{request.StartNumber}-{request.EndNumber}",
+            request?.QuestionCount.ToString(CultureInfo.InvariantCulture) ?? string.Empty,
+            exception);
+        return await SaveErrorEntriesAsync([entry], now, showWhenEmpty: false);
+    }
+
+    private async Task<string?> SaveErrorEntriesAsync(
+        List<ErrorLogEntry> entries,
+        DateTimeOffset createdAt,
+        bool showWhenEmpty)
+    {
+        var outputFolder = OutputFolderTextBox.Text.Trim();
+        if (string.IsNullOrWhiteSpace(outputFolder) || !Directory.Exists(outputFolder))
+        {
+            if (showWhenEmpty)
+            {
+                MessageBox.Show(this,
+                    "先に出力フォルダーを設定してください。",
+                    "出力フォルダーが必要です",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Warning);
+            }
+            return null;
+        }
+
+        if (entries.Count == 0)
+        {
+            if (showWhenEmpty)
+            {
+                MessageBox.Show(this,
+                    "現在記録するエラーはありません。",
+                    "エラーはありません",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+            }
+            return null;
+        }
+
+        try
+        {
+            return await ErrorLogService.SaveAsync(outputFolder, entries, createdAt);
+        }
+        catch (Exception exception)
+        {
+            MessageBox.Show(this,
+                $"エラー一覧を保存できませんでした。\n\n{exception.Message}",
+                "ログを保存できませんでした",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            return null;
+        }
+    }
+
+    private List<ErrorLogEntry> GetCurrentErrorLogEntries(DateTimeOffset loggedAt)
+    {
+        var entries = new List<ErrorLogEntry>();
+        foreach (var result in _recognitionResults)
+        {
+            if (result.HasError)
+            {
+                entries.Add(new ErrorLogEntry(
+                    loggedAt,
+                    "レポート読み取り",
+                    result.StudentName.Trim(),
+                    result.FileName,
+                    null,
+                    string.Empty,
+                    string.Empty,
+                    string.Empty,
+                    result.ErrorType,
+                    result.ErrorCode,
+                    result.NormalTestSummary,
+                    result.ErrorDetails));
+            }
+
+            entries.AddRange(result.Requests
+                .Where(request => !request.IsValid)
+                .Select(request => new ErrorLogEntry(
+                    loggedAt,
+                    "教材・入力内容の事前検査",
+                    result.StudentName.Trim(),
+                    result.FileName,
+                    request.DisplayNumber,
+                    request.MaterialName.Trim(),
+                    $"{request.StartNumber.Trim()}-{request.EndNumber.Trim()}",
+                    request.QuestionCount.Trim(),
+                    "ValidationError",
+                    string.Empty,
+                    request.ValidationMessage,
+                    $"教材名={request.MaterialName}; 開始番号={request.StartNumber}; " +
+                    $"終了番号={request.EndNumber}; 問題数={request.QuestionCount}")));
+        }
+
+        return entries;
+    }
+
+    private static ErrorLogEntry CreateExceptionErrorLogEntry(
+        DateTimeOffset loggedAt,
+        string stage,
+        string studentName,
+        string reportFileName,
+        int? testNumber,
+        string materialName,
+        string range,
+        string questionCount,
+        Exception exception) => new(
+            loggedAt,
+            stage,
+            studentName,
+            reportFileName,
+            testNumber,
+            materialName,
+            range,
+            questionCount,
+            exception.GetType().FullName ?? exception.GetType().Name,
+            $"0x{exception.HResult:X8}",
+            exception.Message,
+            exception.ToString());
 
     private List<SkippedTestLogEntry> GetSkippedLogEntries(DateTimeOffset loggedAt)
     {
