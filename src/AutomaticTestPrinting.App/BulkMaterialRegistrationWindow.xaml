@@ -21,7 +21,7 @@
                 <StackPanel>
                     <TextBlock FontSize="23" FontWeight="Bold" Text="教材をまとめて登録" />
                     <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
-                               Text="教材フォルダーのExcelを自動判定します。登録する教材だけチェックしてください。" />
+                               Text="登録した教材フォルダーすべてのExcelを自動判定します。登録する教材だけチェックしてください。" />
                 </StackPanel>
                 <Button x:Name="RescanButton" Grid.Column="1" VerticalAlignment="Center"
                         Style="{StaticResource SecondaryButton}" Click="Rescan_Click"
@@ -39,7 +39,7 @@
             <Border Padding="16" Background="#EFF8FF" BorderBrush="#B2DDFF"
                     BorderThickness="1" CornerRadius="8">
                 <TextBlock x:Name="ScanSummaryText" Foreground="#175CD3" TextWrapping="Wrap"
-                           Text="教材フォルダーを確認しています…" />
+                           Text="教材フォルダーをまとめて確認しています…" />
             </Border>
 
             <Grid Grid.Row="1" Margin="0,14,0,0">

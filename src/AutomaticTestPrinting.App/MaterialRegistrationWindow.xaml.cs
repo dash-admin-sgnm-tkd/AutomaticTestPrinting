@@ -12,13 +12,17 @@ namespace AutomaticTestPrinting.App;
 
 public partial class MaterialRegistrationWindow : Window
 {
-    private readonly string _materialFolder;
+    private readonly string[] _materialFolders;
     private readonly ExcelTemplateProfileLoadResult _configuration;
 
-    public MaterialRegistrationWindow(string materialFolder)
+    public MaterialRegistrationWindow(IReadOnlyCollection<string> materialFolders)
     {
         InitializeComponent();
-        _materialFolder = Path.GetFullPath(materialFolder);
+        _materialFolders = materialFolders
+            .Where(Directory.Exists)
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
         _configuration = ExcelTemplateProfileStore.LoadDefault();
 
         ReferenceProfileComboBox.ItemsSource = _configuration.Profiles;
@@ -46,7 +50,7 @@ public partial class MaterialRegistrationWindow : Window
         {
             Title = "登録する教材のExcelファイルを選択",
             Filter = "マクロ有効Excelファイル (*.xlsm)|*.xlsm",
-            InitialDirectory = _materialFolder,
+            InitialDirectory = _materialFolders.Length > 0 ? _materialFolders[0] : null,
             CheckFileExists = true,
             Multiselect = false
         };
@@ -134,7 +138,7 @@ public partial class MaterialRegistrationWindow : Window
 
         if (!IsInsideMaterialFolder(workbookPath))
         {
-            message = "Excelファイルは、最初の画面で指定した教材フォルダーの中に置いてください。";
+            message = "Excelファイルは、最初の画面で追加した教材フォルダーのいずれかに置いてください。";
             return false;
         }
 
@@ -195,10 +199,13 @@ public partial class MaterialRegistrationWindow : Window
 
     private bool IsInsideMaterialFolder(string workbookPath)
     {
-        var folderWithSeparator = Path.TrimEndingDirectorySeparator(_materialFolder)
-            + Path.DirectorySeparatorChar;
         var fullWorkbookPath = Path.GetFullPath(workbookPath);
-        return fullWorkbookPath.StartsWith(folderWithSeparator, StringComparison.OrdinalIgnoreCase);
+        return _materialFolders.Any(folder =>
+        {
+            var folderWithSeparator = Path.TrimEndingDirectorySeparator(folder)
+                + Path.DirectorySeparatorChar;
+            return fullWorkbookPath.StartsWith(folderWithSeparator, StringComparison.OrdinalIgnoreCase);
+        });
     }
 
     private static string NormalizeForComparison(string value)

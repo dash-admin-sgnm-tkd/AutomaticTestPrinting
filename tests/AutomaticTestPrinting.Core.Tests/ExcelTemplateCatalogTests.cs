@@ -31,6 +31,26 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     }
 
     [Fact]
+    public void Prepare_SearchesAllMaterialFoldersInConfiguredOrder()
+    {
+        var emptyFolder = Path.Combine(_directory, "empty");
+        var workbookFolder = Path.Combine(_directory, "workbooks");
+        Directory.CreateDirectory(emptyFolder);
+        Directory.CreateDirectory(workbookFolder);
+        var workbookPath = Path.Combine(workbookFolder, "ターゲット1900.xlsm");
+        File.WriteAllBytes(workbookPath, []);
+        var request = new NormalTestRequestCandidate(
+            "英単語ターゲット1900", "1-100", 20, 1, true);
+
+        var result = ExcelTemplateCatalog.Prepare(
+            request,
+            [emptyFolder, workbookFolder]);
+
+        Assert.True(result.IsValid);
+        Assert.Equal(workbookPath, result.WorkbookPath);
+    }
+
+    [Fact]
     public void Prepare_IgnoresDerivedWordWorkbookForTarget1900()
     {
         Directory.CreateDirectory(_directory);

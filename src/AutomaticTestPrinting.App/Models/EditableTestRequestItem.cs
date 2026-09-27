@@ -8,7 +8,7 @@ namespace AutomaticTestPrinting.App.Models;
 
 public sealed class EditableTestRequestItem : INotifyPropertyChanged
 {
-    private readonly string? _materialFolder;
+    private readonly IReadOnlyCollection<string> _materialFolders;
     private string _materialName;
     private string _startNumber;
     private string _endNumber;
@@ -20,9 +20,9 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     public EditableTestRequestItem(
         NormalTestRequestCandidate request,
         int displayNumber,
-        string? materialFolder)
+        IReadOnlyCollection<string> materialFolders)
     {
-        _materialFolder = materialFolder;
+        _materialFolders = materialFolders;
         DisplayNumber = displayNumber;
         PageNumber = request.PageNumber;
         RequiresReview = request.RequiresReview;
@@ -130,7 +130,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
             return;
         }
 
-        var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolder);
+        var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolders);
         IsValid = preparation.IsValid;
         ValidationMessage = preparation.Message;
     }

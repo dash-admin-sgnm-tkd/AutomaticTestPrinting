@@ -43,7 +43,7 @@
 
                         <TextBlock Margin="0,18,0,0" FontWeight="SemiBold" Text="Excelファイル" />
                         <TextBlock Margin="0,5,0,8" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                                   Text="最初の画面で指定した教材フォルダー内の .xlsm ファイルを選んでください。" />
+                                   Text="最初の画面で追加した教材フォルダー内の .xlsm ファイルを選んでください。" />
                         <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />

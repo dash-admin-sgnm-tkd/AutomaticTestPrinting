@@ -19,20 +19,30 @@ public static partial class WorkbookDiscoveryService
 
     public static WorkbookDiscoveryResult Discover(
         string materialFolder,
+        IReadOnlyList<ExcelTemplateProfile> registeredProfiles) =>
+        Discover([materialFolder], registeredProfiles);
+
+    public static WorkbookDiscoveryResult Discover(
+        IReadOnlyCollection<string> materialFolders,
         IReadOnlyList<ExcelTemplateProfile> registeredProfiles)
     {
-        ArgumentException.ThrowIfNullOrWhiteSpace(materialFolder);
+        ArgumentNullException.ThrowIfNull(materialFolders);
         ArgumentNullException.ThrowIfNull(registeredProfiles);
 
-        if (!Directory.Exists(materialFolder))
+        var availableFolders = materialFolders
+            .Where(folder => !string.IsNullOrWhiteSpace(folder) && Directory.Exists(folder))
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
+        if (availableFolders.Length == 0)
         {
-            throw new DirectoryNotFoundException($"教材フォルダーが見つかりません：{materialFolder}");
+            throw new DirectoryNotFoundException("利用できる教材フォルダーがありません。");
         }
 
-        var workbookPaths = Directory.EnumerateFiles(
-                materialFolder,
-                "*.xlsm",
-                SearchOption.AllDirectories)
+        var workbookPaths = availableFolders
+            .SelectMany(folder => EnumerateWorkbookFiles(folder))
+            .GroupBy(path => Path.GetFileName(path), StringComparer.OrdinalIgnoreCase)
+            .Select(group => group.First())
             .ToArray();
         var candidates = new ConcurrentBag<WorkbookRegistrationCandidate>();
         var registeredCount = 0;
@@ -132,6 +142,26 @@ public static partial class WorkbookDiscoveryService
                 StringComparer.OrdinalIgnoreCase).ToArray(),
             registeredCount,
             unreadableCount);
+    }
+
+    private static string[] EnumerateWorkbookFiles(string materialFolder)
+    {
+        try
+        {
+            return Directory.EnumerateFiles(
+                    materialFolder,
+                    "*.xlsm",
+                    SearchOption.AllDirectories)
+                .ToArray();
+        }
+        catch (UnauthorizedAccessException)
+        {
+            return [];
+        }
+        catch (IOException)
+        {
+            return [];
+        }
     }
 
     private static Dictionary<string, string> ReadWorkbookMap(ZipArchive archive)

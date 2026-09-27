@@ -16,6 +16,7 @@ namespace AutomaticTestPrinting.App;
 public partial class MainWindow : Window
 {
     private readonly ObservableCollection<ReportFile> _reports = [];
+    private readonly ObservableCollection<string> _materialFolders = [];
     private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
     private readonly ICollectionView _recognitionResultsView;
     private readonly JsonSettingsStore _settingsStore;
@@ -34,7 +35,12 @@ public partial class MainWindow : Window
 
         _settingsStore = new JsonSettingsStore(settingsPath);
         _recognitionResultsView = CollectionViewSource.GetDefaultView(_recognitionResults);
-        DataContext = new { Reports = _reports, RecognitionResultsView = _recognitionResultsView };
+        DataContext = new
+        {
+            Reports = _reports,
+            MaterialFolders = _materialFolders,
+            RecognitionResultsView = _recognitionResultsView
+        };
         UpdateReportListState();
         UpdateRecognitionResultState();
     }
@@ -43,7 +49,17 @@ public partial class MainWindow : Window
     {
         var settings = await _settingsStore.LoadAsync();
         ReportInboxFolderTextBox.Text = settings.ReportInboxFolder ?? string.Empty;
-        MaterialFolderTextBox.Text = settings.MaterialFolder ?? string.Empty;
+        var savedMaterialFolders = settings.MaterialFolders.Count > 0
+            ? settings.MaterialFolders
+            : string.IsNullOrWhiteSpace(settings.MaterialFolder)
+                ? []
+                : [settings.MaterialFolder];
+        foreach (var folder in savedMaterialFolders
+                     .Where(folder => !string.IsNullOrWhiteSpace(folder))
+                     .Distinct(StringComparer.OrdinalIgnoreCase))
+        {
+            _materialFolders.Add(folder);
+        }
         OutputFolderTextBox.Text = settings.OutputFolder ?? string.Empty;
         UpdateStatus();
     }
@@ -53,7 +69,7 @@ public partial class MainWindow : Window
         await SaveSettingsAsync();
     }
 
-    private void BrowseMaterialFolder_Click(object sender, RoutedEventArgs e)
+    private async void AddMaterialFolder_Click(object sender, RoutedEventArgs e)
     {
         var folder = SelectFolder("Excel・PDF教材を保存しているフォルダーを選択してください");
         if (folder is null)
@@ -61,15 +77,45 @@ public partial class MainWindow : Window
             return;
         }
 
-        MaterialFolderTextBox.Text = folder;
+        var fullPath = Path.GetFullPath(folder);
+        if (_materialFolders.Contains(fullPath, StringComparer.OrdinalIgnoreCase))
+        {
+            MessageBox.Show(this,
+                "この教材フォルダーはすでに追加されています。",
+                "追加済みです",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            return;
+        }
+
+        _materialFolders.Add(fullPath);
         InvalidateRecognitionResults();
         UpdateStatus();
+        await SaveSettingsAsync();
+    }
+
+    private async void RemoveMaterialFolder_Click(object sender, RoutedEventArgs e)
+    {
+        if (MaterialFoldersListBox.SelectedItem is not string folder)
+        {
+            MessageBox.Show(this,
+                "一覧から削除する教材フォルダーを選択してください。",
+                "フォルダーを選択してください",
+                MessageBoxButton.OK,
+                MessageBoxImage.Information);
+            return;
+        }
+
+        _materialFolders.Remove(folder);
+        InvalidateRecognitionResults();
+        UpdateStatus();
+        await SaveSettingsAsync();
     }
 
     private void RegisterMaterial_Click(object sender, RoutedEventArgs e)
     {
-        var materialFolder = MaterialFolderTextBox.Text;
-        if (string.IsNullOrWhiteSpace(materialFolder) || !Directory.Exists(materialFolder))
+        var materialFolders = GetAvailableMaterialFolders();
+        if (materialFolders.Length == 0)
         {
             MessageBox.Show(this,
                 "先に教材フォルダーを設定してください。",
@@ -79,7 +125,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var registrationWindow = new BulkMaterialRegistrationWindow(materialFolder)
+        var registrationWindow = new BulkMaterialRegistrationWindow(materialFolders)
         {
             Owner = this
         };
@@ -217,8 +263,8 @@ public partial class MainWindow : Window
 
     private async void ValidateButton_Click(object sender, RoutedEventArgs e)
     {
-        var validation = SetupValidator.Validate(
-            MaterialFolderTextBox.Text,
+        var validation = SetupValidator.ValidateFolders(
+            GetAvailableMaterialFolders(),
             OutputFolderTextBox.Text,
             _reports);
 
@@ -238,6 +284,7 @@ public partial class MainWindow : Window
         try
         {
             var reports = _reports.ToArray();
+            var materialFolders = GetAvailableMaterialFolders();
             IProgress<string> progress = new Progress<string>(message => StatusText.Text = message);
             using var concurrencyGate = new SemaphoreSlim(2);
             var completedCount = 0;
@@ -248,7 +295,7 @@ public partial class MainWindow : Window
                 {
                     var service = new WindowsReportOcrService();
                     var recognized = await service.RecognizeAsync(report.FullPath, progress);
-                    return RecognitionResultItem.Success(recognized, MaterialFolderTextBox.Text);
+                    return RecognitionResultItem.Success(recognized, materialFolders);
                 }
                 catch (Exception exception)
                 {
@@ -562,7 +609,8 @@ public partial class MainWindow : Window
         var settings = new AppSettings
         {
             ReportInboxFolder = EmptyToNull(ReportInboxFolderTextBox.Text),
-            MaterialFolder = EmptyToNull(MaterialFolderTextBox.Text),
+            MaterialFolder = _materialFolders.FirstOrDefault(),
+            MaterialFolders = _materialFolders.ToList(),
             OutputFolder = EmptyToNull(OutputFolderTextBox.Text)
         };
 
@@ -629,7 +677,7 @@ public partial class MainWindow : Window
 
                 var preparation = ExcelTemplateCatalog.Prepare(
                     testRequest,
-                    MaterialFolderTextBox.Text);
+                    GetAvailableMaterialFolders());
                 if (!preparation.IsValid ||
                     preparation.Profile is null ||
                     preparation.WorkbookPath is null ||
@@ -929,7 +977,7 @@ public partial class MainWindow : Window
 
     private void UpdateStatus()
     {
-        var foldersSelected = !string.IsNullOrWhiteSpace(MaterialFolderTextBox.Text)
+        var foldersSelected = GetAvailableMaterialFolders().Length > 0
             && !string.IsNullOrWhiteSpace(OutputFolderTextBox.Text);
 
         StatusText.Text = foldersSelected && _reports.Count > 0
@@ -941,4 +989,10 @@ public partial class MainWindow : Window
     {
         return string.IsNullOrWhiteSpace(value) ? null : value.Trim();
     }
+
+    private string[] GetAvailableMaterialFolders() =>
+        _materialFolders
+            .Where(Directory.Exists)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
 }

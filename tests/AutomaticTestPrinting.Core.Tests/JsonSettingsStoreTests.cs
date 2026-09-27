@@ -18,6 +18,7 @@ public sealed class JsonSettingsStoreTests
             {
                 ReportInboxFolder = @"G:\マイドライブ\確認テスト\01_未処理",
                 MaterialFolder = @"C:\OneDrive\教材",
+                MaterialFolders = [@"C:\OneDrive\教材", @"G:\マイドライブ\教材"],
                 OutputFolder = @"C:\OneDrive\出力"
             };
 
@@ -26,6 +27,7 @@ public sealed class JsonSettingsStoreTests
 
             Assert.Equal(expected.ReportInboxFolder, actual.ReportInboxFolder);
             Assert.Equal(expected.MaterialFolder, actual.MaterialFolder);
+            Assert.Equal(expected.MaterialFolders, actual.MaterialFolders);
             Assert.Equal(expected.OutputFolder, actual.OutputFolder);
         }
         finally
@@ -49,6 +51,7 @@ public sealed class JsonSettingsStoreTests
 
             Assert.Null(settings.ReportInboxFolder);
             Assert.Null(settings.MaterialFolder);
+            Assert.Empty(settings.MaterialFolders);
             Assert.Null(settings.OutputFolder);
         }
         finally

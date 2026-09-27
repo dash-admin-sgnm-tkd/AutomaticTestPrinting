@@ -54,18 +54,33 @@
                             <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
                                     Click="BrowseReportInboxFolder_Click" Content="フォルダーを選択" />
                         </Grid>
-                        <TextBlock FontWeight="SemiBold" Text="教材フォルダー" />
-                        <Grid Margin="0,8,0,16">
+                        <Grid>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*" />
                                 <ColumnDefinition Width="Auto" />
                             </Grid.ColumnDefinitions>
-                            <TextBox x:Name="MaterialFolderTextBox" Height="40" Padding="10,8"
-                                     VerticalContentAlignment="Center" BorderBrush="{StaticResource BorderBrush}"
-                                     IsReadOnly="True" ToolTip="ExcelとPDF教材を保存しているOneDriveフォルダー" />
-                            <Button Grid.Column="1" Margin="10,0,0,0" Style="{StaticResource SecondaryButton}"
-                                    Click="BrowseMaterialFolder_Click" Content="フォルダーを選択" />
+                            <StackPanel>
+                                <TextBlock FontWeight="SemiBold" Text="教材フォルダー（複数追加できます）" />
+                                <TextBlock Margin="0,4,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                           Text="Google Drive・OneDrive・PC内のフォルダーをまとめて検索します。上から順に優先します。" />
+                            </StackPanel>
+                            <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
+                                <Button Margin="0,0,8,0" Style="{StaticResource SecondaryButton}"
+                                        Click="RemoveMaterialFolder_Click" Content="選択したフォルダーを削除" />
+                                <Button Style="{StaticResource SecondaryButton}"
+                                        Click="AddMaterialFolder_Click" Content="フォルダーを追加" />
+                            </StackPanel>
                         </Grid>
+                        <ListBox x:Name="MaterialFoldersListBox" Margin="0,10,0,16" MinHeight="52" MaxHeight="132"
+                                 ItemsSource="{Binding MaterialFolders}" BorderBrush="{StaticResource BorderBrush}"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate>
+                                    <TextBlock Padding="8,6" Text="{Binding}" TextTrimming="CharacterEllipsis"
+                                               ToolTip="{Binding}" />
+                                </DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
                         <TextBlock FontWeight="SemiBold" Text="出力フォルダー" />
                         <Grid Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>

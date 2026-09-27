@@ -6,5 +6,7 @@ public sealed class AppSettings
 
     public string? MaterialFolder { get; set; }
 
+    public List<string> MaterialFolders { get; set; } = [];
+
     public string? OutputFolder { get; set; }
 }

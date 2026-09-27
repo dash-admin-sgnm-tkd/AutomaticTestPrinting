@@ -63,6 +63,31 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
         Assert.Empty(candidate.MatchingProfileIds);
     }
 
+    [Fact]
+    public void Discover_RemovesDuplicateWorkbookNamesAcrossFolders()
+    {
+        var firstFolder = Path.Combine(_directory, "one-drive");
+        var secondFolder = Path.Combine(_directory, "google-drive");
+        Directory.CreateDirectory(firstFolder);
+        Directory.CreateDirectory(secondFolder);
+        const string workbookName = "同じ教材.xlsm";
+        CreateWorkbook(
+            Path.Combine(firstFolder, workbookName),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"],
+            [100]);
+        CreateWorkbook(
+            Path.Combine(secondFolder, workbookName),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"],
+            [100]);
+
+        var result = WorkbookDiscoveryService.Discover(
+            [firstFolder, secondFolder],
+            [CreateProfile()]);
+
+        Assert.Single(result.Candidates);
+        Assert.StartsWith(firstFolder, result.Candidates[0].WorkbookPath);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))

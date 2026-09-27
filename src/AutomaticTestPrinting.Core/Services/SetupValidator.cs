@@ -7,11 +7,20 @@ public static class SetupValidator
     public static ValidationResult Validate(
         string? materialFolder,
         string? outputFolder,
+        IReadOnlyCollection<ReportFile> reports) =>
+        ValidateFolders(
+            string.IsNullOrWhiteSpace(materialFolder) ? [] : [materialFolder],
+            outputFolder,
+            reports);
+
+    public static ValidationResult ValidateFolders(
+        IReadOnlyCollection<string> materialFolders,
+        string? outputFolder,
         IReadOnlyCollection<ReportFile> reports)
     {
-        if (string.IsNullOrWhiteSpace(materialFolder) || !Directory.Exists(materialFolder))
+        if (materialFolders.Count == 0 || !materialFolders.Any(Directory.Exists))
         {
-            return ValidationResult.Failure("教材フォルダーを選択してください。");
+            return ValidationResult.Failure("利用できる教材フォルダーを1件以上追加してください。");
         }
 
         if (string.IsNullOrWhiteSpace(outputFolder) || !Directory.Exists(outputFolder))

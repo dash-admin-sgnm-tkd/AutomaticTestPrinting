@@ -13,13 +13,17 @@ namespace AutomaticTestPrinting.App;
 
 public partial class BulkMaterialRegistrationWindow : Window
 {
-    private readonly string _materialFolder;
+    private readonly IReadOnlyList<string> _materialFolders;
     private ExcelTemplateProfileLoadResult _configuration;
 
-    public BulkMaterialRegistrationWindow(string materialFolder)
+    public BulkMaterialRegistrationWindow(IReadOnlyCollection<string> materialFolders)
     {
         InitializeComponent();
-        _materialFolder = Path.GetFullPath(materialFolder);
+        _materialFolders = materialFolders
+            .Where(Directory.Exists)
+            .Select(Path.GetFullPath)
+            .Distinct(StringComparer.OrdinalIgnoreCase)
+            .ToArray();
         _configuration = ExcelTemplateProfileStore.LoadDefault();
         CandidatesView = CollectionViewSource.GetDefaultView(Candidates);
         CandidatesView.Filter = FilterCandidate;
@@ -58,7 +62,7 @@ public partial class BulkMaterialRegistrationWindow : Window
             }
 
             var discovery = await Task.Run(() => WorkbookDiscoveryService.Discover(
-                _materialFolder,
+                _materialFolders,
                 _configuration.Profiles));
             var profilesById = _configuration.Profiles.ToDictionary(
                 profile => profile.Id,
@@ -239,7 +243,7 @@ public partial class BulkMaterialRegistrationWindow : Window
 
     private void OpenManualRegistration_Click(object sender, RoutedEventArgs e)
     {
-        var window = new MaterialRegistrationWindow(_materialFolder)
+        var window = new MaterialRegistrationWindow(_materialFolders)
         {
             Owner = this
         };

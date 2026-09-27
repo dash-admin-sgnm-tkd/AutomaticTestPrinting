@@ -23,4 +23,23 @@ public sealed class SetupValidatorTests
         Assert.False(result.IsValid);
         Assert.Contains("レポートPDF", result.Message);
     }
+
+    [Fact]
+    public void ValidateFolders_AcceptsAnAvailableFolderWhenAnotherIsMissing()
+    {
+        var reportPath = Path.GetTempFileName();
+        try
+        {
+            var result = SetupValidator.ValidateFolders(
+                [@"Z:\存在しない教材", Path.GetTempPath()],
+                Path.GetTempPath(),
+                [new AutomaticTestPrinting.Core.Models.ReportFile(reportPath)]);
+
+            Assert.True(result.IsValid);
+        }
+        finally
+        {
+            File.Delete(reportPath);
+        }
+    }
 }

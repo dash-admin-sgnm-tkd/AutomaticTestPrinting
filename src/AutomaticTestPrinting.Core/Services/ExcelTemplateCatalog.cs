@@ -9,7 +9,14 @@ public static partial class ExcelTemplateCatalog
 {
     public static ExcelRequestPreparation Prepare(
         NormalTestRequestCandidate request,
-        string? materialFolder)
+        string? materialFolder) =>
+        Prepare(
+            request,
+            string.IsNullOrWhiteSpace(materialFolder) ? [] : [materialFolder]);
+
+    public static ExcelRequestPreparation Prepare(
+        NormalTestRequestCandidate request,
+        IReadOnlyCollection<string> materialFolders)
     {
         var catalog = ExcelTemplateProfileStore.LoadDefault();
         if (!catalog.IsValid)
@@ -72,7 +79,7 @@ public static partial class ExcelTemplateCatalog
                 EndNumber: end);
         }
 
-        var workbookPath = FindWorkbook(materialFolder, profile);
+        var workbookPath = FindWorkbook(materialFolders, profile);
         if (workbookPath is null)
         {
             return new ExcelRequestPreparation(
@@ -96,39 +103,46 @@ public static partial class ExcelTemplateCatalog
     }
 
     private static string? FindWorkbook(
-        string? materialFolder,
+        IReadOnlyCollection<string> materialFolders,
         ExcelTemplateProfile profile)
     {
-        if (string.IsNullOrWhiteSpace(materialFolder) || !Directory.Exists(materialFolder))
+        foreach (var materialFolder in materialFolders
+                     .Where(Directory.Exists)
+                     .Distinct(StringComparer.OrdinalIgnoreCase))
         {
-            return null;
+            try
+            {
+                var normalizedKeyword = NormalizeName(profile.WorkbookNameKeyword);
+                var excludedKeywords = profile.WorkbookNameExcludedKeywords
+                    .Select(NormalizeName)
+                    .Where(keyword => keyword.Length > 0)
+                    .ToArray();
+                var workbookPath = Directory
+                    .EnumerateFiles(materialFolder, "*.xlsm", SearchOption.AllDirectories)
+                    .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
+                    .FirstOrDefault(path =>
+                    {
+                        var normalizedFileName = NormalizeName(Path.GetFileNameWithoutExtension(path));
+                        return normalizedFileName.Contains(normalizedKeyword, StringComparison.Ordinal) &&
+                            !excludedKeywords.Any(excluded =>
+                                normalizedFileName.Contains(excluded, StringComparison.Ordinal));
+                    });
+                if (workbookPath is not null)
+                {
+                    return workbookPath;
+                }
+            }
+            catch (UnauthorizedAccessException)
+            {
+                // 他の登録フォルダーを続けて検索します。
+            }
+            catch (IOException)
+            {
+                // 他の登録フォルダーを続けて検索します。
+            }
         }
 
-        try
-        {
-            var normalizedKeyword = NormalizeName(profile.WorkbookNameKeyword);
-            var excludedKeywords = profile.WorkbookNameExcludedKeywords
-                .Select(NormalizeName)
-                .Where(keyword => keyword.Length > 0)
-                .ToArray();
-            return Directory.EnumerateFiles(materialFolder, "*.xlsm", SearchOption.AllDirectories)
-                .OrderBy(path => path, StringComparer.OrdinalIgnoreCase)
-                .FirstOrDefault(path =>
-                {
-                    var normalizedFileName = NormalizeName(Path.GetFileNameWithoutExtension(path));
-                    return normalizedFileName.Contains(normalizedKeyword, StringComparison.Ordinal) &&
-                        !excludedKeywords.Any(excluded =>
-                            normalizedFileName.Contains(excluded, StringComparison.Ordinal));
-                });
-        }
-        catch (UnauthorizedAccessException)
-        {
-            return null;
-        }
-        catch (IOException)
-        {
-            return null;
-        }
+        return null;
     }
 
     private static string NormalizeName(string value)

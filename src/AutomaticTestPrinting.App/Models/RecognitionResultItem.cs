@@ -103,10 +103,12 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
         IsIncluded &&
         (HasError || Requests.Any(request => request.IsIncluded && !request.IsValid));
 
-    public static RecognitionResultItem Success(RecognizedReport report, string? materialFolder)
+    public static RecognitionResultItem Success(
+        RecognizedReport report,
+        IReadOnlyCollection<string> materialFolders)
     {
         var requests = report.TestRequests
-            .Select((request, index) => new EditableTestRequestItem(request, index + 1, materialFolder))
+            .Select((request, index) => new EditableTestRequestItem(request, index + 1, materialFolders))
             .ToArray();
         return new RecognitionResultItem(
             report.SourcePath,
