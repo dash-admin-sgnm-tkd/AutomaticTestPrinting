@@ -65,9 +65,9 @@
                             <DataTemplate>
                                 <ComboBox Margin="4" Padding="6,4"
                                           IsEnabled="{Binding CanRegister}"
-                                          ItemsSource="{Binding MatchingProfiles}"
+                                          ItemsSource="{Binding MatchingFormats}"
                                           DisplayMemberPath="DisplayName"
-                                          SelectedItem="{Binding SelectedProfile, UpdateSourceTrigger=PropertyChanged}" />
+                                          SelectedItem="{Binding SelectedFormat, UpdateSourceTrigger=PropertyChanged}" />
                             </DataTemplate>
                         </DataGridTemplateColumn.CellTemplate>
                     </DataGridTemplateColumn>

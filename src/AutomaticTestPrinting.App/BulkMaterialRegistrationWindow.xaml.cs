@@ -64,7 +64,8 @@ public partial class BulkMaterialRegistrationWindow : Window
                     .Where(profilesById.ContainsKey)
                     .Select(id => profilesById[id])
                     .ToArray();
-                Candidates.Add(new BulkMaterialCandidateItem(candidate, matchingProfiles));
+                var matchingFormats = ExcelMaterialFormatCatalog.CreateOptions(matchingProfiles);
+                Candidates.Add(new BulkMaterialCandidateItem(candidate, matchingFormats));
             }
 
             var selectableCount = Candidates.Count(item => item.CanRegister);
@@ -188,7 +189,7 @@ public partial class BulkMaterialRegistrationWindow : Window
                 return false;
             }
 
-            if (item.SelectedProfile is null)
+            if (item.SelectedFormat is null)
             {
                 message = $"「{item.WorkbookFileName}」の形式を選んでください。";
                 return false;
@@ -211,7 +212,7 @@ public partial class BulkMaterialRegistrationWindow : Window
                 .Distinct(StringComparer.OrdinalIgnoreCase)
                 .ToArray();
             var uniqueSuffix = Guid.NewGuid().ToString("N")[..8];
-            result.Add(item.SelectedProfile with
+            result.Add(item.SelectedFormat.TemplateProfile with
             {
                 Id = $"custom-{DateTime.UtcNow:yyyyMMddHHmmss}-{uniqueSuffix}",
                 DisplayName = displayName,

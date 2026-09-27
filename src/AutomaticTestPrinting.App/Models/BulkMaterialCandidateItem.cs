@@ -9,32 +9,34 @@ public sealed class BulkMaterialCandidateItem : INotifyPropertyChanged
     private bool _isSelected;
     private string _displayName;
     private string _maximumQuestionNumber;
-    private ExcelTemplateProfile? _selectedProfile;
+    private ExcelMaterialFormatOption? _selectedFormat;
 
     public BulkMaterialCandidateItem(
         WorkbookRegistrationCandidate candidate,
-        IReadOnlyList<ExcelTemplateProfile> matchingProfiles)
+        IReadOnlyList<ExcelMaterialFormatOption> matchingFormats)
     {
         Candidate = candidate;
-        MatchingProfiles = matchingProfiles;
+        MatchingFormats = matchingFormats;
         _isSelected = candidate.CanRegister && !IsDerivedWordWorkbook(candidate.WorkbookFileName);
         _displayName = candidate.SuggestedDisplayName;
         _maximumQuestionNumber = candidate.SuggestedMaximumQuestionNumber > 0
             ? candidate.SuggestedMaximumQuestionNumber.ToString(CultureInfo.CurrentCulture)
             : string.Empty;
-        _selectedProfile = matchingProfiles.Count > 0 ? matchingProfiles[0] : null;
+        _selectedFormat = matchingFormats.Count > 0 ? matchingFormats[0] : null;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
 
     public WorkbookRegistrationCandidate Candidate { get; }
-    public IReadOnlyList<ExcelTemplateProfile> MatchingProfiles { get; }
+    public IReadOnlyList<ExcelMaterialFormatOption> MatchingFormats { get; }
     public string WorkbookFileName => Candidate.WorkbookFileName;
     public string WorkbookPath => Candidate.WorkbookPath;
     public bool CanRegister => Candidate.CanRegister;
     public string Message => IsDerivedWordWorkbook(WorkbookFileName)
         ? "派生語教材のため未選択（必要なら登録できます）"
-        : Candidate.Message;
+        : SelectedFormat is null
+            ? Candidate.Message
+            : $"{SelectedFormat.DisplayName}を選択中";
 
     public bool IsSelected
     {
@@ -82,18 +84,19 @@ public sealed class BulkMaterialCandidateItem : INotifyPropertyChanged
         }
     }
 
-    public ExcelTemplateProfile? SelectedProfile
+    public ExcelMaterialFormatOption? SelectedFormat
     {
-        get => _selectedProfile;
+        get => _selectedFormat;
         set
         {
-            if (_selectedProfile == value)
+            if (_selectedFormat == value)
             {
                 return;
             }
 
-            _selectedProfile = value;
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedProfile)));
+            _selectedFormat = value;
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedFormat)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(Message)));
         }
     }
 
