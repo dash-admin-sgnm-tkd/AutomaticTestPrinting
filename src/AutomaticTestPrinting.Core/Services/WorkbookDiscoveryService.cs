@@ -93,6 +93,7 @@ public static partial class WorkbookDiscoveryService
                 var suggestedFormatId = InferFinishedLayoutId(
                     archive,
                     workbookMap,
+                    workbookPath,
                     fileStem,
                     matchingProfiles);
                 var bestProfile = matchingProfiles.FirstOrDefault(profile => string.Equals(
@@ -308,6 +309,7 @@ public static partial class WorkbookDiscoveryService
     private static string? InferFinishedLayoutId(
         ZipArchive archive,
         Dictionary<string, string> workbookMap,
+        string workbookPath,
         string fileStem,
         IReadOnlyCollection<ExcelTemplateProfile> matchingProfiles)
     {
@@ -316,6 +318,7 @@ public static partial class WorkbookDiscoveryService
             .Where(id => !string.IsNullOrWhiteSpace(id))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         string? inferred = InferLayoutFromFileName(fileStem);
+        var isJapaneseFolder = Normalize(workbookPath).Contains("国語", StringComparison.Ordinal);
         if (inferred is null)
         {
             var questionListSheetName = matchingProfiles
@@ -328,6 +331,15 @@ public static partial class WorkbookDiscoveryService
                     workbookMap[questionListSheetName]);
         }
 
+        if (isJapaneseFolder &&
+            (inferred is null || string.Equals(
+                inferred,
+                "word-pair-list",
+                StringComparison.OrdinalIgnoreCase)))
+        {
+            inferred = "japanese-vocabulary";
+        }
+
         return inferred is not null && availableLayoutIds.Contains(inferred)
             ? inferred
             : null;
@@ -336,13 +348,14 @@ public static partial class WorkbookDiscoveryService
     private static string? InferLayoutFromFileName(string fileStem)
     {
         var normalized = Normalize(fileStem);
-        if (ContainsAny(normalized, ["語彙", "漢字", "古文単語"]))
+        if (ContainsAny(normalized,
+                ["語彙", "漢字", "古文単語", "古文常識", "四字熟語", "書き取り"]))
         {
             return "japanese-vocabulary";
         }
 
         if (ContainsAny(normalized,
-                ["英文法", "語法", "vintage", "scramble", "nextstage", "upgrade", "grammar", "大岩"]))
+                ["文法", "語法", "vintage", "scramble", "nextstage", "upgrade", "grammar", "大岩"]))
         {
             return "grammar-choice";
         }

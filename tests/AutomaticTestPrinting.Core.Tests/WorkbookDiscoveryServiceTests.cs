@@ -127,6 +127,41 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
         Assert.Contains("内容から", candidate.Message);
     }
 
+    [Fact]
+    public void Discover_DoesNotClassifyWorkbookInJapaneseFolderAsEnglishVocabulary()
+    {
+        var japaneseFolder = Path.Combine(_directory, "テスト作成用Excel元ファイル(国語)");
+        Directory.CreateDirectory(japaneseFolder);
+        CreateWorkbook(
+            Path.Combine(japaneseFolder, "ステップアップノート30.xlsm"),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"],
+            [1, 100],
+            11,
+            115);
+        var wordProfile = CreateProfile() with
+        {
+            Id = "word",
+            FinishedLayoutId = "word-pair-list",
+            FinishedLayoutName = "英単語・英熟語（1問1答）"
+        };
+        var japaneseProfile = CreateProfile() with
+        {
+            Id = "japanese",
+            FinishedLayoutId = "japanese-vocabulary",
+            FinishedLayoutName = "国語（語彙・漢字・古文の1問1答）",
+            UseWideAnswerLayout = true,
+            MaximumQuestionCount = 50
+        };
+
+        var result = WorkbookDiscoveryService.Discover(
+            japaneseFolder,
+            [wordProfile, japaneseProfile]);
+
+        var candidate = Assert.Single(result.Candidates);
+        Assert.Equal("japanese-vocabulary", candidate.SuggestedFormatId);
+        Assert.NotEqual("word-pair-list", candidate.SuggestedFormatId);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))

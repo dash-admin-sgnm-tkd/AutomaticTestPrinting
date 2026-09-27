@@ -34,7 +34,7 @@ public sealed class ExcelMaterialFormatCatalogTests
         var grammar = Assert.Single(
             options,
             option => option.Id == "grammar-choice");
-        Assert.Equal("英文法・語法（選択問題）", grammar.DisplayName);
+        Assert.Equal("文法・選択問題（問題文ワイド）", grammar.DisplayName);
         Assert.Contains("vintage-fourth-edition", grammar.SourceProfileIds);
     }
 
@@ -48,8 +48,8 @@ public sealed class ExcelMaterialFormatCatalogTests
             .ToArray();
 
         Assert.Contains("英単語・英熟語（1問1答）", names);
-        Assert.Contains("英文法・語法（選択問題）", names);
-        Assert.Contains("国語語彙（1問1答）", names);
+        Assert.Contains("文法・選択問題（問題文ワイド）", names);
+        Assert.Contains("国語（語彙・漢字・古文の1問1答）", names);
         Assert.Contains("問題・解答（均等2列）", names);
         Assert.Contains("長文問題（問題欄ワイド）", names);
     }

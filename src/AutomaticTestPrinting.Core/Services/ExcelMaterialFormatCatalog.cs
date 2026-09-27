@@ -112,8 +112,8 @@ public static class ExcelMaterialFormatCatalog
         CreateFormatId(profile) switch
         {
             "word-pair-list" => "英単語・英熟語を答える、短い1問1答形式です。",
-            "grammar-choice" => "英文の空所や下線部を扱う、英文法・語法の問題形式です。",
-            "japanese-vocabulary" => "国語の語彙と意味を対応させる1問1答形式です。",
+            "grammar-choice" => "問題文と選択肢を広く表示する、文法・選択問題向けの形式です。",
+            "japanese-vocabulary" => "国語の語彙・漢字・古文などを答える1問1答形式です。",
             "balanced-two-column" => "問題と解答を同じくらいの幅で並べる形式です。",
             "question-wide-variable-row" => "長い問題文を広く表示し、文章量に応じて行の高さを変える形式です。",
             "answer-wide" => "短い問題に対して解答欄を広く取る形式です。",
@@ -124,8 +124,8 @@ public static class ExcelMaterialFormatCatalog
         CreateFormatId(profile) switch
         {
             "word-pair-list" => "1. abandon\n2. accurate\n3. benefit",
-            "grammar-choice" => "1. She (  ) to the library yesterday.\n   ① go  ② went  ③ gone  ④ going",
-            "japanese-vocabulary" => "1. 『簡潔』の意味を答えなさい。",
+            "grammar-choice" => "1. 問題文（空所・下線部など）\n   ① 選択肢  ② 選択肢  ③ 選択肢",
+            "japanese-vocabulary" => "1. 語句の意味・読み・書きを答えなさい。",
             "question-wide-variable-row" => "1. 次の文章を読み、問いに答えなさい。\n   （長い問題文が入ります）",
             _ => "1. 問題文\n2. 問題文\n3. 問題文"
         };
@@ -134,8 +134,8 @@ public static class ExcelMaterialFormatCatalog
         CreateFormatId(profile) switch
         {
             "word-pair-list" => "1. 捨てる\n2. 正確な\n3. 利益",
-            "grammar-choice" => "1. ② went",
-            "japanese-vocabulary" => "1. 短く、要点がまとまっていること",
+            "grammar-choice" => "1. ② 正答",
+            "japanese-vocabulary" => "1. 解答（意味・読み・漢字など）",
             "question-wide-variable-row" => "1. 解答例",
             _ => "1. 解答\n2. 解答\n3. 解答"
         };

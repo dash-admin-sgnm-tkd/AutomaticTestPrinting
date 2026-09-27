@@ -64,7 +64,7 @@
       "teacherSheetName": "講師用",
       "studentSheetName": "生徒用",
       "finishedLayoutId": "grammar-choice",
-      "finishedLayoutName": "英文法・語法（選択問題）"
+      "finishedLayoutName": "文法・選択問題（問題文ワイド）"
     },
     {
       "id": "vocabulary-1700-sigma-best",
@@ -81,7 +81,7 @@
       "studentSheetName": "生徒用",
       "useWideAnswerLayout": true,
       "finishedLayoutId": "japanese-vocabulary",
-      "finishedLayoutName": "国語語彙（1問1答）"
+      "finishedLayoutName": "国語（語彙・漢字・古文の1問1答）"
     },
     {
       "id": "rapid-reading-idioms-revised",
