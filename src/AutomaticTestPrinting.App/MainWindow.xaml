@@ -275,6 +275,10 @@
 
         <Border Grid.Row="2" Background="White" BorderBrush="#EAECF0" BorderThickness="0,1,0,0">
             <Grid Margin="36,18">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*" />
                     <ColumnDefinition Width="Auto" />
@@ -282,7 +286,7 @@
                 <StackPanel VerticalAlignment="Center">
                     <TextBlock x:Name="StatusText" FontWeight="SemiBold" Text="設定を確認してください" />
                     <TextBlock Margin="0,3,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                               Text="確認後にPDFを作成できます。プリンターへの印刷は行いません。" />
+                               Text="確認後に個別PDFと一括印刷用PDFを作成できます。" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <CheckBox x:Name="ConfirmResultsCheckBox" Margin="0,0,14,0"
@@ -295,7 +299,20 @@
                             Content="レポートを読み取る" />
                     <Button x:Name="CreatePdfsButton" Margin="10,0,0,0" MinWidth="190"
                             Style="{StaticResource PrimaryButton}" Click="CreatePdfsButton_Click"
-                            IsEnabled="False" Content="問題・解答PDFを作成" />
+                            IsEnabled="False" Content="一括PDFを作成" />
+                </StackPanel>
+                <StackPanel x:Name="BatchPdfActionsPanel" Grid.Row="1" Grid.ColumnSpan="2"
+                            Margin="0,12,0,0" HorizontalAlignment="Right" Orientation="Horizontal"
+                            Visibility="Collapsed">
+                    <TextBlock Margin="0,0,12,0" VerticalAlignment="Center"
+                               Foreground="{StaticResource MutedTextBrush}"
+                               Text="印刷前に内容を確認してください" />
+                    <Button x:Name="OpenBatchProblemPdfButton" MinWidth="160"
+                            Style="{StaticResource SecondaryButton}" Click="OpenBatchProblemPdf_Click"
+                            Content="問題一括PDFを開く" />
+                    <Button x:Name="OpenBatchAnswerPdfButton" Margin="8,0,0,0" MinWidth="160"
+                            Style="{StaticResource SecondaryButton}" Click="OpenBatchAnswerPdf_Click"
+                            Content="解答一括PDFを開く" />
                 </StackPanel>
             </Grid>
         </Border>

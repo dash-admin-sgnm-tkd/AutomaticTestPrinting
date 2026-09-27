@@ -20,6 +20,8 @@ public partial class MainWindow : Window
     private readonly ICollectionView _recognitionResultsView;
     private readonly JsonSettingsStore _settingsStore;
     private bool _showOnlyNeedsAttention;
+    private string? _batchProblemPdfPath;
+    private string? _batchAnswerPdfPath;
 
     public MainWindow()
     {
@@ -121,6 +123,7 @@ public partial class MainWindow : Window
         }
 
         OutputFolderTextBox.Text = folder;
+        InvalidateBatchOutputs();
         UpdateStatus();
     }
 
@@ -205,6 +208,7 @@ public partial class MainWindow : Window
         _reports.Clear();
         _recognitionResults.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
+        InvalidateBatchOutputs();
         UpdateReportListState();
         UpdateRecognitionResultState();
         UpdateStatus();
@@ -404,9 +408,9 @@ public partial class MainWindow : Window
         }
 
         var confirmation = MessageBox.Show(this,
-            $"通常テスト {requests.Count}件の問題PDF・解答PDFを作成します。\n" +
-            "プリンターへの印刷は行いません。続けますか？",
-            "PDFを作成します",
+            $"通常テスト {requests.Count}件の個別PDFと一括印刷用PDFを作成します。\n" +
+            "作成後に一括PDFを開き、内容を確認してから印刷してください。続けますか？",
+            "一括PDFを作成します",
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
         if (confirmation != MessageBoxResult.Yes)
@@ -417,9 +421,11 @@ public partial class MainWindow : Window
         CreatePdfsButton.IsEnabled = false;
         ValidateButton.IsEnabled = false;
         ConfirmResultsCheckBox.IsEnabled = false;
-        var generatedFiles = new List<string>();
+        InvalidateBatchOutputs();
+        var generatedTests = new List<ExcelPdfGenerationResult>();
+        var generationErrors = new List<ErrorLogEntry>();
         string? skippedLogPath = null;
-        ExcelPdfGenerationRequest? activeRequest = null;
+        string? errorLogPath = null;
 
         try
         {
@@ -427,28 +433,73 @@ public partial class MainWindow : Window
             for (var index = 0; index < requests.Count; index++)
             {
                 StatusText.Text = $"PDFを作成中：{index + 1}/{requests.Count}";
-                activeRequest = requests[index];
-                var result = await ExcelPdfGenerationService.GenerateAsync(activeRequest);
-                generatedFiles.Add(result.ProblemPdfPath);
-                generatedFiles.Add(result.AnswerPdfPath);
+                var activeRequest = requests[index];
+                try
+                {
+                    var result = await ExcelPdfGenerationService.GenerateAsync(activeRequest);
+                    generatedTests.Add(result);
+                }
+                catch (Exception exception)
+                {
+                    generationErrors.Add(CreateGenerationErrorLogEntry(
+                        DateTimeOffset.Now,
+                        activeRequest,
+                        exception));
+                }
             }
 
-            StatusText.Text = $"PDF作成完了：{generatedFiles.Count}ファイル";
+            if (generationErrors.Count > 0)
+            {
+                errorLogPath = await SaveErrorEntriesAsync(
+                    generationErrors,
+                    DateTimeOffset.Now,
+                    showWhenEmpty: false);
+            }
+
+            if (generatedTests.Count == 0)
+            {
+                throw new InvalidOperationException(
+                    "すべてのテストでPDF作成に失敗しました。詳細ログを確認してください。");
+            }
+
+            StatusText.Text = $"一括PDFを結合中：{generatedTests.Count}件";
+            var batchResult = await Task.Run(() => PdfBatchMergeService.Merge(
+                generatedTests,
+                OutputFolderTextBox.Text,
+                DateTimeOffset.Now));
+            _batchProblemPdfPath = batchResult.ProblemPdfPath;
+            _batchAnswerPdfPath = batchResult.AnswerPdfPath;
+            BatchPdfActionsPanel.Visibility = Visibility.Visible;
+
+            StatusText.Text = generationErrors.Count == 0
+                ? $"一括PDF作成完了：{generatedTests.Count}件"
+                : $"一括PDF作成完了：成功 {generatedTests.Count}件、失敗 {generationErrors.Count}件";
             MessageBox.Show(this,
-                $"問題PDFと解答PDFを作成しました。\n\n保存先：{OutputFolderTextBox.Text}" +
-                (skippedLogPath is null ? string.Empty : $"\nスキップ一覧：{skippedLogPath}"),
-                "PDF作成完了",
+                $"問題一括PDFと解答一括PDFを作成しました。\n" +
+                $"成功：{generatedTests.Count}件" +
+                (generationErrors.Count == 0 ? string.Empty : $"\n失敗：{generationErrors.Count}件") +
+                $"\n\n保存先：{Path.GetDirectoryName(batchResult.ProblemPdfPath)}" +
+                (skippedLogPath is null ? string.Empty : $"\nスキップ一覧：{skippedLogPath}") +
+                (errorLogPath is null ? string.Empty : $"\nエラー詳細：{errorLogPath}"),
+                "一括PDF作成完了",
                 MessageBoxButton.OK,
-                MessageBoxImage.Information);
+                generationErrors.Count == 0 ? MessageBoxImage.Information : MessageBoxImage.Warning);
         }
         catch (Exception exception)
         {
-            var errorLogPath = await SaveGenerationErrorLogAsync(activeRequest, exception);
-            StatusText.Text = "PDF作成中にエラーが発生しました";
+            var displayedErrorLogPath = errorLogPath;
+            if (generatedTests.Count > 0)
+            {
+                displayedErrorLogPath =
+                    await SaveGenerationErrorLogAsync(null, exception) ?? errorLogPath;
+            }
+            StatusText.Text = "一括PDF作成中にエラーが発生しました";
             MessageBox.Show(this,
                 exception.Message +
-                (errorLogPath is null ? string.Empty : $"\n\n詳細ログ：{errorLogPath}"),
-                "PDFを作成できませんでした",
+                (displayedErrorLogPath is null
+                    ? string.Empty
+                    : $"\n\n詳細ログ：{displayedErrorLogPath}"),
+                "一括PDFを作成できませんでした",
                 MessageBoxButton.OK,
                 MessageBoxImage.Error);
         }
@@ -458,6 +509,28 @@ public partial class MainWindow : Window
             ConfirmResultsCheckBox.IsEnabled = true;
             UpdatePdfGenerationState();
         }
+    }
+
+    private void OpenBatchProblemPdf_Click(object sender, RoutedEventArgs e) =>
+        OpenBatchPdf(_batchProblemPdfPath, "問題一括PDF");
+
+    private void OpenBatchAnswerPdf_Click(object sender, RoutedEventArgs e) =>
+        OpenBatchPdf(_batchAnswerPdfPath, "解答一括PDF");
+
+    private void OpenBatchPdf(string? path, string displayName)
+    {
+        if (string.IsNullOrWhiteSpace(path) || !File.Exists(path))
+        {
+            MessageBox.Show(this,
+                $"{displayName}が見つかりません。もう一度一括PDFを作成してください。",
+                "PDFを開けません",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+            InvalidateBatchOutputs();
+            return;
+        }
+
+        Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
     }
 
     private void OpenSourceReport_Click(object sender, RoutedEventArgs e)
@@ -523,8 +596,16 @@ public partial class MainWindow : Window
     {
         _recognitionResults.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
+        InvalidateBatchOutputs();
         UpdateRecognitionResultState();
         UpdatePdfGenerationState();
+    }
+
+    private void InvalidateBatchOutputs()
+    {
+        _batchProblemPdfPath = null;
+        _batchAnswerPdfPath = null;
+        BatchPdfActionsPanel.Visibility = Visibility.Collapsed;
     }
 
     private List<ExcelPdfGenerationRequest> BuildPdfGenerationRequests()
@@ -646,6 +727,20 @@ public partial class MainWindow : Window
             exception);
         return await SaveErrorEntriesAsync([entry], now, showWhenEmpty: false);
     }
+
+    private static ErrorLogEntry CreateGenerationErrorLogEntry(
+        DateTimeOffset loggedAt,
+        ExcelPdfGenerationRequest request,
+        Exception exception) => CreateExceptionErrorLogEntry(
+            loggedAt,
+            "PDF作成",
+            request.StudentName,
+            request.SourceReportFileName,
+            request.TestNumber,
+            request.MaterialName,
+            $"{request.StartNumber}-{request.EndNumber}",
+            request.QuestionCount.ToString(CultureInfo.InvariantCulture),
+            exception);
 
     private async Task<string?> SaveErrorEntriesAsync(
         List<ErrorLogEntry> entries,
@@ -825,6 +920,7 @@ public partial class MainWindow : Window
     private void RecognitionResult_Edited(object? sender, EventArgs e)
     {
         ConfirmResultsCheckBox.IsChecked = false;
+        InvalidateBatchOutputs();
         StatusText.Text = "修正内容を原本と照合し、確認チェックを入れ直してください";
         _recognitionResultsView.Refresh();
         UpdatePdfGenerationState();
