@@ -115,4 +115,37 @@ public sealed class ReportTextParserTests
         Assert.Equal("1101-1900", request.Range);
         Assert.Equal(50, request.QuestionCount);
     }
+
+    [Theory]
+    [InlineData("ｲ1101-1900", "1101-1900")]
+    [InlineData("範囲ｲ1101～1900問", "1101-1900")]
+    [InlineData("１１０１－１９００", "1101-1900")]
+    public void Parse_RemovesOcrNoiseAroundRangeNumbers(string ocrRange, string expectedRange)
+    {
+        var words = new[]
+        {
+            new RecognizedWord("次回までの宿題", 10, 10, 140, 20, 0),
+            new RecognizedWord("英単語ターゲット1900", 350, 85, 160, 20, 1),
+            new RecognizedWord("月日", 10, 150, 40, 20, 2),
+            new RecognizedWord(ocrRange, 370, 150, 120, 20, 3),
+            new RecognizedWord("テスト作成依頼", 10, 300, 160, 20, 4),
+            new RecognizedWord("50", 405, 302, 30, 20, 5)
+        };
+        var pages = new[]
+        {
+            new RecognizedReportPage(
+                1,
+                0,
+                "生徒名:来栖凜奈 次回までの宿題 テスト作成依頼",
+                1000,
+                500,
+                words)
+        };
+
+        var result = ReportTextParser.Parse("report.pdf", pages);
+
+        var request = Assert.Single(result.TestRequests);
+        Assert.Equal(expectedRange, request.Range);
+        Assert.Equal(50, request.QuestionCount);
+    }
 }

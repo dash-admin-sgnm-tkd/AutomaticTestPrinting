@@ -1,4 +1,5 @@
 using System.Globalization;
+using System.Text;
 using System.Text.RegularExpressions;
 using AutomaticTestPrinting.Core.Models;
 
@@ -160,13 +161,20 @@ public static partial class ReportTableExtractor
 
     private static string NormalizeRange(string value)
     {
-        var normalized = value.Replace('一', '-')
+        var normalized = value.Normalize(NormalizationForm.FormKC)
+            .Replace('一', '-')
             .Replace('ー', '-')
             .Replace('〜', '-')
             .Replace('～', '-')
             .Replace('~', '-')
             .Replace(',', '-');
-        return DigitSeparatedShinRegex().Replace(normalized, "-");
+        normalized = DigitSeparatedShinRegex().Replace(normalized, "-");
+
+        // OCRが範囲の数字の前後に「ｲ」などの文字を混ぜることがあるため、
+        // 範囲欄に必要な数字と区切り記号だけを残します。
+        var cleaned = string.Concat(normalized.Where(character =>
+            char.IsDigit(character) || character == '-'));
+        return RepeatedHyphenRegex().Replace(cleaned, "-").Trim('-');
     }
 
     private static string NormalizeMaterialName(string value) =>
@@ -200,6 +208,9 @@ public static partial class ReportTableExtractor
 
     [GeneratedRegex(@"(?<=\d)新(?=\d)")]
     private static partial Regex DigitSeparatedShinRegex();
+
+    [GeneratedRegex(@"-+")]
+    private static partial Regex RepeatedHyphenRegex();
 
     private sealed record OcrLine(
         string Text,
