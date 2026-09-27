@@ -22,14 +22,20 @@ public sealed class ExcelMaterialFormatCatalogTests
 
         var options = ExcelMaterialFormatCatalog.CreateOptions(profiles);
 
-        var standard = Assert.Single(
+        var vocabulary = Assert.Single(
             options,
-            option => option.Id == "standard-table");
-        Assert.Equal("標準（問題・解答の表）", standard.DisplayName);
-        Assert.Contains("target-1900-sixth-edition", standard.SourceProfileIds);
-        Assert.Contains("eiken-pre1-ex-second-edition", standard.SourceProfileIds);
-        Assert.Contains("target-1000-fifth-edition", standard.SourceProfileIds);
-        Assert.Contains("vintage-fourth-edition", standard.SourceProfileIds);
+            option => option.Id == "word-pair-list");
+        Assert.Equal("英単語・英熟語（1問1答）", vocabulary.DisplayName);
+        Assert.Contains("target-1900-sixth-edition", vocabulary.SourceProfileIds);
+        Assert.Contains("eiken-pre1-ex-second-edition", vocabulary.SourceProfileIds);
+        Assert.Contains("target-1000-fifth-edition", vocabulary.SourceProfileIds);
+        Assert.DoesNotContain("vintage-fourth-edition", vocabulary.SourceProfileIds);
+
+        var grammar = Assert.Single(
+            options,
+            option => option.Id == "grammar-choice");
+        Assert.Equal("英文法・語法（選択問題）", grammar.DisplayName);
+        Assert.Contains("vintage-fourth-edition", grammar.SourceProfileIds);
     }
 
     [Fact]
@@ -41,10 +47,11 @@ public sealed class ExcelMaterialFormatCatalogTests
             .Select(option => option.DisplayName)
             .ToArray();
 
-        Assert.Contains("標準（問題・解答の表）", names);
-        Assert.Contains("解答欄ワイド（解答を広く表示）", names);
-        Assert.Contains("均等2列（問題・解答が同じ幅）", names);
-        Assert.Contains("問題欄ワイド（長文・自動行高）", names);
+        Assert.Contains("英単語・英熟語（1問1答）", names);
+        Assert.Contains("英文法・語法（選択問題）", names);
+        Assert.Contains("国語語彙（1問1答）", names);
+        Assert.Contains("問題・解答（均等2列）", names);
+        Assert.Contains("長文問題（問題欄ワイド）", names);
     }
 
     private static AutomaticTestPrinting.Core.Models.ExcelTemplateProfile[] LoadBuiltInProfiles() =>

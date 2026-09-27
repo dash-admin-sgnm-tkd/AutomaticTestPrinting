@@ -1,8 +1,10 @@
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Text;
 using System.Windows;
+using System.Windows.Data;
 using AutomaticTestPrinting.App.Models;
 using AutomaticTestPrinting.Core.Models;
 using AutomaticTestPrinting.Core.Services;
@@ -19,10 +21,13 @@ public partial class BulkMaterialRegistrationWindow : Window
         InitializeComponent();
         _materialFolder = Path.GetFullPath(materialFolder);
         _configuration = ExcelTemplateProfileStore.LoadDefault();
+        CandidatesView = CollectionViewSource.GetDefaultView(Candidates);
+        CandidatesView.Filter = FilterCandidate;
         DataContext = this;
     }
 
     public ObservableCollection<BulkMaterialCandidateItem> Candidates { get; } = [];
+    public ICollectionView CandidatesView { get; }
     public int RegisteredCount { get; private set; }
     public string RegisteredDisplayNames { get; private set; } = string.Empty;
 
@@ -79,6 +84,10 @@ public partial class BulkMaterialRegistrationWindow : Window
                 ? "自動登録できる新しい教材はありません"
                 : $"{selectedCount}件を選択中です。教材名と形式を確認してください";
             RegisterSelectedButton.IsEnabled = selectedCount > 0;
+            if (CandidatesView.Cast<object>().Any())
+            {
+                CandidatesGrid.SelectedIndex = 0;
+            }
         }
         catch (Exception exception)
         {
@@ -247,6 +256,38 @@ public partial class BulkMaterialRegistrationWindow : Window
     private void Close_Click(object sender, RoutedEventArgs e)
     {
         DialogResult = false;
+    }
+
+    private void SearchTextBox_TextChanged(object sender, System.Windows.Controls.TextChangedEventArgs e)
+    {
+        CandidatesView.Refresh();
+        CandidatesGrid.SelectedIndex = CandidatesView.Cast<object>().Any() ? 0 : -1;
+    }
+
+    private void ClearSearch_Click(object sender, RoutedEventArgs e)
+    {
+        SearchTextBox.Clear();
+        SearchTextBox.Focus();
+    }
+
+    private bool FilterCandidate(object value)
+    {
+        if (value is not BulkMaterialCandidateItem item)
+        {
+            return false;
+        }
+
+        var searchText = SearchTextBox?.Text?.Trim();
+        if (string.IsNullOrWhiteSpace(searchText))
+        {
+            return true;
+        }
+
+        return item.WorkbookFileName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase) ||
+               item.DisplayName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase) ||
+               item.Message.Contains(searchText, StringComparison.CurrentCultureIgnoreCase) ||
+               item.MatchingFormats.Any(format =>
+                   format.DisplayName.Contains(searchText, StringComparison.CurrentCultureIgnoreCase));
     }
 
     private static string Normalize(string value)

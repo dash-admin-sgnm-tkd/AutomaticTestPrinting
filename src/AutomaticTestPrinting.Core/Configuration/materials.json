@@ -14,7 +14,9 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用"
+      "studentSheetName": "生徒用",
+      "finishedLayoutId": "word-pair-list",
+      "finishedLayoutName": "英単語・英熟語（1問1答）"
     },
     {
       "id": "eiken-pre1-ex-second-edition",
@@ -28,7 +30,9 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用"
+      "studentSheetName": "生徒用",
+      "finishedLayoutId": "word-pair-list",
+      "finishedLayoutName": "英単語・英熟語（1問1答）"
     },
     {
       "id": "target-1000-fifth-edition",
@@ -42,7 +46,9 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用"
+      "studentSheetName": "生徒用",
+      "finishedLayoutId": "word-pair-list",
+      "finishedLayoutName": "英単語・英熟語（1問1答）"
     },
     {
       "id": "vintage-fourth-edition",
@@ -56,7 +62,9 @@
       "rangeEndCell": "G2",
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
-      "studentSheetName": "生徒用"
+      "studentSheetName": "生徒用",
+      "finishedLayoutId": "grammar-choice",
+      "finishedLayoutName": "英文法・語法（選択問題）"
     },
     {
       "id": "vocabulary-1700-sigma-best",
@@ -71,7 +79,9 @@
       "questionListSheetName": "問題解答リスト",
       "teacherSheetName": "講師用",
       "studentSheetName": "生徒用",
-      "useWideAnswerLayout": true
+      "useWideAnswerLayout": true,
+      "finishedLayoutId": "japanese-vocabulary",
+      "finishedLayoutName": "国語語彙（1問1答）"
     },
     {
       "id": "rapid-reading-idioms-revised",
@@ -89,7 +99,9 @@
       "sectionMappingSheetName": "対応リスト",
       "questionColumnWidth": 44,
       "answerColumnWidth": 44,
-      "outputRowHeight": 18
+      "outputRowHeight": 18,
+      "finishedLayoutId": "balanced-two-column",
+      "finishedLayoutName": "問題・解答（均等2列）"
     },
     {
       "id": "civic-politics-economics-fifth-edition",
@@ -115,7 +127,9 @@
       "answerColumnWidth": 22,
       "autoFitOutputRows": true,
       "headerTitle": "[五訂版]公共・政治経済 集中講義",
-      "fitToSinglePageTall": true
+      "fitToSinglePageTall": true,
+      "finishedLayoutId": "question-wide-variable-row",
+      "finishedLayoutName": "長文問題（問題欄ワイド）"
     }
   ]
 }

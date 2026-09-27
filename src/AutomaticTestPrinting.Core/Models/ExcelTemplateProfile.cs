@@ -28,6 +28,8 @@ public sealed record ExcelTemplateProfile
     public string StudentHeaderText { get; init; } = "問題";
     public string? HeaderTitle { get; init; }
     public bool FitToSinglePageTall { get; init; }
+    public string FinishedLayoutId { get; init; } = string.Empty;
+    public string FinishedLayoutName { get; init; } = string.Empty;
 }
 
 public sealed record ExcelRequestPreparation(

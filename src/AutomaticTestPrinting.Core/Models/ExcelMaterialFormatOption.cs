@@ -4,4 +4,7 @@ public sealed record ExcelMaterialFormatOption(
     string Id,
     string DisplayName,
     ExcelTemplateProfile TemplateProfile,
-    IReadOnlyList<string> SourceProfileIds);
+    IReadOnlyList<string> SourceProfileIds,
+    string PreviewDescription,
+    string PreviewQuestion,
+    string PreviewAnswer);
