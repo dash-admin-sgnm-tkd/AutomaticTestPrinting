@@ -88,6 +88,45 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
         Assert.StartsWith(firstFolder, result.Candidates[0].WorkbookPath);
     }
 
+    [Theory]
+    [InlineData(20, 74, "word-pair-list")]
+    [InlineData(172, 62, "grammar-choice")]
+    public void Discover_InfersFinishedLayoutFromQuestionAndAnswerColumnWidths(
+        double questionColumnWidth,
+        double answerColumnWidth,
+        string expectedLayoutId)
+    {
+        Directory.CreateDirectory(_directory);
+        CreateWorkbook(
+            Path.Combine(_directory, "分類名を含まない教材.xlsm"),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"],
+            [1, 100],
+            questionColumnWidth,
+            answerColumnWidth);
+        var wordProfile = CreateProfile() with
+        {
+            Id = "word",
+            FinishedLayoutId = "word-pair-list",
+            FinishedLayoutName = "英単語・英熟語（1問1答）"
+        };
+        var grammarProfile = CreateProfile() with
+        {
+            Id = "grammar",
+            FinishedLayoutId = "grammar-choice",
+            FinishedLayoutName = "英文法・語法（選択問題）",
+            MaximumQuestionCount = 25
+        };
+
+        var result = WorkbookDiscoveryService.Discover(
+            _directory,
+            [wordProfile, grammarProfile]);
+
+        var candidate = Assert.Single(result.Candidates);
+        Assert.Equal(expectedLayoutId, candidate.SuggestedFormatId);
+        Assert.True(candidate.RequiresReview);
+        Assert.Contains("内容から", candidate.Message);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))
@@ -115,7 +154,9 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
     private static void CreateWorkbook(
         string path,
         IReadOnlyList<string> sheetNames,
-        IReadOnlyList<int> questionNumbers)
+        IReadOnlyList<int> questionNumbers,
+        double? questionColumnWidth = null,
+        double? answerColumnWidth = null)
     {
         using var archive = ZipFile.Open(path, ZipArchiveMode.Create);
         var sheets = new StringBuilder();
@@ -145,6 +186,12 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
 
         for (var index = 0; index < sheetNames.Count; index++)
         {
+            var columns = sheetNames[index] == "問題解答リスト" &&
+                          questionColumnWidth is not null &&
+                          answerColumnWidth is not null
+                ? FormattableString.Invariant(
+                    $"<cols><col min=\"3\" max=\"3\" width=\"{questionColumnWidth}\"/><col min=\"4\" max=\"4\" width=\"{answerColumnWidth}\"/></cols>")
+                : string.Empty;
             var cells = sheetNames[index] == "問題解答リスト"
                 ? string.Concat(questionNumbers.Select((number, row) =>
                     $"<row r=\"{row + 2}\"><c r=\"B{row + 2}\"><v>{number}</v></c></row>"))
@@ -154,7 +201,7 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
                 $"xl/worksheets/sheet{index + 1}.xml",
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">" +
-                $"<sheetData>{cells}</sheetData></worksheet>");
+                $"{columns}<sheetData>{cells}</sheetData></worksheet>");
         }
     }
 

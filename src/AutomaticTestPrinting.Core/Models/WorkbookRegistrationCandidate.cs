@@ -8,7 +8,10 @@ public sealed record WorkbookRegistrationCandidate(
     int SuggestedMaximumQuestionNumber,
     bool CanRegister,
     bool RequiresReview,
-    string Message);
+    string Message)
+{
+    public string? SuggestedFormatId { get; init; }
+}
 
 public sealed record WorkbookDiscoveryResult(
     IReadOnlyList<WorkbookRegistrationCandidate> Candidates,

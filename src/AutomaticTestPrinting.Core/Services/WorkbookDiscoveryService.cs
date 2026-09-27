@@ -90,7 +90,16 @@ public static partial class WorkbookDiscoveryService
                     return;
                 }
 
-                var bestProfile = matchingProfiles[0];
+                var suggestedFormatId = InferFinishedLayoutId(
+                    archive,
+                    workbookMap,
+                    fileStem,
+                    matchingProfiles);
+                var bestProfile = matchingProfiles.FirstOrDefault(profile => string.Equals(
+                        profile.FinishedLayoutId,
+                        suggestedFormatId,
+                        StringComparison.OrdinalIgnoreCase))
+                    ?? matchingProfiles[0];
                 var maximumQuestionNumber = bestProfile.RangeUsesSectionMapping
                     ? bestProfile.MaximumQuestionNumber
                     : ReadMaximumQuestionNumber(
@@ -115,9 +124,14 @@ public static partial class WorkbookDiscoveryService
                     maximumQuestionNumber,
                     true,
                     requiresReview,
-                    requiresReview
-                        ? $"{bestProfile.DisplayName}を仮選択（変更できます）"
-                        : $"{bestProfile.DisplayName}と同じ形式"));
+                    requiresReview && suggestedFormatId is null
+                        ? "複数の完成形式に該当します。プレビューで選択してください"
+                        : requiresReview
+                            ? $"内容から{bestProfile.FinishedLayoutName}と判定（変更できます）"
+                            : $"{bestProfile.DisplayName}と同じ形式")
+                {
+                    SuggestedFormatId = suggestedFormatId
+                });
             }
             catch (InvalidDataException)
             {
@@ -278,6 +292,7 @@ public static partial class WorkbookDiscoveryService
 
     private static string CreateFormatSignature(ExcelTemplateProfile profile) => string.Join(
         '|',
+        profile.FinishedLayoutId,
         profile.WorkingSheetName,
         profile.QuestionListSheetName,
         profile.TeacherSheetName,
@@ -289,6 +304,114 @@ public static partial class WorkbookDiscoveryService
         profile.UseWideAnswerLayout,
         profile.AutoFitOutputRows,
         profile.FitToSinglePageTall);
+
+    private static string? InferFinishedLayoutId(
+        ZipArchive archive,
+        Dictionary<string, string> workbookMap,
+        string fileStem,
+        IReadOnlyCollection<ExcelTemplateProfile> matchingProfiles)
+    {
+        var availableLayoutIds = matchingProfiles
+            .Select(profile => profile.FinishedLayoutId)
+            .Where(id => !string.IsNullOrWhiteSpace(id))
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        string? inferred = InferLayoutFromFileName(fileStem);
+        if (inferred is null)
+        {
+            var questionListSheetName = matchingProfiles
+                .Select(profile => profile.QuestionListSheetName)
+                .FirstOrDefault(workbookMap.ContainsKey);
+            inferred = questionListSheetName is null
+                ? null
+                : InferLayoutFromQuestionListColumns(
+                    archive,
+                    workbookMap[questionListSheetName]);
+        }
+
+        return inferred is not null && availableLayoutIds.Contains(inferred)
+            ? inferred
+            : null;
+    }
+
+    private static string? InferLayoutFromFileName(string fileStem)
+    {
+        var normalized = Normalize(fileStem);
+        if (ContainsAny(normalized, ["語彙", "漢字", "古文単語"]))
+        {
+            return "japanese-vocabulary";
+        }
+
+        if (ContainsAny(normalized,
+                ["英文法", "語法", "vintage", "scramble", "nextstage", "upgrade", "grammar", "大岩"]))
+        {
+            return "grammar-choice";
+        }
+
+        if (ContainsAny(normalized,
+                ["英単語", "英熟語", "単熟語", "ターゲット", "システム英単語", "速読英単語", "leap", "鉄壁", "パス単", "stock", "sparta"]))
+        {
+            return "word-pair-list";
+        }
+
+        return null;
+    }
+
+    private static string? InferLayoutFromQuestionListColumns(
+        ZipArchive archive,
+        string worksheetPath)
+    {
+        var worksheetEntry = archive.GetEntry(worksheetPath);
+        if (worksheetEntry is null)
+        {
+            return null;
+        }
+
+        using var worksheetStream = worksheetEntry.Open();
+        var worksheet = XDocument.Load(worksheetStream);
+        var questionWidth = ReadColumnWidth(worksheet, 3);
+        var answerWidth = ReadColumnWidth(worksheet, 4);
+        if (questionWidth is null || answerWidth is null)
+        {
+            return null;
+        }
+
+        if (questionWidth > answerWidth * 1.3)
+        {
+            return "grammar-choice";
+        }
+
+        return answerWidth > questionWidth * 1.3
+            ? "word-pair-list"
+            : null;
+    }
+
+    private static double? ReadColumnWidth(XDocument worksheet, int columnNumber)
+    {
+        foreach (var column in worksheet.Descendants(SpreadsheetNamespace + "col"))
+        {
+            if (!int.TryParse((string?)column.Attribute("min"), out var minimum) ||
+                !int.TryParse((string?)column.Attribute("max"), out var maximum) ||
+                columnNumber < minimum ||
+                columnNumber > maximum)
+            {
+                continue;
+            }
+
+            if (double.TryParse(
+                    (string?)column.Attribute("width"),
+                    NumberStyles.Float,
+                    CultureInfo.InvariantCulture,
+                    out var width))
+            {
+                return width;
+            }
+        }
+
+        return null;
+    }
+
+    private static bool ContainsAny(string value, IReadOnlyCollection<string> keywords) =>
+        keywords.Any(keyword => value.Contains(Normalize(keyword), StringComparison.Ordinal));
 
     private static WorkbookRegistrationCandidate CreateUnreadableCandidate(
         string workbookPath,

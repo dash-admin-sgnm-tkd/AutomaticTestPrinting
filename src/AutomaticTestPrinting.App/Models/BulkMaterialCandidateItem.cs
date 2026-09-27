@@ -22,7 +22,14 @@ public sealed class BulkMaterialCandidateItem : INotifyPropertyChanged
         _maximumQuestionNumber = candidate.SuggestedMaximumQuestionNumber > 0
             ? candidate.SuggestedMaximumQuestionNumber.ToString(CultureInfo.CurrentCulture)
             : string.Empty;
-        _selectedFormat = matchingFormats.Count > 0 ? matchingFormats[0] : null;
+        _selectedFormat = !string.IsNullOrWhiteSpace(candidate.SuggestedFormatId)
+            ? matchingFormats.FirstOrDefault(format => string.Equals(
+                format.Id,
+                candidate.SuggestedFormatId,
+                StringComparison.OrdinalIgnoreCase))
+            : matchingFormats.Count == 1
+                ? matchingFormats[0]
+                : null;
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -34,9 +41,9 @@ public sealed class BulkMaterialCandidateItem : INotifyPropertyChanged
     public bool CanRegister => Candidate.CanRegister;
     public string Message => IsDerivedWordWorkbook(WorkbookFileName)
         ? "派生語教材のため未選択（必要なら登録できます）"
-        : SelectedFormat is null
-            ? Candidate.Message
-            : $"{SelectedFormat.DisplayName}を選択中";
+            : SelectedFormat is null
+                ? Candidate.Message
+                : $"{SelectedFormat.DisplayName}を選択中";
 
     public bool IsSelected
     {
