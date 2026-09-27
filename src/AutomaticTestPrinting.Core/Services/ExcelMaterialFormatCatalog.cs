@@ -26,17 +26,7 @@ public static class ExcelMaterialFormatCatalog
     }
 
     private static MaterialFormatKey CreateFormatKey(ExcelTemplateProfile profile) => new(
-        profile.MaximumQuestionCount,
-        profile.WorkingSheetName,
-        profile.RangeStartCell,
-        profile.RangeEndCell,
-        profile.QuestionListSheetName,
-        profile.TeacherSheetName,
-        profile.StudentSheetName,
         profile.UseWideAnswerLayout,
-        profile.RangeUsesSectionMapping,
-        profile.SectionMappingSheetName,
-        profile.SectionMappingUsesGridPairs,
         profile.SourceHasSeparateDisplayNumber,
         profile.QuestionColumnWidth,
         profile.AnswerColumnWidth,
@@ -48,77 +38,64 @@ public static class ExcelMaterialFormatCatalog
 
     private static string CreateFormatId(ExcelTemplateProfile profile)
     {
-        if (profile.RangeUsesSectionMapping)
+        if (!profile.UseWideAnswerLayout)
         {
-            return profile.SectionMappingUsesGridPairs
-                ? "chapter-grid"
-                : "chapter-number";
+            return "standard-table";
         }
 
-        if (profile.UseWideAnswerLayout)
+        if (profile.AutoFitOutputRows)
         {
-            return "wide-answer";
+            return "question-wide-variable-row";
         }
 
-        return profile.MaximumQuestionCount <= 25
-            ? "grammar-25"
-            : "vocabulary-standard";
+        return Math.Abs(profile.QuestionColumnWidth - profile.AnswerColumnWidth) < 0.01
+            ? "balanced-two-column"
+            : profile.AnswerColumnWidth > profile.QuestionColumnWidth
+                ? "answer-wide"
+                : "question-wide";
     }
 
     private static string CreateDisplayName(ExcelTemplateProfile profile)
     {
-        if (profile.RangeUsesSectionMapping)
+        if (!profile.UseWideAnswerLayout)
         {
-            return profile.SectionMappingUsesGridPairs
-                ? "章・単元指定（公共・政治経済型）"
-                : "章番号指定（速読英熟語型）";
+            return "標準（問題・解答の表）";
         }
 
-        if (profile.UseWideAnswerLayout)
+        if (profile.AutoFitOutputRows)
         {
-            return "国語・記述（横長解答型）";
+            return "問題欄ワイド（長文・自動行高）";
         }
 
-        return profile.MaximumQuestionCount <= 25
-            ? "英文法・語法（25問型）"
-            : "英単語・英熟語（標準型）";
+        return Math.Abs(profile.QuestionColumnWidth - profile.AnswerColumnWidth) < 0.01
+            ? "均等2列（問題・解答が同じ幅）"
+            : profile.AnswerColumnWidth > profile.QuestionColumnWidth
+                ? "解答欄ワイド（解答を広く表示）"
+                : "問題欄ワイド（問題を広く表示）";
     }
 
     private static int GetDisplayOrder(ExcelTemplateProfile profile)
     {
-        if (!profile.RangeUsesSectionMapping &&
-            !profile.UseWideAnswerLayout &&
-            profile.MaximumQuestionCount > 25)
+        if (!profile.UseWideAnswerLayout)
         {
             return 0;
         }
 
-        if (!profile.RangeUsesSectionMapping &&
-            !profile.UseWideAnswerLayout)
+        if (profile.AnswerColumnWidth > profile.QuestionColumnWidth)
         {
             return 1;
         }
 
-        if (!profile.RangeUsesSectionMapping)
+        if (Math.Abs(profile.QuestionColumnWidth - profile.AnswerColumnWidth) < 0.01)
         {
             return 2;
         }
 
-        return profile.SectionMappingUsesGridPairs ? 4 : 3;
+        return profile.AutoFitOutputRows ? 3 : 4;
     }
 
     private sealed record MaterialFormatKey(
-        int MaximumQuestionCount,
-        string WorkingSheetName,
-        string RangeStartCell,
-        string RangeEndCell,
-        string QuestionListSheetName,
-        string TeacherSheetName,
-        string StudentSheetName,
         bool UseWideAnswerLayout,
-        bool RangeUsesSectionMapping,
-        string? SectionMappingSheetName,
-        bool SectionMappingUsesGridPairs,
         bool SourceHasSeparateDisplayNumber,
         double QuestionColumnWidth,
         double AnswerColumnWidth,

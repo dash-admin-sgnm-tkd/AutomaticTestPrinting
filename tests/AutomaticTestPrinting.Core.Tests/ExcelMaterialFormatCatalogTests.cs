@@ -16,20 +16,20 @@ public sealed class ExcelMaterialFormatCatalogTests
     ];
 
     [Fact]
-    public void CreateOptions_GroupsEquivalentVocabularyProfiles()
+    public void CreateOptions_GroupsProfilesWithTheSameFinishedLayout()
     {
         var profiles = LoadBuiltInProfiles();
 
         var options = ExcelMaterialFormatCatalog.CreateOptions(profiles);
 
-        var vocabulary = Assert.Single(
+        var standard = Assert.Single(
             options,
-            option => option.Id == "vocabulary-standard");
-        Assert.Equal("英単語・英熟語（標準型）", vocabulary.DisplayName);
-        Assert.Contains("target-1900-sixth-edition", vocabulary.SourceProfileIds);
-        Assert.Contains("eiken-pre1-ex-second-edition", vocabulary.SourceProfileIds);
-        Assert.Contains("target-1000-fifth-edition", vocabulary.SourceProfileIds);
-        Assert.DoesNotContain("vintage-fourth-edition", vocabulary.SourceProfileIds);
+            option => option.Id == "standard-table");
+        Assert.Equal("標準（問題・解答の表）", standard.DisplayName);
+        Assert.Contains("target-1900-sixth-edition", standard.SourceProfileIds);
+        Assert.Contains("eiken-pre1-ex-second-edition", standard.SourceProfileIds);
+        Assert.Contains("target-1000-fifth-edition", standard.SourceProfileIds);
+        Assert.Contains("vintage-fourth-edition", standard.SourceProfileIds);
     }
 
     [Fact]
@@ -41,10 +41,10 @@ public sealed class ExcelMaterialFormatCatalogTests
             .Select(option => option.DisplayName)
             .ToArray();
 
-        Assert.Contains("英文法・語法（25問型）", names);
-        Assert.Contains("国語・記述（横長解答型）", names);
-        Assert.Contains("章番号指定（速読英熟語型）", names);
-        Assert.Contains("章・単元指定（公共・政治経済型）", names);
+        Assert.Contains("標準（問題・解答の表）", names);
+        Assert.Contains("解答欄ワイド（解答を広く表示）", names);
+        Assert.Contains("均等2列（問題・解答が同じ幅）", names);
+        Assert.Contains("問題欄ワイド（長文・自動行高）", names);
     }
 
     private static AutomaticTestPrinting.Core.Models.ExcelTemplateProfile[] LoadBuiltInProfiles() =>
