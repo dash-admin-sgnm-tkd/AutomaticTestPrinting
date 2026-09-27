@@ -25,7 +25,7 @@
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Margin="0,0,12,0" Style="{StaticResource SecondaryButton}"
-                            Click="RegisterMaterial_Click" Content="教材を登録" />
+                            Click="RegisterMaterial_Click" Content="教材をまとめて登録" />
                     <Border VerticalAlignment="Center" Background="#ECFDF3"
                             BorderBrush="#ABEFC6" BorderThickness="1" CornerRadius="12" Padding="12,5">
                         <TextBlock Foreground="#067647" FontWeight="SemiBold" Text="初期設定" />

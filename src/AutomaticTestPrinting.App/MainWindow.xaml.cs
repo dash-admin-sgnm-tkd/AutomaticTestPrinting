@@ -79,7 +79,7 @@ public partial class MainWindow : Window
             return;
         }
 
-        var registrationWindow = new MaterialRegistrationWindow(materialFolder)
+        var registrationWindow = new BulkMaterialRegistrationWindow(materialFolder)
         {
             Owner = this
         };
@@ -89,11 +89,12 @@ public partial class MainWindow : Window
         }
 
         InvalidateRecognitionResults();
-        StatusText.Text = $"教材「{registrationWindow.RegisteredDisplayName}」を登録しました";
+        StatusText.Text = $"教材を{registrationWindow.RegisteredCount}件登録しました";
         MessageBox.Show(this,
-            $"教材「{registrationWindow.RegisteredDisplayName}」を登録しました。\n" +
+            $"教材を{registrationWindow.RegisteredCount}件登録しました。\n" +
+            $"{registrationWindow.RegisteredDisplayNames}\n\n" +
             "次回からレポートの読み取り候補として使用されます。",
-            "教材を登録しました",
+            "教材をまとめて登録しました",
             MessageBoxButton.OK,
             MessageBoxImage.Information);
     }

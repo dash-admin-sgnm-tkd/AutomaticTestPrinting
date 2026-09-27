@@ -1,0 +1,114 @@
+<Window x:Class="AutomaticTestPrinting.App.BulkMaterialRegistrationWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="教材をまとめて登録"
+        Width="1120" Height="720" MinWidth="920" MinHeight="580"
+        WindowStartupLocation="CenterOwner" Background="#F2F4F7"
+        ShowInTaskbar="False" Loaded="Window_Loaded">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+
+        <Border Background="White" BorderBrush="#EAECF0" BorderThickness="0,0,0,1" Padding="30,22">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <StackPanel>
+                    <TextBlock FontSize="23" FontWeight="Bold" Text="教材をまとめて登録" />
+                    <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
+                               Text="教材フォルダーのExcelを自動判定します。登録する教材だけチェックしてください。" />
+                </StackPanel>
+                <Button x:Name="RescanButton" Grid.Column="1" VerticalAlignment="Center"
+                        Style="{StaticResource SecondaryButton}" Click="Rescan_Click"
+                        Content="もう一度スキャン" />
+            </Grid>
+        </Border>
+
+        <Grid Grid.Row="1" Margin="30,24">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Border Padding="16" Background="#EFF8FF" BorderBrush="#B2DDFF"
+                    BorderThickness="1" CornerRadius="8">
+                <TextBlock x:Name="ScanSummaryText" Foreground="#175CD3" TextWrapping="Wrap"
+                           Text="教材フォルダーを確認しています…" />
+            </Border>
+
+            <DataGrid x:Name="CandidatesGrid" Grid.Row="1" Margin="0,16,0,0"
+                      ItemsSource="{Binding Candidates}" AutoGenerateColumns="False"
+                      CanUserAddRows="False" CanUserDeleteRows="False" IsReadOnly="False"
+                      HeadersVisibility="Column" GridLinesVisibility="Horizontal"
+                      RowHeaderWidth="0" AlternatingRowBackground="#F9FAFB">
+                <DataGrid.Columns>
+                    <DataGridCheckBoxColumn Header="登録" Width="58"
+                                            Binding="{Binding IsSelected, UpdateSourceTrigger=PropertyChanged}" />
+                    <DataGridTextColumn Header="Excelファイル" Width="2.2*" IsReadOnly="True"
+                                        Binding="{Binding WorkbookFileName}" />
+                    <DataGridTemplateColumn Header="教材名" Width="1.8*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4" Padding="7,5"
+                                         IsEnabled="{Binding CanRegister}"
+                                         Text="{Binding DisplayName, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="形式" Width="1.7*">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <ComboBox Margin="4" Padding="6,4"
+                                          IsEnabled="{Binding CanRegister}"
+                                          ItemsSource="{Binding MatchingProfiles}"
+                                          DisplayMemberPath="DisplayName"
+                                          SelectedItem="{Binding SelectedProfile, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTemplateColumn Header="最大番号" Width="95">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <TextBox Margin="4" Padding="7,5" HorizontalContentAlignment="Right"
+                                         IsEnabled="{Binding CanRegister}"
+                                         Text="{Binding MaximumQuestionNumber, UpdateSourceTrigger=PropertyChanged}" />
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
+                    <DataGridTextColumn Header="判定結果" Width="1.8*" IsReadOnly="True"
+                                        Binding="{Binding Message}" />
+                </DataGrid.Columns>
+            </DataGrid>
+
+            <TextBlock Grid.Row="2" Margin="0,12,0,0" FontSize="12"
+                       Foreground="{StaticResource MutedTextBrush}" TextWrapping="Wrap"
+                       Text="形式が不明な教材は登録されません。候補が複数ある場合だけ「形式」を確認してください。教材名はレポートに書かれる名前へ修正できます。" />
+        </Grid>
+
+        <Border Grid.Row="2" Background="White" BorderBrush="#EAECF0" BorderThickness="0,1,0,0">
+            <Grid Margin="30,17">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <TextBlock x:Name="RegistrationStatusText" Margin="0,0,16,0"
+                           VerticalAlignment="Center" Foreground="{StaticResource MutedTextBrush}"
+                           Text="スキャン完了後、登録する教材を確認してください" />
+                <StackPanel Grid.Column="1" Orientation="Horizontal">
+                    <Button Margin="0,0,10,0" Style="{StaticResource SecondaryButton}"
+                            Click="OpenManualRegistration_Click" Content="1冊ずつ登録" />
+                    <Button Margin="0,0,10,0" Style="{StaticResource SecondaryButton}"
+                            Click="Close_Click" Content="閉じる" />
+                    <Button x:Name="RegisterSelectedButton" MinWidth="190"
+                            Style="{StaticResource PrimaryButton}" Click="RegisterSelected_Click"
+                            IsEnabled="False" Content="選択した教材をまとめて登録" />
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
