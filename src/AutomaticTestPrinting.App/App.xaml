@@ -13,6 +13,7 @@
             <Setter Property="FontFamily" Value="Yu Gothic UI, Segoe UI" />
             <Setter Property="FontSize" Value="14" />
             <Setter Property="Foreground" Value="#101828" />
+            <Setter Property="Icon" Value="Assets/AppIcon.ico" />
         </Style>
 
         <Style x:Key="PrimaryButton" TargetType="Button">
