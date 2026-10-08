@@ -7,10 +7,45 @@ namespace AutomaticTestPrinting.Core.Services;
 
 public static class PdfBatchMergeService
 {
+    public static ReportBatchPdfGenerationResult MergeByReport(
+        IReadOnlyList<GeneratedReportTest> generatedTests, string outputFolder, DateTimeOffset createdAt, bool duplex = false)
+    {
+        ArgumentNullException.ThrowIfNull(generatedTests);
+        ArgumentException.ThrowIfNullOrWhiteSpace(outputFolder);
+        if (generatedTests.Count == 0) throw new ArgumentException("結合するテストがありません。", nameof(generatedTests));
+        foreach (var test in generatedTests)
+        {
+            ArgumentException.ThrowIfNullOrWhiteSpace(test.SourceReportPath);
+            EnsureSourceExists(test.Pdf.ProblemPdfPath);
+            if (test.Pdf.AnswerPdfPath is not null) EnsureSourceExists(test.Pdf.AnswerPdfPath);
+        }
+        // Keep report order and test order; never group solely by student or report filename.
+        var reports = generatedTests.GroupBy(test => test.SourceReportPath, StringComparer.OrdinalIgnoreCase).ToArray();
+        var paths = reports.SelectMany(report => report.Select(test => test.Pdf.ProblemPdfPath)
+            .Concat(report.Where(test => test.Pdf.AnswerPdfPath is not null).Select(test => test.Pdf.AnswerPdfPath!))).ToArray();
+        var folder = Path.Combine(outputFolder, "一括印刷");
+        Directory.CreateDirectory(folder);
+        var suffix = createdAt.ToString("yyyyMMdd_HHmmssfff", CultureInfo.InvariantCulture);
+        var destination = CreateAvailablePath(folder, $"確認テスト_レポート順_問題解答_{suffix}.pdf");
+        var temporary = destination + ".tmp";
+        try
+        {
+            PdfMaterialGenerationService.MergeFiles(paths, temporary, duplex);
+            File.Move(temporary, destination);
+            return new(destination, generatedTests.Count, reports.Length);
+        }
+        catch
+        {
+            TryDelete(temporary);
+            throw;
+        }
+    }
+
     public static BatchPdfGenerationResult Merge(
         IReadOnlyList<ExcelPdfGenerationResult> generatedTests,
         string outputFolder,
-        DateTimeOffset createdAt)
+        DateTimeOffset createdAt,
+        bool duplex = false)
     {
         ArgumentNullException.ThrowIfNull(generatedTests);
         ArgumentException.ThrowIfNullOrWhiteSpace(outputFolder);
@@ -23,31 +58,32 @@ public static class PdfBatchMergeService
         foreach (var test in generatedTests)
         {
             EnsureSourceExists(test.ProblemPdfPath);
-            EnsureSourceExists(test.AnswerPdfPath);
+            if (test.AnswerPdfPath is not null) EnsureSourceExists(test.AnswerPdfPath);
         }
 
         var batchFolder = Path.Combine(outputFolder, "一括印刷");
         Directory.CreateDirectory(batchFolder);
         var suffix = createdAt.ToString("yyyyMMdd_HHmmssfff", CultureInfo.InvariantCulture);
         var problemPath = CreateAvailablePath(batchFolder, $"確認テスト_問題一括_{suffix}.pdf");
-        var answerPath = CreateAvailablePath(batchFolder, $"確認テスト_解答一括_{suffix}.pdf");
+        var answers = generatedTests.Where(test => test.AnswerPdfPath is not null).Select(test => test.AnswerPdfPath!).ToArray();
+        var answerPath = answers.Length > 0 ? CreateAvailablePath(batchFolder, $"確認テスト_解答一括_{suffix}.pdf") : null;
 
         var problemTemporaryPath = problemPath + ".tmp";
-        var answerTemporaryPath = answerPath + ".tmp";
+        var answerTemporaryPath = answerPath is null ? null : answerPath + ".tmp";
         try
         {
-            MergeFiles(generatedTests.Select(test => test.ProblemPdfPath), problemTemporaryPath);
-            MergeFiles(generatedTests.Select(test => test.AnswerPdfPath), answerTemporaryPath);
+            PdfMaterialGenerationService.MergeFiles(generatedTests.Select(test => test.ProblemPdfPath).ToArray(), problemTemporaryPath, duplex);
+            if (answerTemporaryPath is not null) PdfMaterialGenerationService.MergeFiles(answers, answerTemporaryPath, duplex);
             File.Move(problemTemporaryPath, problemPath);
-            File.Move(answerTemporaryPath, answerPath);
+            if (answerTemporaryPath is not null) File.Move(answerTemporaryPath, answerPath!);
             return new BatchPdfGenerationResult(problemPath, answerPath, generatedTests.Count);
         }
         catch
         {
             TryDelete(problemTemporaryPath);
-            TryDelete(answerTemporaryPath);
+            if (answerTemporaryPath is not null) TryDelete(answerTemporaryPath);
             TryDelete(problemPath);
-            TryDelete(answerPath);
+            if (answerPath is not null) TryDelete(answerPath);
             throw;
         }
     }

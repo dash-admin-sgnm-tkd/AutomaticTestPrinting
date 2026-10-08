@@ -17,7 +17,10 @@ public static partial class ReportTextParser
             FindNormalTestSummary(pages, testRequests),
             FindStageTestSummary(text),
             pages,
-            testRequests);
+            testRequests,
+            FindStageTestRequest(pages),
+            testRequests.Count == 0 && Compact(text).Contains("テスト作成依頼", StringComparison.Ordinal)
+                ? "依頼欄がありますが、通常テストを読み取れませんでした（0件）。依頼なしとは判断せず、原本を確認してください。" : string.Empty);
     }
 
     private static string FindStudentName(string text)
@@ -44,7 +47,7 @@ public static partial class ReportTextParser
         }
 
         return pages.Any(page => page.RecognizedWords.Count > 0)
-            ? "通常テスト候補：0件（原本確認）"
+            ? "要確認：依頼欄がありますが通常テストは0件です（原本確認）"
             : "依頼欄あり（問題数は画面で確認してください）";
     }
 
@@ -72,6 +75,22 @@ public static partial class ReportTextParser
 
     private static string Compact(string value) =>
         WhitespaceRegex().Replace(value.Replace('：', ':').Replace('．', '.'), string.Empty);
+
+    private static NormalTestRequestCandidate? FindStageTestRequest(IReadOnlyList<RecognizedReportPage> pages)
+    {
+        var page = pages.LastOrDefault(candidate => Compact(candidate.Text).Contains("次回の内容", StringComparison.Ordinal));
+        if (page is null) return null;
+        var text = Compact(page.Text);
+        if (!text.Contains("段階突破", StringComparison.Ordinal)) return null;
+        var section = text[text.LastIndexOf("次回の内容", StringComparison.Ordinal)..];
+        var subject = StageSubjectRegex().Match(section);
+        var details = StageDetailsRegex().Matches(section).LastOrDefault();
+        if (!subject.Success || details is null) return null;
+        // Treat a stage test as one whole-file item. All identifying dimensions remain in the catalog key.
+        return new NormalTestRequestCandidate(
+            $"段階突破 {subject.Groups[1].Value} {details.Groups[1].Value}年度 {details.Groups[2].Value} 第{details.Groups[3].Value}回",
+            "1-1", 1, page.PageNumber, RequiresReview: true);
+    }
 
     [GeneratedRegex(@"生徒名[:.]?(.+?)(?=(?:教務チェック|講師名|20\d{2}年|通常特訓|科目名|$))")]
     private static partial Regex StudentNameRegex();

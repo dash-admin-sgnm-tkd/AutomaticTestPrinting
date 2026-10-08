@@ -5,6 +5,7 @@ public sealed record ExcelTemplateProfile
     public string Id { get; init; } = string.Empty;
     public string DisplayName { get; init; } = string.Empty;
     public string WorkbookNameKeyword { get; init; } = string.Empty;
+    public string WorkbookFileName { get; init; } = string.Empty;
     public IReadOnlyList<string> WorkbookNameExcludedKeywords { get; init; } = [];
     public IReadOnlyList<string> MaterialNameKeywords { get; init; } = [];
     public int MaximumQuestionNumber { get; init; }
@@ -16,6 +17,7 @@ public sealed record ExcelTemplateProfile
     public string TeacherSheetName { get; init; } = string.Empty;
     public string StudentSheetName { get; init; } = string.Empty;
     public bool UseWideAnswerLayout { get; init; }
+    public bool UseStackedQuestionAnswerLayout { get; init; }
     public bool RangeUsesSectionMapping { get; init; }
     public string? SectionMappingSheetName { get; init; }
     public bool SectionMappingUsesGridPairs { get; init; }
@@ -39,4 +41,5 @@ public sealed record ExcelRequestPreparation(
     ExcelTemplateProfile? Profile = null,
     string? WorkbookPath = null,
     int? StartNumber = null,
-    int? EndNumber = null);
+    int? EndNumber = null,
+    IReadOnlyList<string>? WorkbookCandidates = null);

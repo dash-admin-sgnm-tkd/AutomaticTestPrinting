@@ -2,6 +2,7 @@ using System.Globalization;
 using System.IO;
 using System.Runtime.InteropServices;
 using AutomaticTestPrinting.Core.Models;
+using AutomaticTestPrinting.Core.Services;
 
 namespace AutomaticTestPrinting.App.Services;
 
@@ -105,6 +106,7 @@ public static class ExcelPdfGenerationService
             dynamic openedWorkbook = workbook;
             worksheets = openedWorkbook.Worksheets;
             dynamic worksheetCollection = worksheets;
+            ValidateRequiredWorksheets(worksheetCollection, request);
             backgroundSheet = worksheetCollection[request.Profile.WorkingSheetName];
             if (request.Profile.RangeUsesSectionMapping)
             {
@@ -130,14 +132,19 @@ public static class ExcelPdfGenerationService
                 request);
 
             outputPaths = CreateOutputPaths(request);
-            ExportSheetToPdf(teacherSheet, outputPaths.AnswerPdfPath);
+            ExportSheetToPdf(teacherSheet, outputPaths.AnswerPdfPath!);
             cancellationToken.ThrowIfCancellationRequested();
             ExportSheetToPdf(studentSheet, outputPaths.ProblemPdfPath);
 
-            EnsurePdfCreated(outputPaths.AnswerPdfPath);
+            EnsurePdfCreated(outputPaths.AnswerPdfPath!);
             EnsurePdfCreated(outputPaths.ProblemPdfPath);
             completed = true;
             return outputPaths;
+        }
+        catch (Exception exception)
+        {
+            exception.Data["SourceWorkbookPath"] = request.WorkbookPath;
+            throw;
         }
         finally
         {
@@ -177,7 +184,7 @@ public static class ExcelPdfGenerationService
             if (!completed && outputPaths is not null)
             {
                 TryDeleteFile(outputPaths.ProblemPdfPath);
-                TryDeleteFile(outputPaths.AnswerPdfPath);
+                if (outputPaths.AnswerPdfPath is not null) TryDeleteFile(outputPaths.AnswerPdfPath);
             }
 
             try
@@ -204,7 +211,7 @@ public static class ExcelPdfGenerationService
     {
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
         {
-            dynamic outputRange = sheet.Range["B1:H101"];
+            dynamic outputRange = sheet.Range[StackedQuestionAnswerLayout.UsesLayout(request.Profile) ? "B1:H201" : "B1:H101"];
             dynamic borders = outputRange.Borders;
             try
             {
@@ -244,6 +251,15 @@ public static class ExcelPdfGenerationService
                 backgroundSheet,
                 questionListSheet,
                 request.QuestionCount);
+        }
+        if (VerticalJapaneseQuestionLayout.UsesLayout(request.Profile))
+        {
+            var verticalQuestions = questions.Select(q => new StackedQuestion(q.Number, q.Question, q.Answer)).ToArray();
+            var title = request.Profile.HeaderTitle ?? request.MaterialName;
+            var range = $"{request.StartNumber}-{request.EndNumber}";
+            VerticalJapaneseExcelLayout.Apply(teacherSheet, verticalQuestions, title, range, includeAnswers: true);
+            VerticalJapaneseExcelLayout.Apply(studentSheet, verticalQuestions, title, range, includeAnswers: false);
+            return;
         }
         var firstPageCount = Math.Min(request.QuestionCount, 50);
         var secondPageCount = Math.Max(request.QuestionCount - 50, 0);
@@ -324,6 +340,24 @@ public static class ExcelPdfGenerationService
         ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
         ValidateStudentAnswerCellsAreEmpty(studentSheet, firstPageCount, secondPageCount);
     }
+
+    private static void ValidateRequiredWorksheets(dynamic worksheets, ExcelPdfGenerationRequest request)
+    {
+        var actual = new List<string>();
+        for (var i = 1; i <= (int)worksheets.Count; i++)
+        {
+            dynamic sheet = worksheets[i];
+            try { actual.Add((string)sheet.Name); }
+            finally { ReleaseComObject(sheet); }
+        }
+        var expected = new[] { request.Profile.WorkingSheetName, request.Profile.QuestionListSheetName,
+            request.Profile.TeacherSheetName, request.Profile.StudentSheetName }
+            .Concat(request.Profile.RangeUsesSectionMapping ? new[] { request.Profile.SectionMappingSheetName ?? "" } : Array.Empty<string>());
+        var missing = expected.Where(n => !actual.Contains(n, StringComparer.OrdinalIgnoreCase)).Distinct().ToArray();
+        if (missing.Length > 0)
+            throw new InvalidOperationException($"使用Excelに必要なシートがありません。\n使用Excel：{request.WorkbookPath}\n不足シート：{string.Join(" / ", missing)}\n実際のシート：{string.Join(" / ", actual)}\n教材の版・登録形式を確認してください。");
+    }
+
 
     private static void SetCellValue(dynamic sheet, string address, object value)
     {

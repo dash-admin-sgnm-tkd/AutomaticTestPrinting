@@ -1,7 +1,19 @@
 using AutomaticTestPrinting.Core.Models;
 using AutomaticTestPrinting.Core.Services;
+using ExcelTemplateCatalog = AutomaticTestPrinting.Core.Tests.IsolatedExcelTemplateCatalog;
 
 namespace AutomaticTestPrinting.Core.Tests;
+
+internal static class IsolatedExcelTemplateCatalog
+{
+    public static ExcelRequestPreparation Prepare(NormalTestRequestCandidate request, string? folder) =>
+        Prepare(request, string.IsNullOrWhiteSpace(folder) ? [] : [folder]);
+
+    public static ExcelRequestPreparation Prepare(NormalTestRequestCandidate request, IReadOnlyCollection<string> folders) =>
+        AutomaticTestPrinting.Core.Services.ExcelTemplateCatalog.Prepare(request, folders,
+            workbookChoicesPath: Path.Combine(Path.GetTempPath(), "NoUserChoices-" + Guid.NewGuid().ToString("N") + ".json"),
+            profiles: ExcelTemplateProfileStore.LoadFromFile(Path.Combine(AppContext.BaseDirectory, "materials.json")).Profiles);
+}
 
 public sealed class ExcelTemplateCatalogTests : IDisposable
 {
@@ -13,7 +25,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     public void Prepare_AcceptsValidTarget1900RequestWhenWorkbookExists()
     {
         Directory.CreateDirectory(_directory);
-        var workbookPath = Path.Combine(_directory, "★6訂版)ターゲット1900_本部.xlsm");
+        var workbookPath = Path.Combine(_directory, "★(6訂版)ターゲット1900_20221007本部.xlsm");
         File.WriteAllBytes(workbookPath, []);
         var request = new NormalTestRequestCandidate(
             "英単語ターゲット1900", "501-900", 50, 1, true);
@@ -31,13 +43,50 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     }
 
     [Fact]
+    public void Prepare_DoesNotSubstituteAnOlderEdition()
+    {
+        Directory.CreateDirectory(_directory);
+        File.WriteAllBytes(Path.Combine(_directory, "★(5訂版)ターゲット1900.xlsm"), []);
+        var result = ExcelTemplateCatalog.Prepare(
+            new NormalTestRequestCandidate("英単語ターゲット1900", "1-100", 20, 1, true), _directory);
+        Assert.False(result.IsValid);
+        Assert.Null(result.WorkbookPath);
+    }
+
+    [Fact]
+    public void Prepare_RejectsDuplicateExactFileNamesWithDifferentContent()
+    {
+        foreach (var folder in new[] { "a", "b" })
+        {
+            var path = Path.Combine(_directory, folder);
+            Directory.CreateDirectory(path);
+            File.WriteAllText(Path.Combine(path, "★(6訂版)ターゲット1900_20221007本部.xlsm"), folder);
+        }
+        var result = ExcelTemplateCatalog.Prepare(
+            new NormalTestRequestCandidate("英単語ターゲット1900", "1-100", 20, 1, true), _directory);
+        Assert.False(result.IsValid);
+        Assert.Contains("同名", result.Message);
+    }
+
+    [Fact]
+    public void Prepare_DeduplicatesOverlappingRootFolders()
+    {
+        var child = Path.Combine(_directory, "a");
+        Directory.CreateDirectory(child);
+        File.WriteAllBytes(Path.Combine(child, "★(6訂版)ターゲット1900_20221007本部.xlsm"), []);
+        var result = ExcelTemplateCatalog.Prepare(
+            new NormalTestRequestCandidate("英単語ターゲット1900", "1-100", 20, 1, true), [_directory, child]);
+        Assert.True(result.IsValid);
+    }
+
+    [Fact]
     public void Prepare_SearchesAllMaterialFoldersInConfiguredOrder()
     {
         var emptyFolder = Path.Combine(_directory, "empty");
         var workbookFolder = Path.Combine(_directory, "workbooks");
         Directory.CreateDirectory(emptyFolder);
         Directory.CreateDirectory(workbookFolder);
-        var workbookPath = Path.Combine(workbookFolder, "ターゲット1900.xlsm");
+        var workbookPath = Path.Combine(workbookFolder, "★(6訂版)ターゲット1900_20221007本部.xlsm");
         File.WriteAllBytes(workbookPath, []);
         var request = new NormalTestRequestCandidate(
             "英単語ターゲット1900", "1-100", 20, 1, true);
@@ -65,7 +114,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
 
         Assert.True(result.IsValid);
         Assert.Equal(standardPath, result.WorkbookPath);
-        Assert.Contains("使用Excel：★(6訂版)ターゲット1900_20221007本部.xlsm", result.Message);
+        Assert.Contains($"使用Excel：{standardPath}", result.Message);
     }
 
     [Fact]
@@ -117,19 +166,19 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     [Theory]
     [InlineData(
         "英検準1級単熟語EX第2版",
-        "コピー(第2版)出る順で最短合格！英検 準1級単熟語EX_202306本部.xlsm",
+        "★[第2版]出る順で最短合格！英検 準1級単熟語EX_202306本部.xlsm",
         "401-1300",
         50,
         "eiken-pre1-ex-second-edition")]
     [InlineData(
         "英熟語ターゲット1000",
-        "★【5訂版】英熟語ターゲット1000_202507本部.xlsm",
+        "★[5訂版]英熟語ターゲット1000_20220227本部.xlsm",
         "601-1000",
         50,
         "target-1000-fifth-edition")]
     [InlineData(
         "Vintage4thEdition",
-        "[新版][4th Edition] Vintage_20231030本部.xlsm",
+        "★Vintage 4th Edition_20231030本部.xlsm",
         "1048-1323",
         25,
         "vintage-fourth-edition")]
@@ -141,7 +190,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         "vocabulary-1700-sigma-best")]
     [InlineData(
         "[新版] 速読英熟語 改訂版",
-        "新版][改訂版]速読英熟語（単元番号指定可_～100問）.xlsm",
+        "★[改訂版]速読英熟語_20240301本部.xlsm",
         "17-61",
         25,
         "rapid-reading-idioms-revised")]
@@ -177,7 +226,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     {
         Directory.CreateDirectory(_directory);
         File.WriteAllBytes(
-            Path.Combine(_directory, "[新版][4th Edition] Vintage_本部.xlsm"), []);
+            Path.Combine(_directory, "★Vintage 4th Edition_20231030本部.xlsm"), []);
         var request = new NormalTestRequestCandidate(
             "Vintage 4th Edition", "1048-1323", 25, 1, true);
 
@@ -220,7 +269,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
     public void Prepare_AcceptsQuestionCountLargerThanSectionCountForRapidReadingIdioms()
     {
         Directory.CreateDirectory(_directory);
-        File.WriteAllBytes(Path.Combine(_directory, "速読英熟語.xlsm"), []);
+        File.WriteAllBytes(Path.Combine(_directory, "★[改訂版]速読英熟語_20240301本部.xlsm"), []);
         var request = new NormalTestRequestCandidate(
             "速読英熟語改訂版", "17-18", 25, 1, true);
 

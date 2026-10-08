@@ -53,19 +53,27 @@ public static partial class ReportTableExtractor
                 .OrderBy(item => item.Line.CenterX)
                 .ToArray();
 
-            var results = new List<NormalTestRequestCandidate>(countLines.Length);
-            foreach (var item in countLines)
+            var halfColumnWidth = page.PixelWidth * 0.055;
+            var columns = countLines.Select(item => (CenterX: item.Line.CenterX, item.Count)).ToList();
+            // A material column with an unreadable/blank count must be reviewed, not silently dropped.
+            foreach (var heading in lines.Where(line => page.ExtractionMethod != "PDF文字抽出" &&
+                line.Top > marker.Bottom && line.Bottom < rangeAnchor.Top - 8 && IsSubjectHeading(line.Text)))
             {
-                var halfColumnWidth = page.PixelWidth * 0.055;
+                if (!columns.Any(column => Math.Abs(column.CenterX - heading.CenterX) <= halfColumnWidth))
+                    columns.Add((heading.CenterX, 0));
+            }
+            var results = new List<NormalTestRequestCandidate>(columns.Count);
+            foreach (var item in columns.OrderBy(column => column.CenterX))
+            {
                 var material = ExtractMaterial(
                     page,
-                    item.Line.CenterX,
+                    item.CenterX,
                     halfColumnWidth,
                     marker.Bottom,
                     rangeAnchor.Top);
                 var range = ExtractRange(
                     page,
-                    item.Line.CenterX,
+                    item.CenterX,
                     halfColumnWidth,
                     rangeAnchor.CenterY);
 
@@ -73,10 +81,11 @@ public static partial class ReportTableExtractor
                 {
                     continue;
                 }
+                if (item.Count == 0 && string.IsNullOrWhiteSpace(material)) continue;
 
                 var normalizedRange = string.IsNullOrWhiteSpace(range)
                     ? "範囲を確認"
-                    : RepairRangeForMaterial(NormalizeRange(range), material);
+                    : NormalizeRange(range);
 
                 results.Add(new NormalTestRequestCandidate(
                     string.IsNullOrWhiteSpace(material) ? "教材名を確認" : material,
@@ -140,9 +149,27 @@ public static partial class ReportTableExtractor
     private static OcrLine[] BuildLines(RecognizedReportPage page) =>
         page.RecognizedWords
             .GroupBy(word => word.LineIndex)
+            .SelectMany(words => SplitHorizontal(words, page.PixelWidth * 0.03))
             .Select(ToLine)
             .OrderBy(line => line.Top)
             .ToArray();
+
+    private static IEnumerable<RecognizedWord[]> SplitHorizontal(IEnumerable<RecognizedWord> words, double gap)
+    {
+        var cell = new List<RecognizedWord>();
+        var right = double.MinValue;
+        foreach (var word in words.OrderBy(word => word.Left))
+        {
+            if (cell.Count > 0 && word.Left - right > gap)
+            {
+                yield return cell.ToArray();
+                cell.Clear();
+            }
+            cell.Add(word);
+            right = word.Left + word.Width;
+        }
+        if (cell.Count > 0) yield return cell.ToArray();
+    }
 
     private static OcrLine ToLine(IEnumerable<RecognizedWord> words)
     {
@@ -185,22 +212,7 @@ public static partial class ReportTableExtractor
         (value.Length <= 6 && value.EndsWith("英語", StringComparison.Ordinal)) ||
         value is "現代文" or "古文" or "漢文" or "日本史" or "世界史" or "政治経済" or "公共";
 
-    private static string RepairRangeForMaterial(string range, string materialName)
-    {
-        if (!materialName.Contains("1900", StringComparison.Ordinal))
-        {
-            return range;
-        }
-
-        return range switch
-        {
-            "1-900" => "1-1900",
-            "1901-1900" => "1101-1900",
-            _ => range
-        };
-    }
-
-    [GeneratedRegex(@"^(\d{1,3})(?:問)?$")]
+    [GeneratedRegex(@"^(\d{1,3})(?:[問題])?$")]
     private static partial Regex CountRegex();
 
     [GeneratedRegex(@"\d")]

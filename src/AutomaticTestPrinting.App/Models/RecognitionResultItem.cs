@@ -45,7 +45,10 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
     public string SourcePath { get; }
     public string FileName { get; }
     public string NormalTestSummary { get; }
+    public string NormalTestReadWarning { get; private init; } = string.Empty;
+    public bool HasReadingWarning => NormalTestReadWarning.Length > 0;
     public string StageTestSummary { get; }
+    public bool ShowStageTestSummary { get; private init; } = true;
     public string OrientationSummary { get; }
     public bool HasError { get; }
     public string ErrorType { get; }
@@ -101,7 +104,7 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
 
     public bool NeedsAttention =>
         IsIncluded &&
-        (HasError || Requests.Any(request => request.IsIncluded && !request.IsValid));
+        (HasError || HasReadingWarning || Requests.Any(request => request.IsIncluded && !request.IsValid));
 
     public static RecognitionResultItem Success(
         RecognizedReport report,
@@ -120,7 +123,7 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
             string.Empty,
             string.Empty,
             string.Empty,
-            requests);
+            requests) { ShowStageTestSummary = report.StageTestRequest is null, NormalTestReadWarning = report.NormalTestReadWarning };
     }
 
     public static RecognitionResultItem Failure(string sourcePath, Exception exception) => new(

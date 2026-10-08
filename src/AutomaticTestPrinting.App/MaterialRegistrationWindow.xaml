@@ -14,8 +14,8 @@
 
         <Border Background="White" BorderBrush="#EAECF0" BorderThickness="0,0,0,1" Padding="30,22">
             <StackPanel>
-                <TextBlock FontSize="23" FontWeight="Bold" Text="新しい教材を登録" />
-                <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
+                <TextBlock x:Name="HeadingText" FontSize="23" FontWeight="Bold" Text="新しい教材を登録" />
+                <TextBlock x:Name="DescriptionText" Margin="0,7,0,0" TextWrapping="Wrap" Foreground="{StaticResource MutedTextBrush}"
                            Text="既存教材に近い形式を選び、教材のExcelファイルを登録します。" />
             </StackPanel>
         </Border>
@@ -90,7 +90,7 @@
                     <ColumnDefinition Width="Auto" />
                 </Grid.ColumnDefinitions>
                 <TextBlock x:Name="RegistrationStatusText" Margin="0,0,16,0" VerticalAlignment="Center"
-                           Foreground="{StaticResource MutedTextBrush}" Text="必要な項目を入力してください" />
+                           TextWrapping="Wrap" Foreground="{StaticResource MutedTextBrush}" Text="必要な項目を入力してください" />
                 <StackPanel Grid.Column="1" HorizontalAlignment="Right" Orientation="Horizontal">
                     <Button Margin="0,0,10,0" Style="{StaticResource SecondaryButton}"
                             Click="Cancel_Click" Content="キャンセル" />

@@ -14,4 +14,4 @@ public sealed record ExcelPdfGenerationRequest(
 
 public sealed record ExcelPdfGenerationResult(
     string ProblemPdfPath,
-    string AnswerPdfPath);
+    string? AnswerPdfPath);

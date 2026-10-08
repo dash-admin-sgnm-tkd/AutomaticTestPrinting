@@ -49,7 +49,7 @@ public sealed class ExcelMaterialFormatCatalogTests
 
         Assert.Contains("英単語・英熟語（1問1答）", names);
         Assert.Contains("文法・選択問題（問題文ワイド）", names);
-        Assert.Contains("国語（語彙・漢字・古文の1問1答）", names);
+        Assert.Contains("国語・漢字（縦書き・問題と解答欄を上下）", names);
         Assert.Contains("問題・解答（均等2列）", names);
         Assert.Contains("長文問題（問題欄ワイド）", names);
     }

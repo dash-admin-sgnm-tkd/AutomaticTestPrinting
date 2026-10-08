@@ -15,7 +15,7 @@ public sealed class SkippedTestLogServiceTests
         {
             new SkippedTestLogEntry(
                 createdAt,
-                "来栖凛奈",
+                "テスト生徒",
                 "report.pdf",
                 2,
                 "未対応,教材",
@@ -34,7 +34,7 @@ public sealed class SkippedTestLogServiceTests
             var bytes = await File.ReadAllBytesAsync(path);
             Assert.Equal([0xEF, 0xBB, 0xBF], bytes[..3]);
             var csv = Encoding.UTF8.GetString(bytes[3..]);
-            Assert.Contains("来栖凛奈,report.pdf,2,\"未対応,教材\",101-200,50", csv);
+            Assert.Contains("テスト生徒,report.pdf,2,\"未対応,教材\",101-200,50", csv);
             Assert.Contains("\"未対応です。\n教材登録が必要です。\"", csv);
         }
         finally

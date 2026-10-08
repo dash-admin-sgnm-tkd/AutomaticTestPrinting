@@ -1,6 +1,7 @@
 [CmdletBinding()]
 param(
-    [string]$OutputDirectory = "artifacts/distribution"
+    [string]$OutputDirectory = "artifacts/distribution",
+    [string]$DotnetPath = "dotnet"
 )
 
 $ErrorActionPreference = "Stop"
@@ -15,6 +16,8 @@ $version = [string]$properties.Project.PropertyGroup.Version
 if ([string]::IsNullOrWhiteSpace($version)) {
     throw "Version is missing from Directory.Build.props."
 }
+$versionReadmePath = Join-Path $repositoryRoot "packaging/README-ja-v$version.txt"
+if (Test-Path -LiteralPath $versionReadmePath) { $readmePath = $versionReadmePath }
 
 if ([IO.Path]::IsPathRooted($OutputDirectory)) {
     $distributionRoot = [IO.Path]::GetFullPath($OutputDirectory)
@@ -29,12 +32,12 @@ $stageDirectory = Join-Path $distributionRoot $packageName
 $zipPath = Join-Path $distributionRoot "$packageName.zip"
 $checksumPath = Join-Path $distributionRoot "$packageName.sha256.txt"
 
-dotnet test $solutionPath -c Release
+& $DotnetPath test $solutionPath -c Release
 if ($LASTEXITCODE -ne 0) {
     throw "Tests failed. Distribution was not created."
 }
 
-dotnet publish $projectPath `
+& $DotnetPath publish $projectPath `
     -c Release `
     -r win-x64 `
     --self-contained true `
@@ -52,7 +55,7 @@ New-Item -ItemType Directory -Force -Path $distributionRoot | Out-Null
 
 foreach ($target in @($stageDirectory, $zipPath, $checksumPath)) {
     $resolvedTarget = [IO.Path]::GetFullPath($target)
-    if (-not $resolvedTarget.StartsWith($distributionRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    if (-not $resolvedTarget.StartsWith($distributionRoot.TrimEnd([IO.Path]::DirectorySeparatorChar) + [IO.Path]::DirectorySeparatorChar, [StringComparison]::OrdinalIgnoreCase)) {
         throw "Refusing to remove a path outside the distribution directory: $resolvedTarget"
     }
 
@@ -64,9 +67,16 @@ foreach ($target in @($stageDirectory, $zipPath, $checksumPath)) {
 New-Item -ItemType Directory -Force -Path $stageDirectory | Out-Null
 Copy-Item -LiteralPath (Join-Path $publishDirectory "AutomaticTestPrinting.App.exe") `
     -Destination $stageDirectory
-Copy-Item -LiteralPath (Join-Path $publishDirectory "materials.json") `
-    -Destination $stageDirectory
-Copy-Item -LiteralPath $readmePath -Destination $stageDirectory
+foreach ($catalog in @("materials.json", "shared-material-catalog.json", "additional-excel-catalog.json", "additional-stage-catalog.json")) {
+    $catalogPath = Join-Path $publishDirectory $catalog
+    if (-not (Test-Path -LiteralPath $catalogPath)) { throw "Missing distribution catalog: $catalog" }
+    Copy-Item -LiteralPath $catalogPath -Destination $stageDirectory
+}
+Copy-Item -LiteralPath $readmePath -Destination (Join-Path $stageDirectory "README-ja.txt")
+$releaseNotesPath = Join-Path $repositoryRoot "packaging/RELEASE_NOTES-v$version.md"
+if (Test-Path -LiteralPath $releaseNotesPath) {
+    Copy-Item -LiteralPath $releaseNotesPath -Destination $stageDirectory
+}
 
 Compress-Archive -LiteralPath $stageDirectory -DestinationPath $zipPath -CompressionLevel Optimal
 

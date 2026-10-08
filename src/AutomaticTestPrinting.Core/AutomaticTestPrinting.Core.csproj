@@ -7,6 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <EmbeddedResource Include="Configuration/additional-excel-catalog.json" />
+    <Content Include="Configuration/additional-excel-catalog.json"
+             Link="additional-excel-catalog.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Configuration/additional-stage-catalog.json" Condition="Exists('Configuration/additional-stage-catalog.json')" />
+    <Content Include="Configuration/additional-stage-catalog.json" Condition="Exists('Configuration/additional-stage-catalog.json')"
+             Link="additional-stage-catalog.json" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <Content Include="Configuration\shared-material-catalog.json"
+             Link="shared-material-catalog.json" CopyToOutputDirectory="PreserveNewest"
+             CopyToPublishDirectory="PreserveNewest" />
+    <EmbeddedResource Include="Configuration\shared-material-catalog.json"
+                      LogicalName="AutomaticTestPrinting.Core.Configuration.shared-material-catalog.json" />
     <Content Include="Configuration\materials.json"
              Link="materials.json"
              CopyToOutputDirectory="PreserveNewest"
@@ -17,6 +28,7 @@
 
   <ItemGroup>
     <PackageReference Include="PDFsharp" Version="6.2.4" />
+    <PackageReference Include="PdfPig" Version="0.1.16" />
   </ItemGroup>
 
 </Project>

@@ -1,5 +1,6 @@
 using System.ComponentModel;
 using System.Globalization;
+using System.IO;
 using System.Runtime.CompilerServices;
 using AutomaticTestPrinting.Core.Models;
 using AutomaticTestPrinting.Core.Services;
@@ -16,6 +17,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     private string _validationMessage = string.Empty;
     private bool _isValid;
     private bool _isIncluded = true;
+    private string? _suggestionMaterialName;
 
     public EditableTestRequestItem(
         NormalTestRequestCandidate request,
@@ -26,9 +28,10 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         DisplayNumber = displayNumber;
         PageNumber = request.PageNumber;
         RequiresReview = request.RequiresReview;
+        OriginalMaterialName = request.MaterialName;
         _materialName = request.MaterialName;
         (_startNumber, _endNumber) = SplitRange(request.Range);
-        _questionCount = request.QuestionCount.ToString(CultureInfo.CurrentCulture);
+        _questionCount = request.QuestionCount > 0 ? request.QuestionCount.ToString(CultureInfo.CurrentCulture) : string.Empty;
         Revalidate();
     }
 
@@ -36,8 +39,17 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     public event EventHandler? Edited;
 
     public int DisplayNumber { get; }
+    public string RequestHeading => PdfMaterialProfileStore.NormalizeName(MaterialName)
+        .StartsWith("段階突破", StringComparison.Ordinal) ? "段階突破テストを作成する" : $"テスト {DisplayNumber} を作成する";
     public int PageNumber { get; }
     public bool RequiresReview { get; }
+    public string OriginalMaterialName { get; }
+    public IReadOnlyList<string> MaterialSuggestions { get; private set; } = [];
+    public bool HasMaterialSuggestions => MaterialSuggestions.Count > 0;
+    public string? SelectedMaterialSuggestion { get; set; }
+    public IReadOnlyList<string> WorkbookCandidates { get; private set; } = [];
+    public ExcelTemplateProfile? WorkbookProfile { get; private set; }
+    public bool CanChooseWorkbook => WorkbookCandidates.Count > 0;
 
     public string MaterialName
     {
@@ -120,19 +132,71 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
             RequiresReview);
     }
 
-    private void Revalidate()
+    private void UpdateMaterialSuggestions(bool force)
     {
+        if (!force && _suggestionMaterialName == MaterialName) return;
+        _suggestionMaterialName = MaterialName;
+        try
+        {
+            var materials = SharedMaterialCatalog.Load().Items.Select(item => (Name: item.DisplayName, Aliases: (IEnumerable<string>)item.Aliases))
+                .Concat(ExcelTemplateProfileStore.LoadDefault().Profiles.Select(profile => (Name: profile.DisplayName, Aliases: (IEnumerable<string>)profile.MaterialNameKeywords)))
+                .Concat(PdfMaterialProfileStore.Load().Select(profile => (Name: profile.DisplayName, Aliases: (IEnumerable<string>)profile.Aliases)));
+            MaterialSuggestions = MaterialNameSuggestionService.Suggest(MaterialName, materials);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.Text.Json.JsonException or ArgumentException)
+        {
+            // Optional hints must not replace the specific configuration error shown by validation.
+            MaterialSuggestions = [];
+        }
+        SelectedMaterialSuggestion = null;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(MaterialSuggestions)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasMaterialSuggestions)));
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedMaterialSuggestion)));
+    }
+
+    private void Revalidate(bool refreshSuggestions = false)
+    {
+        UpdateMaterialSuggestions(refreshSuggestions);
+        WorkbookCandidates = [];
+        WorkbookProfile = null;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanChooseWorkbook)));
         var candidate = BuildCandidate();
         if (candidate is null || string.IsNullOrWhiteSpace(candidate.MaterialName))
         {
             IsValid = false;
-            ValidationMessage = "教材名・範囲・問題数を入力してください。";
+            ValidationMessage = "教材名・範囲・問題数を原本と照合して入力してください。空欄は依頼なし・読み取り漏れの可能性があります。";
             return;
         }
 
-        var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolders);
+        var pdf = PdfMaterialCatalog.Prepare(candidate, _materialFolders);
+        if (pdf.IsSupported)
+        {
+            IsValid = pdf.IsValid;
+            ValidationMessage = pdf.Message;
+        }
+        else
+        {
+            var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolders);
+            ApplyExcelPreparation(preparation);
+            if (!preparation.IsSupported && MaterialSuggestions.Count > 0)
+                ValidationMessage = "教材名が登録と一致しません（誤読・略称の可能性）。原本を見て下の修正候補を確認してください。";
+        }
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanChooseWorkbook)));
+    }
+
+    public void RefreshValidation()
+    {
+        Revalidate(refreshSuggestions: true);
+        Edited?.Invoke(this, EventArgs.Empty);
+    }
+
+    public void ApplyExcelPreparation(ExcelRequestPreparation preparation)
+    {
+        WorkbookProfile = preparation.Profile;
+        WorkbookCandidates = preparation.WorkbookCandidates ?? [];
         IsValid = preparation.IsValid;
         ValidationMessage = preparation.Message;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanChooseWorkbook)));
     }
 
     private void SetField(ref string field, string value, [CallerMemberName] string? propertyName = null)
@@ -144,6 +208,8 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
 
         field = value;
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        if (propertyName == nameof(MaterialName))
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(RequestHeading)));
         Revalidate();
         Edited?.Invoke(this, EventArgs.Empty);
     }

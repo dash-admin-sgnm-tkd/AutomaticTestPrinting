@@ -6,6 +6,7 @@
         WindowStartupLocation="CenterScreen" Background="#F2F4F7"
         Loaded="Window_Loaded" Closing="Window_Closing">
     <Grid>
+    <Grid x:Name="MainContentGrid">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto" />
             <RowDefinition Height="*" />
@@ -21,12 +22,16 @@
                 <StackPanel>
                     <TextBlock FontSize="26" FontWeight="Bold" Text="確認テスト作成" />
                     <TextBlock Margin="0,7,0,0" Foreground="{StaticResource MutedTextBrush}"
+                               TextWrapping="Wrap"
                                Text="レポートを読み込み、内容を確認してからテストを作成します。" />
                 </StackPanel>
                 <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
                     <Button Margin="0,0,12,0" Style="{StaticResource SecondaryButton}"
-                            Click="RegisterMaterial_Click" Content="教材をまとめて登録" />
-                    <Border VerticalAlignment="Center" Background="#ECFDF3"
+                            Click="PdfMaterials_Click" Content="PDF教材から作成" />
+                    <Button Margin="0,0,12,0" Style="{StaticResource SecondaryButton}"
+                            Click="SharedCatalog_Click" Content="教材カタログ" />
+                    <Button Style="{StaticResource SecondaryButton}" Click="RegisterPdfMaterial_Click" Content="PDF教材を登録" />
+                    <Border Visibility="Collapsed" VerticalAlignment="Center" Background="#ECFDF3"
                             BorderBrush="#ABEFC6" BorderThickness="1" CornerRadius="12" Padding="12,5">
                         <TextBlock Foreground="#067647" FontWeight="SemiBold" Text="初期設定" />
                     </Border>
@@ -62,7 +67,7 @@
                             <StackPanel>
                                 <TextBlock FontWeight="SemiBold" Text="教材フォルダー（複数追加できます）" />
                                 <TextBlock Margin="0,4,0,0" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                                           Text="Google Drive・OneDrive・PC内のフォルダーをまとめて検索します。上から順に優先します。" />
+                                           Text="Google Drive・OneDrive・PC内のフォルダーをまとめて検索します。下の一覧にフォルダーをドロップして追加できます。" />
                             </StackPanel>
                             <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Bottom">
                                 <Button Margin="0,0,8,0" Style="{StaticResource SecondaryButton}"
@@ -72,6 +77,8 @@
                             </StackPanel>
                         </Grid>
                         <ListBox x:Name="MaterialFoldersListBox" Margin="0,10,0,16" MinHeight="52" MaxHeight="132"
+                                 AllowDrop="True" PreviewDragOver="MaterialFolders_DragOver" Drop="MaterialFolders_Drop"
+                                 Background="White" ToolTip="ここにフォルダーをドロップ（複数選択可）。ファイルの移動やコピーは行いません。"
                                  ItemsSource="{Binding MaterialFolders}" BorderBrush="{StaticResource BorderBrush}"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto">
                             <ListBox.ItemTemplate>
@@ -81,6 +88,8 @@
                                 </DataTemplate>
                             </ListBox.ItemTemplate>
                         </ListBox>
+                        <TextBlock Margin="0,-8,0,16" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
+                                   Text="エクスプローラーから複数フォルダーをまとめて追加できます。登録済みのフォルダーやファイルは追加しません。" />
                         <TextBlock FontWeight="SemiBold" Text="出力フォルダー" />
                         <Grid Margin="0,8,0,0">
                             <Grid.ColumnDefinitions>
@@ -219,10 +228,7 @@
                                                                     BorderBrush="#D0D5DD" BorderThickness="1" CornerRadius="7">
                                                                 <StackPanel>
                                                                     <CheckBox FontWeight="SemiBold" IsChecked="{Binding IsIncluded}">
-                                                                        <TextBlock>
-                                                                            <Run Text="テスト " /><Run Text="{Binding DisplayNumber, Mode=OneWay}" />
-                                                                            <Run Text=" を作成する" />
-                                                                        </TextBlock>
+                                                                        <TextBlock Text="{Binding RequestHeading}" />
                                                                     </CheckBox>
                                                                     <Grid Margin="0,8,0,0">
                                                                         <Grid.ColumnDefinitions>
@@ -255,7 +261,7 @@
                                                                                      Text="{Binding QuestionCount, UpdateSourceTrigger=PropertyChanged}" />
                                                                         </StackPanel>
                                                                     </Grid>
-                                                                    <TextBlock Margin="0,8,0,0" FontWeight="SemiBold"
+                                                                      <TextBlock Margin="0,8,0,0" FontWeight="SemiBold"
                                                                                Text="{Binding ValidationMessage}" TextWrapping="Wrap">
                                                                         <TextBlock.Style>
                                                                             <Style TargetType="TextBlock">
@@ -267,13 +273,55 @@
                                                                                 </Style.Triggers>
                                                                             </Style>
                                                                         </TextBlock.Style>
-                                                                    </TextBlock>
+                                                                      </TextBlock>
+                                                                        <StackPanel Margin="0,8,0,0" IsEnabled="{Binding IsIncluded}">
+                                                                            <StackPanel.Style>
+                                                                                <Style TargetType="StackPanel">
+                                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                                    <Style.Triggers>
+                                                                                        <DataTrigger Binding="{Binding HasMaterialSuggestions}" Value="True">
+                                                                                            <Setter Property="Visibility" Value="Visible" />
+                                                                                        </DataTrigger>
+                                                                                    </Style.Triggers>
+                                                                                </Style>
+                                                                            </StackPanel.Style>
+                                                                            <TextBlock Text="教材名の修正候補（版を含め原本と照合してください。自動では変更しません）" TextWrapping="Wrap" />
+                                                                            <WrapPanel Margin="0,4,0,0">
+                                                                                <ComboBox Width="340" ItemsSource="{Binding MaterialSuggestions}" SelectedItem="{Binding SelectedMaterialSuggestion, Mode=TwoWay}" />
+                                                                                <Button Margin="8,0,0,0" Padding="10,6" Content="候補を確認して適用" Click="ApplyMaterialSuggestion_Click" />
+                                                                            </WrapPanel>
+                                                                            <TextBlock Margin="0,4,0,0" Text="{Binding OriginalMaterialName, StringFormat=元の読み取り：{0}}" TextWrapping="Wrap" Foreground="#667085" />
+                                                                        </StackPanel>
+                                                                        <Button Content="使用Excelを選ぶ・変更する" Margin="0,8,0,0"
+                                                                              HorizontalAlignment="Left" Padding="10,6"
+                                                                              Click="ChooseWorkbook_Click">
+                                                                          <Button.Style>
+                                                                              <Style TargetType="Button">
+                                                                                  <Setter Property="Visibility" Value="Collapsed" />
+                                                                                  <Style.Triggers>
+                                                                                      <DataTrigger Binding="{Binding CanChooseWorkbook}" Value="True">
+                                                                                          <Setter Property="Visibility" Value="Visible" />
+                                                                                      </DataTrigger>
+                                                                                  </Style.Triggers>
+                                                                              </Style>
+                                                                          </Button.Style>
+                                                                      </Button>
                                                                 </StackPanel>
                                                             </Border>
                                                         </DataTemplate>
                                                     </ItemsControl.ItemTemplate>
                                                 </ItemsControl>
-                                                <TextBlock Margin="0,5,0,0" Text="{Binding StageTestSummary}" />
+                                                <TextBlock Margin="0,5,0,0" Text="{Binding StageTestSummary}">
+                                                    <TextBlock.Style>
+                                                        <Style TargetType="TextBlock">
+                                                            <Style.Triggers>
+                                                                <DataTrigger Binding="{Binding ShowStageTestSummary}" Value="False">
+                                                                    <Setter Property="Visibility" Value="Collapsed" />
+                                                                </DataTrigger>
+                                                            </Style.Triggers>
+                                                        </Style>
+                                                    </TextBlock.Style>
+                                                </TextBlock>
                                                 <TextBlock Margin="0,7,0,0" FontSize="12"
                                                            Foreground="{StaticResource MutedTextBrush}"
                                                            Text="{Binding OrientationSummary}" />
@@ -321,15 +369,40 @@
                             Visibility="Collapsed">
                     <TextBlock Margin="0,0,12,0" VerticalAlignment="Center"
                                Foreground="{StaticResource MutedTextBrush}"
-                               Text="印刷前に内容を確認してください" />
-                    <Button x:Name="OpenBatchProblemPdfButton" MinWidth="160"
-                            Style="{StaticResource SecondaryButton}" Click="OpenBatchProblemPdf_Click"
-                            Content="問題一括PDFを開く" />
-                    <Button x:Name="OpenBatchAnswerPdfButton" Margin="8,0,0,0" MinWidth="160"
-                            Style="{StaticResource SecondaryButton}" Click="OpenBatchAnswerPdf_Click"
-                            Content="解答一括PDFを開く" />
+                               Text="レポートごとに問題 → 解答の順です。印刷前に確認してください" />
+                    <Button x:Name="OpenBatchPrintPdfButton" MinWidth="200"
+                            Style="{StaticResource SecondaryButton}" Click="OpenBatchPrintPdf_Click"
+                            Content="印刷用一括PDFを開く" />
                 </StackPanel>
             </Grid>
         </Border>
+    </Grid>
+        <Grid x:Name="BusyOverlay" Visibility="Collapsed" Panel.ZIndex="100"
+              Background="#66000000" Cursor="Wait" AutomationProperties.Name="処理中">
+            <Border Width="500" Padding="32" Background="White" CornerRadius="16"
+                    HorizontalAlignment="Center" VerticalAlignment="Center">
+                <StackPanel>
+                    <Grid Width="52" Height="52" Margin="0,0,0,20">
+                        <Ellipse Stroke="#E4E7EC" StrokeThickness="5"/>
+                        <Path Stroke="#2563EB" StrokeThickness="5" StrokeStartLineCap="Round"
+                              StrokeEndLineCap="Round" Data="M 26,2 A 24,24 0 0 1 50,26"
+                              RenderTransformOrigin="0.5,0.5">
+                            <Path.RenderTransform><RotateTransform x:Name="BusySpinnerRotation"/></Path.RenderTransform>
+                        </Path>
+                    </Grid>
+                    <TextBlock x:Name="BusyTitleText" FontSize="22" FontWeight="SemiBold"
+                               TextAlignment="Center" TextWrapping="Wrap"/>
+                    <TextBlock Margin="0,14,0,0" Text="{Binding Text, ElementName=StatusText}"
+                               TextAlignment="Center" TextWrapping="Wrap" Foreground="#475467"/>
+                    <ProgressBar x:Name="BusyProgressBar" Height="8" Margin="0,20,0,8"
+                                 IsIndeterminate="True" Minimum="0" Maximum="100"/>
+                    <TextBlock x:Name="BusyCountText" TextAlignment="Center" Foreground="#475467"/>
+                    <TextBlock x:Name="BusyCloseNotice" Margin="0,8,0,0" Visibility="Collapsed"
+                               Text="処理完了後にアプリを終了します" TextAlignment="Center" Foreground="#B54708"/>
+                    <TextBlock Margin="0,20,0,0" TextWrapping="Wrap" TextAlignment="Center"
+                               Foreground="#667085" Text="処理が終わるまでお待ちください。&#10;この画面のまま、最小化して他の作業をすることもできます。"/>
+                </StackPanel>
+            </Border>
+        </Grid>
     </Grid>
 </Window>

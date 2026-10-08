@@ -17,15 +17,11 @@ public sealed class WindowsReportOcrService
         "テスト", "作成", "依頼", "生徒", "次回", "宿題", "段階", "科目", "範囲", "特訓"
     ];
 
-    private readonly OcrEngine _ocrEngine;
-
-    public WindowsReportOcrService()
-    {
-        _ocrEngine = OcrEngine.TryCreateFromLanguage(new Language("ja-JP"))
+    private readonly Lazy<OcrEngine> _ocrEngine = new(() =>
+        OcrEngine.TryCreateFromLanguage(new Language("ja-JP"))
             ?? OcrEngine.TryCreateFromUserProfileLanguages()
             ?? throw new InvalidOperationException(
-                "Windowsの日本語OCRを使用できません。Windowsの言語設定で日本語を追加してください。");
-    }
+                "Windowsの日本語OCRを使用できません。Windowsの言語設定で日本語を追加してください。"));
 
     public async Task<RecognizedReport> RecognizeAsync(
         string pdfPath,
@@ -35,11 +31,29 @@ public sealed class WindowsReportOcrService
         var storageFile = await StorageFile.GetFileFromPathAsync(pdfPath);
         var document = await PdfDocument.LoadFromFileAsync(storageFile);
         var pages = new List<RecognizedReportPage>((int)document.PageCount);
+        IReadOnlyList<RecognizedReportPage?> directPages;
+        try
+        {
+            directPages = await Task.Run(() => PdfReportTextExtractionService.Extract(pdfPath, cancellationToken), cancellationToken);
+        }
+        catch (Exception exception) when (exception is not OperationCanceledException)
+        {
+            // A PDF unsupported by the text reader may still be rendered by Windows.
+            progress?.Report($"文字情報を使用できないためOCRで読み取ります（{exception.GetType().Name}）");
+            directPages = [];
+        }
 
         for (uint index = 0; index < document.PageCount; index++)
         {
             cancellationToken.ThrowIfCancellationRequested();
             progress?.Report($"{Path.GetFileName(pdfPath)}：{index + 1}/{document.PageCount}ページ");
+
+            if (index < directPages.Count && directPages[(int)index] is { } direct)
+            {
+                pages.Add(direct);
+                progress?.Report($"{Path.GetFileName(pdfPath)}：{index + 1}ページをPDF文字情報から読み取りました");
+                continue;
+            }
 
             using var page = document.GetPage(index);
             using var stream = new InMemoryRandomAccessStream();
@@ -76,7 +90,7 @@ public sealed class WindowsReportOcrService
             transform,
             ExifOrientationMode.IgnoreExifOrientation,
             ColorManagementMode.DoNotColorManage);
-        var result = await _ocrEngine.RecognizeAsync(bitmap);
+        var result = await _ocrEngine.Value.RecognizeAsync(bitmap);
         var words = result.Lines
             .SelectMany((line, lineIndex) => line.Words.Select(word => new RecognizedWord(
                 word.Text,

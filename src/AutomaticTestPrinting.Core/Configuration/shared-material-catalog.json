@@ -1,0 +1,5954 @@
+{
+  "schemaVersion": 1,
+  "updatedAt": "2026-10-04",
+  "sourceSpreadsheetId": "1zyqrPPx79dzabrmqYBpyu9dhYzB1QEmuRyZI7_Mfl3E",
+  "sourceFolderId": "12l-B7SZw_QKWVJvo06Y_UIfYqrrJVtsd",
+  "scopeDescription": "国立校 確認テスト作成（指定フォルダー内・子フォルダー含む）",
+  "items": [
+    {
+      "id": "shared-excel-41",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "高校英文読解をひとつひとつわかりやすく（改訂版） / 基本演習",
+      "edition": "改訂版",
+      "fileNames": [
+        "★[改訂版](基本演習)高校英文読解をひとつひとつわかりやすく。_20230930本部.xlsm"
+      ],
+      "aliases": [
+        "高校英文読解をひとつひとつわかりやすく"
+      ],
+      "notes": "基本演習\nファイル名の版表記：改訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 2,
+      "sourceFileId": "1Ae1RdIiAlfD3LjcGH-6YkBchNC2QGLdz",
+      "sourceRelativePath": "①英語/⓪基礎徹底/高校英文読解をひとつひとつわかりやすく。改訂版/★[改訂版](基本演習)高校英文読解をひとつひとつわかりやすく。_20230930本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-139",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]【多義語(minimalフレーズ)】システム英単語",
+      "edition": "5訂版",
+      "fileNames": [
+        "★[5訂版]【多義語(minimalフレーズ)】システム英単語_20210804本部.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]【多義語(minimalフレーズ)】システム英単語"
+      ],
+      "notes": "多義語\nファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 3,
+      "sourceFileId": "1gCbx16kOeJlxeqB4BF3N8JN1NpBIlWE2",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/★[5訂版]【多義語(minimalフレーズ)】システム英単語_20210804本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-140",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]システム英単語",
+      "edition": "5訂版",
+      "fileNames": [
+        "★[5訂版]システム英単語_20210804本部.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]システム英単語"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 4,
+      "sourceFileId": "104kix2wNzoauPJXKJl-moxuwoFXxv0dC",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/★[5訂版]システム英単語_20210804本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-3",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "システム英単語（5訂版）",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]システム英単語(黒字の訳追加ver)_20220501本部.xlsm"
+      ],
+      "aliases": [
+        "システム英単語"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 5,
+      "sourceFileId": "1QjEXG38oRxOj7GxDPwFGLoitIeQssIIc",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/5訂版 他のバージョン/[5訂版]システム英単語(黒字の訳追加ver)_20220501本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-141",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【5訂版】システム英単語 派生語",
+      "edition": "5訂版",
+      "fileNames": [
+        "【5訂版】システム英単語 派生語_20220914本部.xlsm"
+      ],
+      "aliases": [
+        "【5訂版】システム英単語 派生語"
+      ],
+      "notes": "派生語\nファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 6,
+      "sourceFileId": "1r0IIqU8JzLL_U-4axg7DiNGDgyHBkLFr",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/5訂版 他のバージョン/【5訂版】システム英単語 派生語_20220914本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-142",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "〈英単語を解答する〉[改訂新版]【多義語のBrush Up】システム英単語",
+      "edition": "改訂新版",
+      "fileNames": [
+        "〈英単語を解答する〉[改訂新版]【多義語のBrush Up】システム英単語_20150925本部.xlsm"
+      ],
+      "aliases": [
+        "〈英単語を解答する〉[改訂新版]【多義語のBrush Up】システム英単語"
+      ],
+      "notes": "英単語を解答\nファイル名の版表記：改訂新版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 7,
+      "sourceFileId": "1k_fw88NLc3odfxEHi67i4FhYp8_kiPDC",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/改訂新版/〈英単語を解答する〉[改訂新版]【多義語のBrush Up】システム英単語_20150925本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-143",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "〈英単語を解答する〉[改訂新版]システム英単語",
+      "edition": "改訂新版",
+      "fileNames": [
+        "〈英単語を解答する〉[改訂新版]システム英単語_20151210本部.xlsm"
+      ],
+      "aliases": [
+        "〈英単語を解答する〉[改訂新版]システム英単語"
+      ],
+      "notes": "英単語を解答\nファイル名の版表記：改訂新版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 8,
+      "sourceFileId": "1V6CwXBea0DgNPWpoobBO4_DutT7Z0Smr",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/改訂新版/〈英単語を解答する〉[改訂新版]システム英単語_20151210本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-144",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[改訂新版]システム英単語",
+      "edition": "改訂新版",
+      "fileNames": [
+        "★[改訂新版]システム英単語_20211017本部.xlsm"
+      ],
+      "aliases": [
+        "[改訂新版]システム英単語"
+      ],
+      "notes": "ファイル名の版表記：改訂新版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 9,
+      "sourceFileId": "1AgKn5GEcj55Q7L5NLfv91420SIfl-jXB",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/改訂新版/★[改訂新版]システム英単語_20211017本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-145",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[改訂新版]システム英単語（多義語）",
+      "edition": "改訂新版",
+      "fileNames": [
+        "★[改訂新版]システム英単語（多義語）_20211017本部.xlsm"
+      ],
+      "aliases": [
+        "[改訂新版]システム英単語（多義語）"
+      ],
+      "notes": "多義語\nファイル名の版表記：改訂新版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 10,
+      "sourceFileId": "18OshUemB-PBoghA9PSPa8FDrQd1Wwo9w",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★システム英単語/改訂新版/★[改訂新版]システム英単語（多義語）_20211017本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-146",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【6訂版】ターゲット1900 派生語",
+      "edition": "6訂版",
+      "fileNames": [
+        "【6訂版】ターゲット1900 派生語_20220914本部.xlsm"
+      ],
+      "aliases": [
+        "【6訂版】ターゲット1900 派生語"
+      ],
+      "notes": "派生語\nファイル名の版表記：6訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 11,
+      "sourceFileId": "1sWwNgqnyHMDQSQ35-cUKmZbgIW4owfcV",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★ターゲット1900/【6訂版】ターゲット1900 派生語_20220914本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-2",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "英単語ターゲット1900（6訂版）",
+      "edition": "6訂版",
+      "fileNames": [
+        "★(6訂版)ターゲット1900_20221007本部.xlsm"
+      ],
+      "aliases": [
+        "英単語ターゲット1900"
+      ],
+      "notes": "ファイル名の版表記：6訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 12,
+      "sourceFileId": "1-1Nf8vy-LX2gsIIuerZ8-SoTEv7ijLHe",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★ターゲット1900/★(6訂版)ターゲット1900_20221007本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-147",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]ターゲット1900",
+      "edition": "5訂版",
+      "fileNames": [
+        "★[5訂版]ターゲット1900.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]ターゲット1900"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 13,
+      "sourceFileId": "1dLI9ABBilyfmI3A_tTaj5aJvGk8WjEvb",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★ターゲット1900/5訂版/★[5訂版]ターゲット1900.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-20",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "必携 英単語LEAP（改訂版）",
+      "edition": "改訂版",
+      "fileNames": [
+        "★【改訂版】必携 英単語LEAP_202505本部.xlsm"
+      ],
+      "aliases": [
+        "必携 英単語LEAP"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 14,
+      "sourceFileId": "1zus0ookbTDF9ke_KmtSnyrrvLjd3GZEH",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★必携英単語 LEAP/★【改訂版】必携 英単語LEAP_202505本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-148",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "必携英単語 LEAP",
+      "edition": "未確認",
+      "fileNames": [
+        "必携英単語 LEAP_20210811本部.xlsm"
+      ],
+      "aliases": [
+        "必携英単語 LEAP"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 15,
+      "sourceFileId": "1SO55fnwfen9leZYr28JEmekQZ4FMxw2P",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/★必携英単語 LEAP/必携英単語 LEAP_20210811本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-25",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "英検 準1級単熟語EX（第2版）",
+      "edition": "第2版",
+      "fileNames": [
+        "★[第2版]出る順で最短合格！英検 準1級単熟語EX_202306本部.xlsm"
+      ],
+      "aliases": [
+        "英検 準1級単熟語EX"
+      ],
+      "notes": "ファイル名の版表記：第2版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 16,
+      "sourceFileId": "13N1fIUXUu14MZAknmYLCceQNjGGgLnpG",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/☆英検 準1級単熟語EX/★[第2版]出る順で最短合格！英検 準1級単熟語EX_202306本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-149",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【改訂第5版】速読英単語-上級編",
+      "edition": "第5版",
+      "fileNames": [
+        "★【改訂第5版】速読英単語-上級編_20230425_本部.xlsm"
+      ],
+      "aliases": [
+        "【改訂第5版】速読英単語-上級編"
+      ],
+      "notes": "ファイル名の版表記：第5版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 17,
+      "sourceFileId": "1c9PE-Zn7aRWNemRIbJjX_g-zjmO6Ucsk",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/☆速読英単語 上級編/★【改訂第5版】速読英単語-上級編_20230425_本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-51",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "鉄力会東大英単語熟語 鉄壁（改訂版）",
+      "edition": "改訂版",
+      "fileNames": [
+        "[改訂版]鉄緑会東大英単語熟語 鉄壁_20220515本部.xlsm"
+      ],
+      "aliases": [
+        "鉄力会東大英単語熟語 鉄壁"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 18,
+      "sourceFileId": "1DtE-QRaIzF5ZSPAq2PPp3FXSXzBPnB2e",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/☆鉄緑会東大英単語熟語 鉄壁/[改訂版]鉄緑会東大英単語熟語 鉄壁_20220515本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-5",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "システム英単語Basic（5訂版）",
+      "edition": "5訂版",
+      "fileNames": [
+        "★[5訂版]システム英単語Basic_20210804本部.xlsm"
+      ],
+      "aliases": [
+        "システム英単語Basic"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 19,
+      "sourceFileId": "1_1v-KwXUtObu6yLDIohxkSJPsToSskC8",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/システム英単語Basic・中学版/システム英単語 Basic/★[5訂版]システム英単語Basic_20210804本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-151",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "Intro（最初の100個）",
+      "edition": "未確認",
+      "fileNames": [
+        "Intro（最初の100個）.xlsm"
+      ],
+      "aliases": [
+        "Intro（最初の100個）"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 20,
+      "sourceFileId": "1YK7oXrk7-eN4U6ci6mRjUej61Ihs7dZf",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/システム英単語Basic・中学版/システム英単語 Basic/Intro（最初の100個）.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-6",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "システム英単語Basic（5訂版） / 多義語のBrush Up",
+      "edition": "5訂版",
+      "fileNames": [
+        "多義語.xlsm"
+      ],
+      "aliases": [
+        "システム英単語Basic"
+      ],
+      "notes": "多義語のBrush Up\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 21,
+      "sourceFileId": "1NyeEPDF8xfc7mEfJgqgca3qMrarKzl5N",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/システム英単語Basic・中学版/システム英単語 Basic/多義語.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-152",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[改訂版]中学版 システム英単語",
+      "edition": "改訂版",
+      "fileNames": [
+        "★[改訂版]中学版 システム英単語_20211128本部.xlsm"
+      ],
+      "aliases": [
+        "[改訂版]中学版 システム英単語"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 22,
+      "sourceFileId": "10Mf-9gbaB5whH33QriqAirk7amNGllkV",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/システム英単語Basic・中学版/システム英単語 中学版/★[改訂版]中学版 システム英単語_20211128本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-33",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "英単語ターゲット1200（改訂版）",
+      "edition": "改訂版",
+      "fileNames": [
+        "★[改訂版]英単語ターゲット1200.xlsm"
+      ],
+      "aliases": [
+        "英単語ターゲット1200"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 23,
+      "sourceFileId": "1mOxxVR5XnhKmTasK8qL8AoyKzBBPMMiC",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/ターゲット1200・1400/ターゲット1200/★[改訂版]英単語ターゲット1200.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-35",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "ターゲット1400（五訂版） / 英検2級によく出る単語140",
+      "edition": "五訂版",
+      "fileNames": [
+        "[5訂版]【英検2級によく出る単語140】ターゲット1400_20210623本部.xlsm"
+      ],
+      "aliases": [
+        "ターゲット1400"
+      ],
+      "notes": "英検2級によく出る単語140\nファイル名の版表記：5訂版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 24,
+      "sourceFileId": "1R81nr_8Z7SIJTF5E8wpv1GhoZ5hgnUJQ",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/ターゲット1200・1400/ターゲット1400/[5訂版]【英検2級によく出る単語140】ターゲット1400_20210623本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-34",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "ターゲット1400（五訂版）",
+      "edition": "五訂版",
+      "fileNames": [
+        "★[5訂版]ターゲット1400_20210623本部.xlsm"
+      ],
+      "aliases": [
+        "ターゲット1400"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 25,
+      "sourceFileId": "1BFkdwt8SfEjJudlD3zJwtBWyceKmupiS",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/ターゲット1200・1400/ターゲット1400/★[5訂版]ターゲット1400_20210623本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-153",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]英検1級 でる順パス単",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]英検1級 でる順パス単_20220130本部.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]英検1級 でる順パス単"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 26,
+      "sourceFileId": "1fFIqfFcRa3jDzmcJ3HuzDkeohEWAcN4f",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/1級/[5訂版]英検1級 でる順パス単_20220130本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-292",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]パス単2級",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]パス単2級_20211017本部.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]パス単2級"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 27,
+      "sourceFileId": "1mOOjKS4fNcRGO4e4wl1Bq0Y4Hm6wv_I-",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/2級/[5訂版]パス単2級_20211017本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-154",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]【熟語】英検準1級でる順パス単",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]【熟語】英検準1級でる順パス単.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]【熟語】英検準1級でる順パス単"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 28,
+      "sourceFileId": "1rV-RXdd2a4HgY3frvq3R9UeZjXvTVxkB",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/準1級/[5訂版]【熟語】英検準1級でる順パス単.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-155",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]【単語】英検準1級でる順パス単",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]【単語】英検準1級でる順パス単.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]【単語】英検準1級でる順パス単"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 29,
+      "sourceFileId": "14zYyRMKoxOgDbDJ_5UbhsY6zvmIhuk6E",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/準1級/[5訂版]【単語】英検準1級でる順パス単.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-156",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【熟語】英検準1級出る順パス単",
+      "edition": "未確認",
+      "fileNames": [
+        "【熟語】英検準1級出る順パス単.xlsm"
+      ],
+      "aliases": [
+        "【熟語】英検準1級出る順パス単"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 30,
+      "sourceFileId": "1Rna7gbGbpmIPce1GBmtJdevI6ZiZhHvh",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/準1級/改定前（難単語が掲載・稀に使う生徒がいるので確認）/【熟語】英検準1級出る順パス単.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-157",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【単語】英検準1級出る順パス単",
+      "edition": "未確認",
+      "fileNames": [
+        "【単語】英検準1級出る順パス単.xlsm"
+      ],
+      "aliases": [
+        "【単語】英検準1級出る順パス単"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 31,
+      "sourceFileId": "1WB3LlMeqrQBapKYy56Bg1YRlQiGBO_6A",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/準1級/改定前（難単語が掲載・稀に使う生徒がいるので確認）/【単語】英検準1級出る順パス単.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-30",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "パス単2級（5訂版）",
+      "edition": "5訂版",
+      "fileNames": [
+        "[5訂版]英検準2級パス単_20211128本部.xlsm"
+      ],
+      "aliases": [
+        "パス単2級"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 32,
+      "sourceFileId": "1TaqNLmiJaovDXANbEhKNzyDl02mF8_Pe",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/パス単シリーズ（準2・2・準1・1級）/準2級/[5訂版]英検準2級パス単_20211128本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-158",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "ユメタン1大学合格必須レベル",
+      "edition": "未確認",
+      "fileNames": [
+        "ユメタン1大学合格必須レベル_20210526本部.xlsm"
+      ],
+      "aliases": [
+        "ユメタン1大学合格必須レベル"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 33,
+      "sourceFileId": "1wCYlc1ORH9ma_eYWTkwzL4En8-hF-TC9",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/ユメタン1大学合格必須レベル/ユメタン1大学合格必須レベル_20210526本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-27",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "英単語Stock3000",
+      "edition": "版不明",
+      "fileNames": [
+        "英単語Stock3000_20210602本部.xlsm"
+      ],
+      "aliases": [
+        "英単語Stock3000"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 34,
+      "sourceFileId": "1nxF5T8VOwaK2XAvgVZgqwvmVeLp8xrWU",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/英単語Stock3000/英単語Stock3000_20210602本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-28",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "英単語Stock4500",
+      "edition": "版不明",
+      "fileNames": [
+        "英単語Stock4500_20210630本部.xlsm"
+      ],
+      "aliases": [
+        "英単語Stock4500"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 35,
+      "sourceFileId": "1r_Hix9woXc1bZ_8fniaUZ7ZK5rfobixP",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/英単語Stock4500/英単語Stock4500_20210630本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-159",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[改訂7版]速読英単語 必修編",
+      "edition": "7版",
+      "fileNames": [
+        "[改訂7版]速読英単語 必修編_20190525本部.xlsm"
+      ],
+      "aliases": [
+        "[改訂7版]速読英単語 必修編"
+      ],
+      "notes": "ファイル名の版表記：7版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 36,
+      "sourceFileId": "19Fy8KRdCcms2b3PVM3ytPfhtdAV1Fd7s",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/速読英単語 必修編/[改訂7版]速読英単語 必修編_20190525本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-293",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【ルート外】★速読英単語 必修編",
+      "edition": "未確認",
+      "fileNames": [
+        "【ルート外】★速読英単語 必修編_20210818本部.xlsm"
+      ],
+      "aliases": [
+        "【ルート外】★速読英単語 必修編"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 37,
+      "sourceFileId": "18miFUuyj0lnKB2vUZzI6rmowiIjbg5ov",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/速読英単語 必修編/【ルート外】★速読英単語 必修編_20210818本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-160",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "単語王2202",
+      "edition": "未確認",
+      "fileNames": [
+        "単語王2202_20180529本部.xlsm"
+      ],
+      "aliases": [
+        "単語王2202"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 38,
+      "sourceFileId": "16L8S3xIF6-7MW8Y0bx0blz0ASq3pkKqP",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/単語王2202/単語王2202_20180529本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-22",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "必携英単語 LEAP Basic",
+      "edition": "版不明",
+      "fileNames": [
+        "★必携英単語 LEAP Basic_20210811本部.xlsm"
+      ],
+      "aliases": [
+        "必携英単語 LEAP Basic"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 39,
+      "sourceFileId": "1X6sUSAHB7GnAOEWkYBVH-ttqm8pLBMSH",
+      "sourceRelativePath": "①英語/①単語（レベルに関わらずここにあります）/必携英単語 LEAP Basic/★必携英単語 LEAP Basic_20210811本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-294",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[4訂版]英熟語ターゲット1000",
+      "edition": "4訂版",
+      "fileNames": [
+        "[4訂版]英熟語ターゲット1000_20230921本部.xlsm"
+      ],
+      "aliases": [
+        "[4訂版]英熟語ターゲット1000"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 40,
+      "sourceFileId": "1KUplwYhm1QwNu5lbGC6d7npOTHYVz6ZO",
+      "sourceRelativePath": "①英語/②熟語（レベルに関わらずここにあります）/★英熟語ターゲット1000/[4訂版]英熟語ターゲット1000_20230921本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-295",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "[5訂版]英熟語ターゲット1000",
+      "edition": "5訂版",
+      "fileNames": [
+        "★[5訂版]英熟語ターゲット1000_20220227本部.xlsm"
+      ],
+      "aliases": [
+        "[5訂版]英熟語ターゲット1000"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 41,
+      "sourceFileId": "1oj2szpDbZ_DaQPq_7Cka72_PrBlfd_Bf",
+      "sourceRelativePath": "①英語/②熟語（レベルに関わらずここにあります）/★英熟語ターゲット1000/★[5訂版]英熟語ターゲット1000_20220227本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-296",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "コピー★(5訂版)英熟語ターゲット1000",
+      "edition": "5訂版",
+      "fileNames": [
+        "コピー★(5訂版)英熟語ターゲット1000_20220227本部.xlsm"
+      ],
+      "aliases": [
+        "コピー★(5訂版)英熟語ターゲット1000"
+      ],
+      "notes": "ファイル名の版表記：5訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n英単語・英熟語（1問1答の候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 42,
+      "sourceFileId": "1fPilYS7r7Rgt6R_Q9rgGDMwC0ceprFkv",
+      "sourceRelativePath": "①英語/②熟語（レベルに関わらずここにあります）/★英熟語ターゲット1000/コピー★(5訂版)英熟語ターゲット1000_20220227本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-299",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "コピー★(改訂版)速読英熟語",
+      "edition": "改訂版",
+      "fileNames": [
+        "コピー★(改訂版)速読英熟語_20240301本部.xlsm"
+      ],
+      "aliases": [
+        "コピー★(改訂版)速読英熟語"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 43,
+      "sourceFileId": "1-OAzPzJ7EfvhlXAQfO3khNhnJZWiwvQg",
+      "sourceRelativePath": "①英語/②熟語（レベルに関わらずここにあります）/★速読英熟語/コピー★(改訂版)速読英熟語_20240301本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-19",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "大岩のいちばんはじめの英文法 超基礎文法編",
+      "edition": "版不明",
+      "fileNames": [
+        "★大岩のいちばんはじめの英文法 超基礎文法編_20211003本部.xlsm"
+      ],
+      "aliases": [
+        "大岩のいちばんはじめの英文法 超基礎文法編"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 44,
+      "sourceFileId": "1u_MqWjISV-bakoITVOkvnlFdjX3DWYxr",
+      "sourceRelativePath": "①英語/③文法/★大岩のいちばんはじめの英文法 超基礎文法編_20211003本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-300",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "問題文付き_推奨4thNextStage",
+      "edition": "未確認",
+      "fileNames": [
+        "★問題文付き_推奨4thNextStage_20230113本部.xlsm"
+      ],
+      "aliases": [
+        "問題文付き_推奨4thNextStage"
+      ],
+      "notes": "問題文付き\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 45,
+      "sourceFileId": "1bY5SP18qmcanvLrWCA-BtCB8jWh_2FxZ",
+      "sourceRelativePath": "①英語/③文法/Next Stage/★問題文付き_推奨4thNextStage_20230113本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-301",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "(問題文つき)Scramble-4th-Edition",
+      "edition": "4th／4th- edition",
+      "fileNames": [
+        "★(問題文つき)Scramble-4th-Edition_20230525本部.xlsm"
+      ],
+      "aliases": [
+        "(問題文つき)Scramble-4th-Edition"
+      ],
+      "notes": "ファイル名の版表記：4th／4th- edition。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 46,
+      "sourceFileId": "1zDV-DwNHKH6E5LjqATvajthvJM4kBZ0A",
+      "sourceRelativePath": "①英語/③文法/Scramble/★(問題文つき)Scramble-4th-Edition_20230525本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-302",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "(問題文付き_推奨)[3rd] Vintage",
+      "edition": "3rd",
+      "fileNames": [
+        "★(問題文付き_推奨)[3rd] Vintage_20230213本部.xlsm"
+      ],
+      "aliases": [
+        "(問題文付き_推奨)[3rd] Vintage"
+      ],
+      "notes": "問題文付き\nファイル名の版表記：3rd。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 47,
+      "sourceFileId": "1iz0acLMWpAIUAlPP5k4_tvaq4RmpGXzx",
+      "sourceRelativePath": "①英語/③文法/Vintage/3rd Edition/★(問題文付き_推奨)[3rd] Vintage_20230213本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-8",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "Vintage（4th）",
+      "edition": "4th",
+      "fileNames": [
+        "★Vintage 4th Edition_20231030本部.xlsm"
+      ],
+      "aliases": [
+        "Vintage"
+      ],
+      "notes": "ファイル名の版表記：4th edition。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 48,
+      "sourceFileId": "1LUoBvlg6iZ0zI3byuk_1OwbK1P7MVMUn",
+      "sourceRelativePath": "①英語/③文法/Vintage/4th Edition/★Vintage 4th Edition_20231030本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-303",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "関正生の英文法ポラリス1 標準レベル",
+      "edition": "未確認",
+      "fileNames": [
+        "★関正生の英文法ポラリス1 標準レベル_202505本部.xlsm"
+      ],
+      "aliases": [
+        "関正生の英文法ポラリス1 標準レベル"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 49,
+      "sourceFileId": "1Z073BYKMuUSU2m2SnpqmSVZcaw8TGgoH",
+      "sourceRelativePath": "①英語/③文法/関正生の英文法ポラリス1 標準レベル/★関正生の英文法ポラリス1 標準レベル_202505本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-10",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "関正生の英文法ポラリス1標準レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "関正生の英文法ポラリス1 標準レベル_20220410本部.xlsm"
+      ],
+      "aliases": [
+        "関正生の英文法ポラリス1標準レベル"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 50,
+      "sourceFileId": "1p5OaWNjhMrU2ecwChY3tNgWPCV4iZCqZ",
+      "sourceRelativePath": "①英語/③文法/関正生の英文法ポラリス1 標準レベル/関正生の英文法ポラリス1 標準レベル_20220410本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-304",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【Exercise】大学入試 Basic Lecture 動画でわかる英文法[読解入門編]",
+      "edition": "未確認",
+      "fileNames": [
+        "【Exercise】大学入試 Basic Lecture 動画でわかる英文法[読解入門編]_20240123本部.xlsm"
+      ],
+      "aliases": [
+        "【Exercise】大学入試 Basic Lecture 動画でわかる英文法[読解入門編]"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n文法・読解（問題欄ワイドの候補）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 51,
+      "sourceFileId": "17_4BE6QOthejS2G6HtZv8LmDWXblZMDT",
+      "sourceRelativePath": "①英語/④解釈/★動画でわかる英文法［読解入門編］/【Exercise】大学入試 Basic Lecture 動画でわかる英文法[読解入門編]_20240123本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-306",
+      "kind": "Excel",
+      "subject": "英語",
+      "displayName": "【4訂版】入門英文問題精講",
+      "edition": "4訂版",
+      "fileNames": [
+        "★【4訂版】入門英文問題精講_20231109本部.xlsm"
+      ],
+      "aliases": [
+        "【4訂版】入門英文問題精講"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 52,
+      "sourceFileId": "12FTbJdGTsvVmZAQ4hwMDKJYEPy1XhwBy",
+      "sourceRelativePath": "①英語/④解釈/★入門英文問題精講/★【4訂版】入門英文問題精講_20231109本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-307",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【改訂版】現代文キーワード読解　テスト",
+      "edition": "改訂版",
+      "fileNames": [
+        "【改訂版】現代文キーワード読解　テスト.xls"
+      ],
+      "aliases": [
+        "【改訂版】現代文キーワード読解　テスト"
+      ],
+      "notes": "ファイル名の版表記：改訂版。内部の版確定は未確認。\n未確認（旧.xlsのボタン部品は追加調査）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 53,
+      "sourceFileId": "1zV1uimmkUK5LJJ5v_G6qlcHzVpavC62e",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/現代文キーワード読解（基本確認テストは出さない）/確認テスト・要約・旧バージョン/【改訂版】現代文キーワード読解　テスト.xls",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-243",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "現代文キーワード読解(要約)",
+      "edition": "未確認",
+      "fileNames": [
+        "現代文キーワード読解(要約)_20220320本部.xlsm"
+      ],
+      "aliases": [
+        "現代文キーワード読解(要約)"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 54,
+      "sourceFileId": "1mzddW1J_V5NEK4d_psAyQgkfdPmxn6ly",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/現代文キーワード読解（基本確認テストは出さない）/確認テスト・要約・旧バージョン/現代文キーワード読解(要約)_20220320本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-308",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "現代文キーワード読解（キーワード）",
+      "edition": "未確認",
+      "fileNames": [
+        "現代文キーワード読解（キーワード）.xlsm"
+      ],
+      "aliases": [
+        "現代文キーワード読解（キーワード）"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 55,
+      "sourceFileId": "1Ts2yUJ2FNGDYiFHNwwzEWDPLAcjpIV20",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/現代文キーワード読解（基本確認テストは出さない）/現代文キーワード読解（キーワード）.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-309",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "国語力を伸ばす 語彙1700",
+      "edition": "未確認",
+      "fileNames": [
+        "国語力を伸ばす 語彙1700_20230301本部.xlsm"
+      ],
+      "aliases": [
+        "国語力を伸ばす 語彙1700"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 56,
+      "sourceFileId": "1xZ0FK2r9JP6r2NyHAuZFrkWoXqlsDPF-",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/国語力を伸ばす語彙1700/国語力を伸ばす 語彙1700_20230301本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-310",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【共通テスト対策】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【共通テスト対策】入試漢字マスター1800+4訂版_20220606本部.xlsm"
+      ],
+      "aliases": [
+        "【共通テスト対策】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 57,
+      "sourceFileId": "1PqCJl978xVwaEA_B9Aja74jLEyTmoHu7",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【共通テスト対策】入試漢字マスター1800+4訂版_20220606本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-311",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四字熟語A】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四字熟語A】入試漢字マスター1800+4訂版_20211024本部.xlsm"
+      ],
+      "aliases": [
+        "【四字熟語A】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 58,
+      "sourceFileId": "1OunXNgbPLM_tCxdKjOPW1vU690RsGI72",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【四字熟語A】入試漢字マスター1800+4訂版_20211024本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-312",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四字熟語B】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四字熟語B】入試漢字マスター1800+4訂版_20211024本部.xlsm"
+      ],
+      "aliases": [
+        "【四字熟語B】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 59,
+      "sourceFileId": "1-320XdzvtygnNHIr2XQNgvT7SJqxER8b",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【四字熟語B】入試漢字マスター1800+4訂版_20211024本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-313",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四字熟語C】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四字熟語C】入試漢字マスター1800+4訂版_20211024本部.xlsm"
+      ],
+      "aliases": [
+        "【四字熟語C】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 60,
+      "sourceFileId": "1sZSa-sEfOxFitLdoIiiSORBu5ldsG8wZ",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【四字熟語C】入試漢字マスター1800+4訂版_20211024本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-314",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【書き取りA】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【書き取りA】入試漢字マスター1800+4訂版_20210728本部.xlsm"
+      ],
+      "aliases": [
+        "【書き取りA】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 61,
+      "sourceFileId": "1RwEn5LZo-I8lT_KwUMC3Hani4a_OXh3x",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【書き取りA】入試漢字マスター1800+4訂版_20210728本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-315",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【書き取りB】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【書き取りB】入試漢字マスター1800+4訂版_20210728本部.xlsm"
+      ],
+      "aliases": [
+        "【書き取りB】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 62,
+      "sourceFileId": "1PCq3HJF6Hdqrh1b3EeEuqCebePliNa3B",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【書き取りB】入試漢字マスター1800+4訂版_20210728本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-316",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【書き取りC】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【書き取りC】入試漢字マスター1800+4訂版_20210728本部.xlsm"
+      ],
+      "aliases": [
+        "【書き取りC】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 63,
+      "sourceFileId": "154Tk-2lKD_ZzrB40NHcBcddMv59cEN6K",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【書き取りC】入試漢字マスター1800+4訂版_20210728本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-317",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【読みA】入試漢字マスター1800+4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【読みA】入試漢字マスター1800+4訂版_20211024本部.xlsm"
+      ],
+      "aliases": [
+        "【読みA】入試漢字マスター1800+4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 64,
+      "sourceFileId": "1hB_SXzkBOyDZHHx_5Zu8ErpFV5FW4i_t",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【読みA】入試漢字マスター1800+4訂版_20211024本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-318",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【読みB】入試漢字マスター1800+_4訂版",
+      "edition": "4訂版",
+      "fileNames": [
+        "【読みB】入試漢字マスター1800+_4訂版_20220720本部.xlsm"
+      ],
+      "aliases": [
+        "【読みB】入試漢字マスター1800+_4訂版"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 65,
+      "sourceFileId": "1XdMNoq-FYzyEZMG6MFjuVaWcYtN3KUTb",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/【読みB】入試漢字マスター1800+_4訂版_20220720本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-319",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター書きA (意味解答)",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター書きA (意味解答)_20220206本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター書きA (意味解答)"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 66,
+      "sourceFileId": "1FX9bBewYEbpQUvxK2Y-c14MNEsnpPNSS",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター書きA (意味解答)_20220206本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-320",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター書きA (意味解答)",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター書きA (意味解答)_20220213本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター書きA (意味解答)"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 67,
+      "sourceFileId": "1gD-hK2KDEAlowoA_ZlwuJG_dCr9VWy_8",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター書きA (意味解答)_20220213本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-245",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター書きB (意味解答)",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター書きB (意味解答)_20220206本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター書きB (意味解答)"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 68,
+      "sourceFileId": "12eetunUlsMEjg0YtgD68NdCeYPYWWKYa",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター書きB (意味解答)_20220206本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-321",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター書きC(意味解答)",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター書きC(意味解答)_20220206本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター書きC(意味解答)"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 69,
+      "sourceFileId": "1mP2iNRIMxCnyLAvBj_3AymWUCup7Dxnd",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター書きC(意味解答)_20220206本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-322",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター読みA(意味解答",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター読みA(意味解答_20220206本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター読みA(意味解答"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 70,
+      "sourceFileId": "1mTHaRSDJ8JPo9sNgSEjq8AdFCZAx98Yu",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター読みA(意味解答_20220206本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-323",
+      "kind": "Excel",
+      "subject": "現代文",
+      "displayName": "【四訂版】漢字マスター読みB(意味解答)",
+      "edition": "4訂版",
+      "fileNames": [
+        "【四訂版】漢字マスター読みB(意味解答)_20220206本部.xlsm"
+      ],
+      "aliases": [
+        "【四訂版】漢字マスター読みB(意味解答)"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 71,
+      "sourceFileId": "1rXI4NHeTg_sQeZUNFl7vYSPZ_cI9YvYm",
+      "sourceRelativePath": "②現代文/⓪漢字・語彙/入試漢字マスター1800+/四訂版　意味解答/【四訂版】漢字マスター読みB(意味解答)_20220206本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-331",
+      "kind": "Excel",
+      "subject": "古文",
+      "displayName": "読み解き古文単語",
+      "edition": "未確認",
+      "fileNames": [
+        "★読み解き古文単語_20181020本部.xlsm"
+      ],
+      "aliases": [
+        "読み解き古文単語"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 72,
+      "sourceFileId": "1FYPavhqKw6IlqmL2cowo60-nRHeSWwXo",
+      "sourceRelativePath": "③古文/①古文単語（レベルに関わらずあります）/読んで見て覚える 古文単語315/読み解き古文単語/★読み解き古文単語_20181020本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-332",
+      "kind": "Excel",
+      "subject": "古文",
+      "displayName": "古文助動詞ランダム出題",
+      "edition": "未確認",
+      "fileNames": [
+        "★古文助動詞ランダム出題.xlsm"
+      ],
+      "aliases": [
+        "古文助動詞ランダム出題"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 73,
+      "sourceFileId": "1U2PxpvDmRyt2DhuUpcnWKBfzTqvG8rKY",
+      "sourceRelativePath": "③古文/②文法/★古文助動詞ランダム出題.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-333",
+      "kind": "Excel",
+      "subject": "漢文",
+      "displayName": "[共通テスト対応版]コレだけ漢字92",
+      "edition": "未確認",
+      "fileNames": [
+        "★[共通テスト対応版]コレだけ漢字92.xlsm"
+      ],
+      "aliases": [
+        "[共通テスト対応版]コレだけ漢字92"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n縦書き・転置配置（構造確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 74,
+      "sourceFileId": "1m3hr25zOJDjwpiX7R68p5amVYa3svLur",
+      "sourceRelativePath": "④漢文/★漢文 早覚え速答法/★[共通テスト対応版]コレだけ漢字92.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-82",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "[第1版5刷]スピードマスター 日本史問題集",
+      "edition": "第1版",
+      "fileNames": [
+        "★[第1版5刷]スピードマスター 日本史問題集_20210526本部.xlsm"
+      ],
+      "aliases": [
+        "[第1版5刷]スピードマスター 日本史問題集"
+      ],
+      "notes": "ファイル名の版表記：第1版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 75,
+      "sourceFileId": "1SwJzg2mKBSh4r3BoKQDCF1-R0H0dPF4O",
+      "sourceRelativePath": "⑤日本史/▲ルート外/スピードマスター 日本史問題集/★[第1版5刷]スピードマスター 日本史問題集_20210526本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-97",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "日本史B表解演習書",
+      "edition": "未確認",
+      "fileNames": [
+        "★日本史B表解演習書_20210919本部.xlsm"
+      ],
+      "aliases": [
+        "日本史B表解演習書"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 76,
+      "sourceFileId": "1XAVu8a4k-ReO3DqjjUhz1KqdR4KCeEuu",
+      "sourceRelativePath": "⑤日本史/▲ルート外/日本史B表解演習書/★日本史B表解演習書_20210919本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-334",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "(2周目以降)時代と流れで覚える日本史(赤字 MARCH)",
+      "edition": "未確認",
+      "fileNames": [
+        "(2周目以降)時代と流れで覚える日本史(赤字 MARCH)_20220706本部.xlsm"
+      ],
+      "aliases": [
+        "(2周目以降)時代と流れで覚える日本史(赤字 MARCH)"
+      ],
+      "notes": "赤字\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 77,
+      "sourceFileId": "1ynuhZylV0nh53iocNiq5_pwhvk1jrk75",
+      "sourceRelativePath": "⑤日本史/時代と流れで覚える！ 日本史B用語/(2周目以降)時代と流れで覚える日本史(赤字 MARCH)_20220706本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-335",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "時代と流れで覚える日本史(重要用語 日大) ",
+      "edition": "未確認",
+      "fileNames": [
+        "★時代と流れで覚える日本史(重要用語 日大) _20220529本部.xlsm"
+      ],
+      "aliases": [
+        "時代と流れで覚える日本史(重要用語 日大) "
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 78,
+      "sourceFileId": "1-3ILJ1ONhmDf3d_WwHa0E1LQCnscrq87",
+      "sourceRelativePath": "⑤日本史/時代と流れで覚える！ 日本史B用語/★時代と流れで覚える日本史(重要用語 日大) _20220529本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-336",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "新日本史B一問一答(完全版2nd)",
+      "edition": "未確認",
+      "fileNames": [
+        "★新日本史B一問一答(完全版2nd)_20220213本部.xlsm"
+      ],
+      "aliases": [
+        "新日本史B一問一答(完全版2nd)"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 79,
+      "sourceFileId": "1-2w0hWwme23h_OMWE8DvEtvzJLa6v9u1",
+      "sourceRelativePath": "⑤日本史/日本史B一問一答 完全版/★新日本史B一問一答(完全版2nd)_20220213本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-337",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "日本史2レベル 空欄解答",
+      "edition": "未確認",
+      "fileNames": [
+        "★日本史2レベル 空欄解答.xlsm"
+      ],
+      "aliases": [
+        "日本史2レベル 空欄解答"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 80,
+      "sourceFileId": "1ZsXTfHoDS8UWyFMuhQMMcg900lpbEtFJ",
+      "sourceRelativePath": "⑤日本史/日本史用語2レベル定着トレーニング/★日本史2レベル 空欄解答.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-338",
+      "kind": "Excel",
+      "subject": "日本史",
+      "displayName": "日本史2レベル 赤字回答（2周目以降）",
+      "edition": "未確認",
+      "fileNames": [
+        "★日本史2レベル 赤字回答（2周目以降）.xlsm"
+      ],
+      "aliases": [
+        "日本史2レベル 赤字回答（2周目以降）"
+      ],
+      "notes": "赤字\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 81,
+      "sourceFileId": "1lEjN6sMCvpbPw3ewVPDmg4aJ6xlWmBZ4",
+      "sourceRelativePath": "⑤日本史/日本史用語2レベル定着トレーニング/★日本史2レベル 赤字回答（2周目以降）.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-339",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "斎藤の世界史B 一問一答 完全網羅版",
+      "edition": "未確認",
+      "fileNames": [
+        "斎藤の世界史B 一問一答 完全網羅版_20220522本部.xlsm"
+      ],
+      "aliases": [
+        "斎藤の世界史B 一問一答 完全網羅版"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n問題・解答別（標準シート型・詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 82,
+      "sourceFileId": "1lrngHbh_TSTdQ7v_9Nx79-SHgmIE5TIN",
+      "sourceRelativePath": "⑥世界史/斎藤の世界史B 一問一答 完全網羅版/斎藤の世界史B 一問一答 完全網羅版_20220522本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-340",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "(2周目以降)時代と流れで覚える世界史(赤字 MARCH)",
+      "edition": "未確認",
+      "fileNames": [
+        "(2周目以降)時代と流れで覚える世界史(赤字 MARCH)_20220727本部.xlsm"
+      ],
+      "aliases": [
+        "(2周目以降)時代と流れで覚える世界史(赤字 MARCH)"
+      ],
+      "notes": "赤字\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 83,
+      "sourceFileId": "1czMeWW1Es6vJY8Pvu8lgY8hrsd-linan",
+      "sourceRelativePath": "⑥世界史/時代と流れで覚える！世界史B用語/(2周目以降)時代と流れで覚える世界史(赤字 MARCH)_20220727本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-341",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "時代と流れで覚える世界史(重要用語 日大)",
+      "edition": "未確認",
+      "fileNames": [
+        "★時代と流れで覚える世界史(重要用語 日大)_20221021本部.xlsm"
+      ],
+      "aliases": [
+        "時代と流れで覚える世界史(重要用語 日大)"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 84,
+      "sourceFileId": "1RwDOVH6JOlZDMvJS1qXcdYe_XMPrNPs_",
+      "sourceRelativePath": "⑥世界史/時代と流れで覚える！世界史B用語/★時代と流れで覚える世界史(重要用語 日大)_20221021本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-126",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "【第1部】世界史B一問一答 完全版",
+      "edition": "未確認",
+      "fileNames": [
+        "【第1部】世界史B一問一答 完全版_20181027本部.xlsm"
+      ],
+      "aliases": [
+        "【第1部】世界史B一問一答 完全版"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 85,
+      "sourceFileId": "1icQlKkt4I0HAKSOkbfGET6IoM37ilQb9",
+      "sourceRelativePath": "⑥世界史/世界史B一問一答 完全版/旧 世界史B一問一答/【第1部】世界史B一問一答 完全版_20181027本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-127",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "【第2部】世界史B一問一答 完全版",
+      "edition": "未確認",
+      "fileNames": [
+        "【第2部】世界史B一問一答 完全版_20181027本部.xlsm"
+      ],
+      "aliases": [
+        "【第2部】世界史B一問一答 完全版"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 86,
+      "sourceFileId": "18vo8vav85BY_1d29eHTpvVYlHIUlklhm",
+      "sourceRelativePath": "⑥世界史/世界史B一問一答 完全版/旧 世界史B一問一答/【第2部】世界史B一問一答 完全版_20181027本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-128",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "【第3部】世界史B一問一答 完全版",
+      "edition": "未確認",
+      "fileNames": [
+        "【第3部】世界史B一問一答 完全版_20181027本部.xlsm"
+      ],
+      "aliases": [
+        "【第3部】世界史B一問一答 完全版"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 87,
+      "sourceFileId": "1bwg8KmZTOqY1nafEzYajyUWePmcu-VDb",
+      "sourceRelativePath": "⑥世界史/世界史B一問一答 完全版/旧 世界史B一問一答/【第3部】世界史B一問一答 完全版_20181027本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-129",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "【第4部】世界史B一問一答 完全版",
+      "edition": "未確認",
+      "fileNames": [
+        "【第4部】世界史B一問一答 完全版_20191019本部.xlsm"
+      ],
+      "aliases": [
+        "【第4部】世界史B一問一答 完全版"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n単語リスト・旧式フォーム型（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 88,
+      "sourceFileId": "1JQEjuO69Hdse7H8Kgybw1y_czxuvXims",
+      "sourceRelativePath": "⑥世界史/世界史B一問一答 完全版/旧 世界史B一問一答/【第4部】世界史B一問一答 完全版_20191019本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-342",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "世界史用語マルチトレーニング STEP1 問題文付き",
+      "edition": "未確認",
+      "fileNames": [
+        "★世界史用語マルチトレーニング STEP1 問題文付き_20210811本部.xlsm"
+      ],
+      "aliases": [
+        "世界史用語マルチトレーニング STEP1 問題文付き"
+      ],
+      "notes": "問題文付き\nファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 89,
+      "sourceFileId": "1qUHsA1euCvs_uzCcvFTjx7cwzEAw8ePX",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/STEP1（文章で定着）/★世界史用語マルチトレーニング STEP1 問題文付き_20210811本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-70",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "★世界史用語マルチ・トレーニング STEP2_20200615本部",
+      "edition": "版不明",
+      "fileNames": [
+        "★世界史用語マルチ・トレーニング STEP2_20200615本部.xlsm"
+      ],
+      "aliases": [
+        "★世界史用語マルチ・トレーニング STEP2_20200615本部"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 90,
+      "sourceFileId": "1DES2uQoqEstxG5_eIpd_T6ixZ0Ig9Cgr",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/STEP2（地図で定着）/★世界史用語マルチ・トレーニング STEP2_20200615本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-69",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "★世界史用語マルチ・トレーニング STEP3_20210526本部",
+      "edition": "版不明",
+      "fileNames": [
+        "★世界史用語マルチ・トレーニング STEP3_20210526本部.xlsm"
+      ],
+      "aliases": [
+        "★世界史用語マルチ・トレーニング STEP3_20210526本部"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 91,
+      "sourceFileId": "10ASFI96U02hGFvUR9-ItItc53GFy2mKB",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/STEP3（年表で定着）/★世界史用語マルチ・トレーニング STEP3_20210526本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-67",
+      "kind": "Excel",
+      "subject": "世界史",
+      "displayName": "★世界史用語マルチトレーニング STEP1 赤字回答(MARCHレベル)_20210901本部",
+      "edition": "版不明",
+      "fileNames": [
+        "★世界史用語マルチトレーニング STEP1 赤字回答(MARCHレベル)_20210901本部.xlsm"
+      ],
+      "aliases": [
+        "★世界史用語マルチトレーニング STEP1 赤字回答(MARCHレベル)_20210901本部"
+      ],
+      "notes": "ファイル名の版表記：なし。内部の版確定は未確認。\nあり（部品・接続を静的確認）／実行は未検証\n穴埋め（問題・解答用紙別）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\n版の内部確認・完成レイアウト・アプリ互換性・実行結果は未検証。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 92,
+      "sourceFileId": "1eCNH2poJFWSDzGACFb4qcDrltt3T-HFy",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/赤字解答（2周目以降）/★世界史用語マルチトレーニング STEP1 赤字回答(MARCHレベル)_20210901本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-excel-343",
+      "kind": "Excel",
+      "subject": "政治・経済",
+      "displayName": "[四訂版]共通テスト 政治・経済 集中講義 必携一問一答問題集 別冊",
+      "edition": "4訂版",
+      "fileNames": [
+        "★[四訂版]共通テスト 政治・経済 集中講義 必携一問一答問題集 別冊_20200720本部.xlsm"
+      ],
+      "aliases": [
+        "[四訂版]共通テスト 政治・経済 集中講義 必携一問一答問題集 別冊"
+      ],
+      "notes": "ファイル名の版表記：4訂版。内部の版確定は未確認。\n未確認（部品と印刷処理の接続未確定）／実行は未検証\n独自形式（詳細要確認）／完成レイアウトは未検証\n指定フォルダー内の同名候補は1件\nボタンと印刷処理の接続・版・完成レイアウト・アプリ互換性は未確認。",
+      "sourceSheet": "Excel登録準備",
+      "sourceRow": 93,
+      "sourceFileId": "1AUzZcBpvv2WjpnzLiyojyket43wwnpD_",
+      "sourceRelativePath": "⑦政治・経済/共通テスト 政治・経済 集中講義/★[四訂版]共通テスト 政治・経済 集中講義 必携一問一答問題集 別冊_20200720本部.xlsm",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1nP_pz_WxVXawJ7jy-hyqJ_WlOQlTHEJj",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "Next Stage",
+      "edition": "版不明",
+      "fileNames": [
+        "Next Stage_20151008本部.pdf"
+      ],
+      "aliases": [
+        "Next Stage"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 2,
+      "sourceFileId": "1nP_pz_WxVXawJ7jy-hyqJ_WlOQlTHEJj",
+      "sourceRelativePath": "①英語/③文法/Next Stage/Next Stage_20151008本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1TrcWpO2_ZcMO2t1cxbH8-tz12nSkPu3k",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "Scramble 4th Edition_20200921本部 _2021114本部",
+      "edition": "版不明",
+      "fileNames": [
+        "Scramble 4th Edition_20200921本部 _2021114本部.pdf"
+      ],
+      "aliases": [
+        "Scramble 4th Edition_20200921本部 _2021114本部"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 3,
+      "sourceFileId": "1TrcWpO2_ZcMO2t1cxbH8-tz12nSkPu3k",
+      "sourceRelativePath": "①英語/③文法/Scramble/Scramble 4th Edition_20200921本部 _2021114本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-12y1vfPu7lHd4a_f5SxwcnaqUPXHP1gWc",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生の英文法ポラリス1 標準レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "関正生の英文法ポラリス1 標準レベル_20190330本部.pdf"
+      ],
+      "aliases": [
+        "関正生の英文法ポラリス1 標準レベル"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 4,
+      "sourceFileId": "12y1vfPu7lHd4a_f5SxwcnaqUPXHP1gWc",
+      "sourceRelativePath": "①英語/③文法/関正生の英文法ポラリス1 標準レベル/関正生の英文法ポラリス1 標準レベル_20190330本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-210",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "大学入試問題集 関正生の英文解釈ポラリス[2 発展レベル]",
+      "edition": "版不明",
+      "fileNames": [
+        "大学入試問題集 関正生の英文解釈ポラリス[2 発展レベル]_20231026本部.pdf"
+      ],
+      "aliases": [
+        "大学入試問題集 関正生の英文解釈ポラリス[2 発展レベル]"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 5,
+      "sourceFileId": "1yi7W79W_CYquBL3nx52NABTiZRgGQcTJ",
+      "sourceRelativePath": "①英語/④解釈/関正生の英文解釈ポラリス2/大学入試問題集 関正生の英文解釈ポラリス[2 発展レベル]_20231026本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-3",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈)関正生のThe Rules 英語長文問題集1",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集1.pdf"
+      ],
+      "aliases": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集1"
+      ],
+      "notes": "別冊・用途別PDF／内容要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 6,
+      "sourceFileId": "1E_b4e7o0QaryrCYxw5HdxTK5ivqXUhuF",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集1/(構文解釈)関正生のThe Rules 英語長文問題集1.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-154",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生のThe Rules 英語長文問題集1",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf"
+      ],
+      "aliases": [
+        "関正生のThe Rules 英語長文問題集1"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 7,
+      "sourceFileId": "1UkYMUMNLl4sJkCqEdKl2ngWYMHjIcehW",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集1/★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+      "autoEnabled": false,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "1-2",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 2,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "3",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 3,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "4-5",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 4,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "5-6",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 5,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "7",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 6,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "8-9",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 7,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "10-11",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 8,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "12-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 9,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "14",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 10,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "15-16",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 11,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "17-18",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        },
+        {
+          "number": 12,
+          "fileName": "★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
+          "pages": "19-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 20
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-4",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈)関正生のThe Rules 英語長文問題集2",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集2_本部.pdf"
+      ],
+      "aliases": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集2"
+      ],
+      "notes": "別冊・用途別PDF／内容要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 8,
+      "sourceFileId": "1BKoU33n0rN3khvOXrNv-Oavh70ekQZ5z",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集2/(構文解釈)関正生のThe Rules 英語長文問題集2_本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-155",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生のThe Rules 英語長文問題集2",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf"
+      ],
+      "aliases": [
+        "関正生のThe Rules 英語長文問題集2"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 9,
+      "sourceFileId": "1cJ0P7BU3TAFH89GIVCwL_FVVZE2IEeLt",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集2/★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "1",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 2,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "2-3",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 3,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "4-5",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 4,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "6-7",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 5,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "8-9",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 6,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "10-11",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 7,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "12-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 8,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "14-15",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 9,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "16-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 10,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "18",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 11,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "19-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        },
+        {
+          "number": 12,
+          "fileName": "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf",
+          "pages": "21-22",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 22
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-5",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈)関正生のThe Rules 英語長文問題集3",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集3.pdf"
+      ],
+      "aliases": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集3"
+      ],
+      "notes": "別冊・用途別PDF／内容要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 10,
+      "sourceFileId": "1WFWCD91_YxKcV78nLs8s-oL4EFathBeL",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集3/(構文解釈)関正生のThe Rules 英語長文問題集3.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-156",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生のThe Rules 英語長文問題集3",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf"
+      ],
+      "aliases": [
+        "関正生のThe Rules 英語長文問題集3"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 11,
+      "sourceFileId": "1ZALK71yapDKCkvRkJn19tuLeWQTsy_UN",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集3/★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+      "autoEnabled": false,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "1-3",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 2,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "3-4",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 3,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "5-6",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 4,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "7",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 5,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "8-9",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 6,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "10-12",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 7,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "12-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 8,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "14-15",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 9,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "15-18",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 10,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "18-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 11,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "21-23",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        },
+        {
+          "number": 12,
+          "fileName": "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
+          "pages": "23-24",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 24
+        }
+      ]
+    },
+    {
+      "id": "scoped-1Ih_PdppnnTXhvVqfObgm-EHH5d-azEJa",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈)関正生のThe Rules 英語長文問題集4",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集4.pdf"
+      ],
+      "aliases": [
+        "(構文解釈)関正生のThe Rules 英語長文問題集4"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 12,
+      "sourceFileId": "1Ih_PdppnnTXhvVqfObgm-EHH5d-azEJa",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集4/(構文解釈)関正生のThe Rules 英語長文問題集4.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1wJe0t6AEv6vM1BSji2xwgOic4T4zthGI",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生のThe Rules 英語長文問題集4",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生のThe Rules 英語長文問題集4_20211003本部.pdf"
+      ],
+      "aliases": [
+        "関正生のThe Rules 英語長文問題集4"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 13,
+      "sourceFileId": "1wJe0t6AEv6vM1BSji2xwgOic4T4zthGI",
+      "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集4/★関正生のThe Rules 英語長文問題集4_20211003本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-136",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "英語長文プラス記述式トレーニング問題集",
+      "edition": "版不明",
+      "fileNames": [
+        "英語長文プラス記述式トレーニング問題集_20230213本部.pdf"
+      ],
+      "aliases": [
+        "英語長文プラス記述式トレーニング問題集"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 14,
+      "sourceFileId": "1xw1ifDxgkqDwnwU6Jqt_NpYvA4NRMPB8",
+      "sourceRelativePath": "①英語/⑤長文/英語長文プラス 記述式トレーニング問題集/英語長文プラス記述式トレーニング問題集_20230213本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-202",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "大学入試 英語長文プラス 速読トレーニング問題集",
+      "edition": "版不明",
+      "fileNames": [
+        "大学入試 英語長文プラス 速読トレーニング問題集_20230902本部.pdf"
+      ],
+      "aliases": [
+        "大学入試 英語長文プラス 速読トレーニング問題集"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 15,
+      "sourceFileId": "1D2oXQ2w3UPkP8-8TyTJxXbN0sYx3H5o1",
+      "sourceRelativePath": "①英語/⑤長文/英語長文プラス 速読トレーニング問題集/大学入試 英語長文プラス 速読トレーニング問題集_20230902本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-11",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈用)英語長文ポラリス1",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈用)英語長文ポラリス1_20230904本部.pdf"
+      ],
+      "aliases": [
+        "(構文解釈用)英語長文ポラリス1"
+      ],
+      "notes": "別冊・用途別PDF／内容要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 16,
+      "sourceFileId": "1PEI2ZK4YabO177uhApwJQxCuXWwRlSPS",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス1 標準レベル/(構文解釈用)英語長文ポラリス1_20230904本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-159",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生の英語長文ポラリス1 標準レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf"
+      ],
+      "aliases": [
+        "関正生の英語長文ポラリス1 標準レベル"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 17,
+      "sourceFileId": "1YoBptW7NJ-g_NAym2Pyuv8mHhDk6lRbc",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス1 標準レベル/★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+      "autoEnabled": false,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "1-2",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 2,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "3-6",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 3,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "7-9",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 4,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "10-11",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 5,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "12-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 6,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "13-16",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 7,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "16-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 8,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "18-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 9,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "20-23",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 10,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "23-24",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 11,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "25-28",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        },
+        {
+          "number": 12,
+          "fileName": "★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
+          "pages": "28-29",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 29
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-12",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈用)英語長文ポラリス２",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈用)英語長文ポラリス２_20230904本部.pdf"
+      ],
+      "aliases": [
+        "(構文解釈用)英語長文ポラリス２"
+      ],
+      "notes": "別冊・用途別PDF／内容要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 18,
+      "sourceFileId": "10spLOYB6lF9n_kwAELNe_j67YuDlbN7v",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス2 応用レベル/(構文解釈用)英語長文ポラリス２_20230904本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-160",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生の英語長文ポラリス2 応用レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生の英語長文ポラリス2 応用レベル_20170208本部.pdf"
+      ],
+      "aliases": [
+        "関正生の英語長文ポラリス2 応用レベル"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 19,
+      "sourceFileId": "1f5cdK3-SQ2aRzuk5dtLkqXxiP1-N-uTy",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス2 応用レベル/★関正生の英語長文ポラリス2 応用レベル_20170208本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1nmlCKUCFBsNbrQ2wlyBWvRJ8Un1P0NE2",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "(構文解釈用)英語長文ポラリス３",
+      "edition": "版不明",
+      "fileNames": [
+        "(構文解釈用)英語長文ポラリス３_20230904本部.pdf"
+      ],
+      "aliases": [
+        "(構文解釈用)英語長文ポラリス３"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 20,
+      "sourceFileId": "1nmlCKUCFBsNbrQ2wlyBWvRJ8Un1P0NE2",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス3 発展レベル/(構文解釈用)英語長文ポラリス３_20230904本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-161",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "関正生の英語長文ポラリス3 発展レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "★関正生の英語長文ポラリス3 発展レベル_20170125本部.pdf"
+      ],
+      "aliases": [
+        "関正生の英語長文ポラリス3 発展レベル"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 21,
+      "sourceFileId": "1eUWm3CRYrWG610Xbwuqgur_YQBhj_sHx",
+      "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス3 発展レベル/★関正生の英語長文ポラリス3 発展レベル_20170125本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-179",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "国公立標準問題集 CanPass 英語",
+      "edition": "版不明",
+      "fileNames": [
+        "★国公立標準問題集 CanPass 英語_20170502本部.pdf"
+      ],
+      "aliases": [
+        "国公立標準問題集 CanPass 英語"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 22,
+      "sourceFileId": "1AxrfnyZlKJ8Bsp4kshIse-VlnETxSMSg",
+      "sourceRelativePath": "①英語/⑤長文/国公立標準問題集 CanPass 英語/★国公立標準問題集 CanPass 英語_20170502本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1i2jMNxgkinPQHepJE9oTFLATfx0MK2WP",
+      "kind": "PDF",
+      "subject": "英語",
+      "displayName": "CanPass 英語 解答用紙",
+      "edition": "版不明",
+      "fileNames": [
+        "CanPass 英語 解答用紙.pdf"
+      ],
+      "aliases": [
+        "CanPass 英語 解答用紙"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 23,
+      "sourceFileId": "1i2jMNxgkinPQHepJE9oTFLATfx0MK2WP",
+      "sourceRelativePath": "①英語/⑤長文/国公立標準問題集 CanPass 英語/CanPass 英語 解答用紙.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-346",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "船口のゼロから読み解く最強の現代文",
+      "edition": "版不明",
+      "fileNames": [
+        "船口のゼロから読み解く最強の現代文_20190615本部.pdf"
+      ],
+      "aliases": [
+        "船口のゼロから読み解く最強の現代文"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 24,
+      "sourceFileId": "1cmMEhYuuVZiYVFQxG4cDHKa72mwH4ikf",
+      "sourceRelativePath": "②現代文/①日大/★船口のゼロから読み解く最強の現代文/船口のゼロから読み解く最強の現代文_20190615本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-14BwG_Vy6KA5EEfDdWoouMERMYI1SbWNR",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[改訂版]田村のやさしく語る現代文",
+      "edition": "版不明",
+      "fileNames": [
+        "[改訂版]田村のやさしく語る現代文_20200803.pdf"
+      ],
+      "aliases": [
+        "[改訂版]田村のやさしく語る現代文"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 25,
+      "sourceFileId": "14BwG_Vy6KA5EEfDdWoouMERMYI1SbWNR",
+      "sourceRelativePath": "②現代文/①日大/★田村のやさしく語る現代文/[改訂版]田村のやさしく語る現代文_20200803.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1q6qgdzd9F2EwNXnV4YcMuO-csrOW9-b8",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "【第1部実践・第2部入試実践】ゼロから覚醒はじめよう現代文",
+      "edition": "版不明",
+      "fileNames": [
+        "【第1部実践・第2部入試実践】ゼロから覚醒はじめよう現代文_20220629本部.pdf"
+      ],
+      "aliases": [
+        "【第1部実践・第2部入試実践】ゼロから覚醒はじめよう現代文"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 26,
+      "sourceFileId": "1q6qgdzd9F2EwNXnV4YcMuO-csrOW9-b8",
+      "sourceRelativePath": "②現代文/①日大/★柳生のゼロから覚醒はじめよう現代文/【第1部実践・第2部入試実践】ゼロから覚醒はじめよう現代文_20220629本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-330",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "きめる!共通テスト 現代文",
+      "edition": "改訂版",
+      "fileNames": [
+        "★[改訂版]きめる!共通テスト 現代文_20240706本部.pdf"
+      ],
+      "aliases": [
+        "きめる!共通テスト 現代文"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 27,
+      "sourceFileId": "1w08VlXKGyYPWUFRejK2__blgSdUv50zS",
+      "sourceRelativePath": "②現代文/①日大/きめる！共通テスト 現代文/★[改訂版]きめる!共通テスト 現代文_20240706本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-340",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "新・現代文レベル別問題集1 超基礎編",
+      "edition": "版不明",
+      "fileNames": [
+        "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf"
+      ],
+      "aliases": [
+        "新・現代文レベル別問題集1 超基礎編"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 28,
+      "sourceFileId": "1cgowuhDpCk5eXH6qF-JzJgn-CJqFP-jt",
+      "sourceRelativePath": "②現代文/①日大/新・現代文レベル別問題集 1超基礎編/新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "2-5",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 2,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "6-9",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 3,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "10-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 4,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "14-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 5,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "18-21",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 6,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "22-24",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 7,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "25-28",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 8,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "29-33",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 9,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "34-41",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        },
+        {
+          "number": 10,
+          "fileName": "新・現代文レベル別問題集1 超基礎編_20230617本部.pdf",
+          "pages": "42-50",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 50
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-341",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "新・現代文レベル別問題集2 初級編",
+      "edition": "版不明",
+      "fileNames": [
+        "新・現代文レベル別問題集2 初級編_20240228本部.pdf"
+      ],
+      "aliases": [
+        "新・現代文レベル別問題集2 初級編"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 29,
+      "sourceFileId": "1ClZgULfMmBdhqwAIT-UnNW-FruHa4-lm",
+      "sourceRelativePath": "②現代文/①日大/新・現代文レベル別問題集 2初級編/新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "2-6",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 2,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "7-10",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 3,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "11-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 4,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "18-22",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 5,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "23-27",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 6,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "28-32",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 7,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "33-38",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 8,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "39-44",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 9,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "45-50",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        },
+        {
+          "number": 10,
+          "fileName": "新・現代文レベル別問題集2 初級編_20240228本部.pdf",
+          "pages": "51-55",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 55
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-357",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "入試現代文へのアクセス 基本編",
+      "edition": "版不明",
+      "fileNames": [
+        "入試現代文へのアクセス 基本編_20150827本部.pdf"
+      ],
+      "aliases": [
+        "入試現代文へのアクセス 基本編"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 30,
+      "sourceFileId": "1xu-QCsCeJ7e8UWh8spNnleRuZ4rzIz3-",
+      "sourceRelativePath": "②現代文/①日大/入試現代文へのアクセス 基本編/入試現代文へのアクセス 基本編_20150827本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "12-14",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 2,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "15-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 3,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "18-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 4,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "21-23",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 5,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "24-26",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 6,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "27-29",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 7,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "30-32",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 8,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "33-36",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 9,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "37-39",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 10,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "40-42",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 11,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "43-46",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        },
+        {
+          "number": 12,
+          "fileName": "入試現代文へのアクセス 基本編_20150827本部.pdf",
+          "pages": "47-51",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 51
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-329",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "GMARCH&関関同立の現代文",
+      "edition": "版不明",
+      "fileNames": [
+        "GMARCH&関関同立の現代文_20150827本部.pdf"
+      ],
+      "aliases": [
+        "GMARCH&関関同立の現代文"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 31,
+      "sourceFileId": "1RCpnbqj7q-85i-BRNMsSCX3Di5tSt15C",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/GMARCH&関関同立の現代文/GMARCH&関関同立の現代文_20150827本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "1-3",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 2,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "4-7",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 3,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "8-10",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 4,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "11-15",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 5,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "16-18",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 6,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "19-22",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 7,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "23-25",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 8,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "26-29",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 9,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "30-31",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 10,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "32-35",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 11,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "36-39",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 12,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "40-42",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 13,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "43-46",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 14,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "47-52",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 15,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "53-57",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 16,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "58-62",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 17,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "63-68",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 18,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "69-74",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 19,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "75-78",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        },
+        {
+          "number": 20,
+          "fileName": "GMARCH&関関同立の現代文_20150827本部.pdf",
+          "pages": "79-82",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 82
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-338",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "現代文読解力の開発講座",
+      "edition": "版不明",
+      "fileNames": [
+        "★現代文読解力の開発講座_20150827本部.pdf"
+      ],
+      "aliases": [
+        "現代文読解力の開発講座"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 32,
+      "sourceFileId": "1Y4RogdHj5McDo9zmmotjFmHqX4OUvpWW",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/現代文読解力の開発講座/★現代文読解力の開発講座_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "1",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 2,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "2-4",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 3,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "5-7",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 4,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "8-10",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 5,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "11-13",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 6,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "14-17",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 7,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "18-20",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 8,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "20-23",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 9,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "23-26",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        },
+        {
+          "number": 10,
+          "fileName": "★現代文読解力の開発講座_20150827本部.pdf",
+          "pages": "26-31",
+          "answerFileName": "",
+          "answerPages": "",
+          "expectedPageCount": 31
+        }
+      ]
+    },
+    {
+      "id": "shared-pdf-339",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "国公立標準問題集 CanPass 現代文",
+      "edition": "版不明",
+      "fileNames": [
+        "★国公立標準問題集 CanPass 現代文_20170502本部.pdf"
+      ],
+      "aliases": [
+        "国公立標準問題集 CanPass 現代文"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 33,
+      "sourceFileId": "15IkkoDIiRCHpiKGFiZx9kzmlkjgRyXZW",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/国公立標準問題集 CanPass 現代文/★国公立標準問題集 CanPass 現代文_20170502本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-170CDKZBppGmkXdDvJvg2kYC1tfWNkovD",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "CanPass 現代文 解答用紙",
+      "edition": "版不明",
+      "fileNames": [
+        "CanPass 現代文 解答用紙_20220706本部.pdf"
+      ],
+      "aliases": [
+        "CanPass 現代文 解答用紙"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 34,
+      "sourceFileId": "170CDKZBppGmkXdDvJvg2kYC1tfWNkovD",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/国公立標準問題集 CanPass 現代文/CanPass 現代文 解答用紙_20220706本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-347",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "船口の最強の現代文 記述トレーニング",
+      "edition": "版不明",
+      "fileNames": [
+        "船口の最強の現代文 記述トレーニング_20190615本部.pdf"
+      ],
+      "aliases": [
+        "船口の最強の現代文 記述トレーニング"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 35,
+      "sourceFileId": "1PXqbNDu3G8Y5eUUAbSaGSl8Cn-QNkOEC",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/船口の最強の現代文 記述トレーニング/船口の最強の現代文 記述トレーニング_20190615本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-358",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "入試現代文へのアクセス 発展編",
+      "edition": "版不明",
+      "fileNames": [
+        "入試現代文へのアクセス 発展編_20150827本部.pdf"
+      ],
+      "aliases": [
+        "入試現代文へのアクセス 発展編"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 36,
+      "sourceFileId": "1gQavJDYzu9Ye5sI7o9YDIt3SzIHOoEb3",
+      "sourceRelativePath": "②現代文/②MARCH・地方国公立/入試現代文へのアクセス 発展編/入試現代文へのアクセス 発展編_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-336",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "現代文と格闘する",
+      "edition": "三訂版",
+      "fileNames": [
+        "★[三訂版]現代文と格闘する_20160610本部.pdf"
+      ],
+      "aliases": [
+        "現代文と格闘する"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 37,
+      "sourceFileId": "1fBUqH1Fhb-uqYtMbqwMILId3SW8hHKZu",
+      "sourceRelativePath": "②現代文/③早慶・東大/現代文と格闘する/★[三訂版]現代文と格闘する_20160610本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1_2xm0-oblb9nfoogGTLeBWISmzME2i8_",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[改訂版]上級現代文I",
+      "edition": "版不明",
+      "fileNames": [
+        "[改訂版]上級現代文I_20231102本部.pdf"
+      ],
+      "aliases": [
+        "[改訂版]上級現代文I"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 38,
+      "sourceFileId": "1_2xm0-oblb9nfoogGTLeBWISmzME2i8_",
+      "sourceRelativePath": "②現代文/③早慶・東大/上級現代文Ⅰ/[改訂版]上級現代文I_20231102本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1qSfNJoA3MViQW7z6Bn-eKc9pA2ndMt_I",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "上級現代文Ⅱ",
+      "edition": "版不明",
+      "fileNames": [
+        "上級現代文Ⅱ_20230902本部.pdf"
+      ],
+      "aliases": [
+        "上級現代文Ⅱ"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 39,
+      "sourceFileId": "1qSfNJoA3MViQW7z6Bn-eKc9pA2ndMt_I",
+      "sourceRelativePath": "②現代文/③早慶・東大/上級現代文Ⅱ/上級現代文Ⅱ_20230902本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-14N6yHjB9cwW4qnjPK6-c-qgrLulU_yN_",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[第12版]東大の現代文25カ年",
+      "edition": "版不明",
+      "fileNames": [
+        "★[第12版]東大の現代文25カ年_20250524本部.pdf"
+      ],
+      "aliases": [
+        "[第12版]東大の現代文25カ年"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 40,
+      "sourceFileId": "14N6yHjB9cwW4qnjPK6-c-qgrLulU_yN_",
+      "sourceRelativePath": "②現代文/③早慶・東大/難関大学過去問シリーズ/★[第12版]東大の現代文25カ年_20250524本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1HdW_c4Ux6uYxvQPJpsWJs91J1iSqbesI",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[第2版]京大の現代文25カ年",
+      "edition": "版不明",
+      "fileNames": [
+        "★[第2版]京大の現代文25カ年_20231115本部.pdf"
+      ],
+      "aliases": [
+        "[第2版]京大の現代文25カ年"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 41,
+      "sourceFileId": "1HdW_c4Ux6uYxvQPJpsWJs91J1iSqbesI",
+      "sourceRelativePath": "②現代文/③早慶・東大/難関大学過去問シリーズ/★[第2版]京大の現代文25カ年_20231115本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-415",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "阪大の国語15カ年",
+      "edition": "第3版",
+      "fileNames": [
+        "★[第3版]阪大の国語15カ年_20231120本部.pdf"
+      ],
+      "aliases": [
+        "阪大の国語15カ年"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 42,
+      "sourceFileId": "1w05gK_EhhG6ewrHLA_vMNbA5zkYs7Cth",
+      "sourceRelativePath": "②現代文/③早慶・東大/難関大学過去問シリーズ/★[第3版]阪大の国語15カ年_20231120本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1luGtnaAr0BWa0tfWmUiHApdLUYm83YIR",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[第3版]神戸大の国語15カ年",
+      "edition": "版不明",
+      "fileNames": [
+        "★[第3版]神戸大の国語15カ年_20231211本部.pdf"
+      ],
+      "aliases": [
+        "[第3版]神戸大の国語15カ年"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 43,
+      "sourceFileId": "1luGtnaAr0BWa0tfWmUiHApdLUYm83YIR",
+      "sourceRelativePath": "②現代文/③早慶・東大/難関大学過去問シリーズ/★[第3版]神戸大の国語15カ年_20231211本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1axXSkkbh3LIl0xKxNbPsppdbIRZolQ1B",
+      "kind": "PDF",
+      "subject": "現代文",
+      "displayName": "[第6版]一橋大の国語20カ年",
+      "edition": "版不明",
+      "fileNames": [
+        "★[第6版]一橋大の国語20カ年_20250527本部.pdf"
+      ],
+      "aliases": [
+        "[第6版]一橋大の国語20カ年"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 44,
+      "sourceFileId": "1axXSkkbh3LIl0xKxNbPsppdbIRZolQ1B",
+      "sourceRelativePath": "②現代文/③早慶・東大/難関大学過去問シリーズ/★[第6版]一橋大の国語20カ年_20250527本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-363",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "「有名」私大古文演習",
+      "edition": "版不明",
+      "fileNames": [
+        "★「有名」私大古文演習_20170411本部.pdf"
+      ],
+      "aliases": [
+        "「有名」私大古文演習"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 45,
+      "sourceFileId": "1YJnTteCwEIbuiKiUrMffc1UH3iXep8uK",
+      "sourceRelativePath": "③古文/▲ルート外/「有名」私大古文演習/★「有名」私大古文演習_20170411本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-144LRFu2IbJN-r1qd85oKb93aDFJAzyAx",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古文上達 基礎編",
+      "edition": "版不明",
+      "fileNames": [
+        "★古文上達 基礎編.pdf"
+      ],
+      "aliases": [
+        "古文上達 基礎編"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 46,
+      "sourceFileId": "144LRFu2IbJN-r1qd85oKb93aDFJAzyAx",
+      "sourceRelativePath": "③古文/▲ルート外/古文上達45 基礎編/★古文上達 基礎編.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-407",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古文上達_基礎編_練習問題",
+      "edition": "版不明",
+      "fileNames": [
+        "古文上達_基礎編_練習問題.pdf"
+      ],
+      "aliases": [
+        "古文上達_基礎編_練習問題"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 47,
+      "sourceFileId": "1-5cogjdcyyh421RAWUuT-Krbv68AuBec",
+      "sourceRelativePath": "③古文/▲ルート外/古文上達45 基礎編/古文上達_基礎編_練習問題.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-408",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古文読解多読トレーニング",
+      "edition": "版不明",
+      "fileNames": [
+        "★古文読解多読トレーニング_20200615本部.pdf"
+      ],
+      "aliases": [
+        "古文読解多読トレーニング"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 48,
+      "sourceFileId": "1u2zyXba7e77JQ7y8R5hAK-4u9xvYcAkb",
+      "sourceRelativePath": "③古文/▲ルート外/古文読解多読トレーニング/★古文読解多読トレーニング_20200615本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-409",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "高校 とってもやさしい古文",
+      "edition": "改訂版",
+      "fileNames": [
+        "[改訂版]高校 とってもやさしい古文_20230301本部.pdf"
+      ],
+      "aliases": [
+        "高校 とってもやさしい古文"
+      ],
+      "notes": "同名PDFあり／保存場所要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 49,
+      "sourceFileId": "1gHpGC8F3POIKEaQm-UOkByBq1c4OP20o",
+      "sourceRelativePath": "③古文/▲ルート外/高校とってもやさしい古文/[改訂版]高校 とってもやさしい古文_20230301本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-417",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "首都圏「難関」私大古文演習",
+      "edition": "版不明",
+      "fileNames": [
+        "★首都圏「難関」私大古文演習_20150827本部.pdf"
+      ],
+      "aliases": [
+        "首都圏「難関」私大古文演習"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 50,
+      "sourceFileId": "19zCyOxTttjmERZ4cKpgZ_gx91L1ikZHb",
+      "sourceRelativePath": "③古文/▲ルート外/首都圏「難関」私大古文演習/★首都圏「難関」私大古文演習_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-437",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "日東駒専&産近甲龍の古文",
+      "edition": "版不明",
+      "fileNames": [
+        "日東駒専&産近甲龍の古文_20150827本部.pdf"
+      ],
+      "aliases": [
+        "日東駒専&産近甲龍の古文"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 51,
+      "sourceFileId": "1i2nFgRl8daF_r4I03mTC41qRNCSfJbWH",
+      "sourceRelativePath": "③古文/▲ルート外/日東駒専&産近甲龍の古文/日東駒専&産近甲龍の古文_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1JzJua-Grx0baW6e0RIk5-rNshZmSY7-M",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "用言活用表",
+      "edition": "版不明",
+      "fileNames": [
+        "用言活用表.pdf"
+      ],
+      "aliases": [
+        "用言活用表"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 52,
+      "sourceFileId": "1JzJua-Grx0baW6e0RIk5-rNshZmSY7-M",
+      "sourceRelativePath": "③古文/⓪古典文法表/用言活用表.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1-0c8BfvWf7M-WQLWJt4K3iNeMeIuu-Pw",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "[三訂版]ステップアップノート30 古典文法基礎ドリル",
+      "edition": "版不明",
+      "fileNames": [
+        "★[三訂版]ステップアップノート30 古典文法基礎ドリル_20170513本部.pdf"
+      ],
+      "aliases": [
+        "[三訂版]ステップアップノート30 古典文法基礎ドリル"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 53,
+      "sourceFileId": "1-0c8BfvWf7M-WQLWJt4K3iNeMeIuu-Pw",
+      "sourceRelativePath": "③古文/②文法/★ステップアップノート30 古典文法基礎ドリル/★[三訂版]ステップアップノート30 古典文法基礎ドリル_20170513本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-16vRn7R9fGspcYyz3DmcEMwEsAtdhsEW0",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "[旧版]やさしくわかりやすい古典文法",
+      "edition": "版不明",
+      "fileNames": [
+        "[旧版]やさしくわかりやすい古典文法.pdf"
+      ],
+      "aliases": [
+        "[旧版]やさしくわかりやすい古典文法"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 54,
+      "sourceFileId": "16vRn7R9fGspcYyz3DmcEMwEsAtdhsEW0",
+      "sourceRelativePath": "③古文/②文法/★やさしくわかりやすい古典文法/[旧版]やさしくわかりやすい古典文法.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1WHXD2E4xhS5o8NBTChNyPFB3X6affkGx",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "[新版]やさしくわかりやすい古典文法",
+      "edition": "版不明",
+      "fileNames": [
+        "[新版]やさしくわかりやすい古典文法.pdf"
+      ],
+      "aliases": [
+        "[新版]やさしくわかりやすい古典文法"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 55,
+      "sourceFileId": "1WHXD2E4xhS5o8NBTChNyPFB3X6affkGx",
+      "sourceRelativePath": "③古文/②文法/★やさしくわかりやすい古典文法/[新版]やさしくわかりやすい古典文法.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1vh3qGGBPHxLsARjdaMArUp60S1LNXkNu",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "確認テスト 旧版",
+      "edition": "版不明",
+      "fileNames": [
+        "★確認テスト 旧版.pdf"
+      ],
+      "aliases": [
+        "確認テスト 旧版"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 56,
+      "sourceFileId": "1vh3qGGBPHxLsARjdaMArUp60S1LNXkNu",
+      "sourceRelativePath": "③古文/②文法/★やさしくわかりやすい古典文法/★確認テスト 旧版.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1IWryWRWOOZYJKuF5r433qyQ67l5oKlav",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "確認テスト【解答】 旧版",
+      "edition": "版不明",
+      "fileNames": [
+        "★確認テスト【解答】 旧版.pdf"
+      ],
+      "aliases": [
+        "確認テスト【解答】 旧版"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 57,
+      "sourceFileId": "1IWryWRWOOZYJKuF5r433qyQ67l5oKlav",
+      "sourceRelativePath": "③古文/②文法/★やさしくわかりやすい古典文法/★確認テスト【解答】 旧版.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1h8hwUqsx6Qc2hg_bIEkNP_rVyBZh7AMP",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "やさしくわかりやすい古典文法 旧版と新版の違い",
+      "edition": "版不明",
+      "fileNames": [
+        "やさしくわかりやすい古典文法 旧版と新版の違い.pdf"
+      ],
+      "aliases": [
+        "やさしくわかりやすい古典文法 旧版と新版の違い"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 58,
+      "sourceFileId": "1h8hwUqsx6Qc2hg_bIEkNP_rVyBZh7AMP",
+      "sourceRelativePath": "③古文/②文法/★やさしくわかりやすい古典文法/旧版と新版の違い/やさしくわかりやすい古典文法 旧版と新版の違い.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-392",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古典文法スピード・インプット",
+      "edition": "版不明",
+      "fileNames": [
+        "★古典文法スピード・インプット_20200411本部.pdf"
+      ],
+      "aliases": [
+        "古典文法スピード・インプット"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 59,
+      "sourceFileId": "1OVHw9eW5AHt3m3-CI5LM1VUGovQDwO7l",
+      "sourceRelativePath": "③古文/②文法/★古典文法スピードインプット（解答も有）/★古典文法スピード・インプット_20200411本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1z9MdZPKggI3l97zMyFrNrvM6_QKvZWss",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "入試にチャレンジ 解答",
+      "edition": "版不明",
+      "fileNames": [
+        "入試にチャレンジ 解答.pdf"
+      ],
+      "aliases": [
+        "入試にチャレンジ 解答"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 60,
+      "sourceFileId": "1z9MdZPKggI3l97zMyFrNrvM6_QKvZWss",
+      "sourceRelativePath": "③古文/②文法/★古典文法スピードインプット（解答も有）/入試にチャレンジ 解答.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-14y5uYvK45jwSCrmLCk64uwbvNA4xVDxd",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "岡本の古典文法　基本・応用問題",
+      "edition": "版不明",
+      "fileNames": [
+        "★岡本の古典文法　基本・応用問題.pdf"
+      ],
+      "aliases": [
+        "岡本の古典文法　基本・応用問題"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 61,
+      "sourceFileId": "14y5uYvK45jwSCrmLCk64uwbvNA4xVDxd",
+      "sourceRelativePath": "③古文/②文法/岡本の古典文法（基本・応用問題）/★岡本の古典文法　基本・応用問題.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1ooUR3Y7LnHL07GVHDEKxC0VphoGzY5cc",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "岡本の古典文法　基本・応用問題【解答】",
+      "edition": "版不明",
+      "fileNames": [
+        "岡本の古典文法　基本・応用問題【解答】.pdf"
+      ],
+      "aliases": [
+        "岡本の古典文法　基本・応用問題【解答】"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 62,
+      "sourceFileId": "1ooUR3Y7LnHL07GVHDEKxC0VphoGzY5cc",
+      "sourceRelativePath": "③古文/②文法/岡本の古典文法（基本・応用問題）/岡本の古典文法　基本・応用問題【解答】.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-440",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "富井の古典文法をはじめからていねいに",
+      "edition": "版不明",
+      "fileNames": [
+        "富井の古典文法をはじめからていねいに_20150827本部.pdf"
+      ],
+      "aliases": [
+        "富井の古典文法をはじめからていねいに"
+      ],
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 63,
+      "sourceFileId": "1eA29dHWmKy3Dk1BeKSFH7WPLYZL8c_Nh",
+      "sourceRelativePath": "③古文/②文法/富井の古典文法（練習問題）/富井の古典文法をはじめからていねいに_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-371",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "GMARCH&関関同立の古文",
+      "edition": "版不明",
+      "fileNames": [
+        "GMARCH&関関同立の古文_20150827本部.pdf"
+      ],
+      "aliases": [
+        "GMARCH&関関同立の古文"
+      ],
+      "notes": "今回のPDFは約307MBで取得上限超過。ページ・解答の対応は未確認。\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 64,
+      "sourceFileId": "1JBGn4_LrEGBZUOH8YKsy0LgByU1ameFu",
+      "sourceRelativePath": "③古文/④読解問題/GMARCH&関関同立の古文/GMARCH&関関同立の古文_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-430",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "大学入試問題集 岡本梨奈の古文ポラリス1 基礎レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "★大学入試問題集 岡本梨奈の古文ポラリス1 基礎レベル_20201102本部.pdf"
+      ],
+      "aliases": [
+        "大学入試問題集 岡本梨奈の古文ポラリス1 基礎レベル"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 65,
+      "sourceFileId": "1yXafdIECLKaflMPyK9bkycSudof6pj8p",
+      "sourceRelativePath": "③古文/④読解問題/岡本梨奈の古文ポラリス1 基礎レベル/★大学入試問題集 岡本梨奈の古文ポラリス1 基礎レベル_20201102本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-431",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "大学入試問題集 岡本梨奈の古文ポラリス2 標準レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "★大学入試問題集 岡本梨奈の古文ポラリス2 標準レベル_20201102本部.pdf"
+      ],
+      "aliases": [
+        "大学入試問題集 岡本梨奈の古文ポラリス2 標準レベル"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 66,
+      "sourceFileId": "12rZz8gATmA6O6qBMm9chgAsNHVf9NwWr",
+      "sourceRelativePath": "③古文/④読解問題/岡本梨奈の古文ポラリス2 標準レベル/★大学入試問題集 岡本梨奈の古文ポラリス2 標準レベル_20201102本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-395",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古文POLARIS3 発展レベル",
+      "edition": "版不明",
+      "fileNames": [
+        "古文POLARIS3 発展レベル_20220928本部.pdf"
+      ],
+      "aliases": [
+        "古文POLARIS3 発展レベル"
+      ],
+      "notes": "同名PDFあり／保存場所要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 67,
+      "sourceFileId": "1ZxDaDDJ_SIyKolHBGrOWKyO1ZmLRjggU",
+      "sourceRelativePath": "③古文/④読解問題/岡本梨奈の古文ポラリス3 発展レベル/古文POLARIS3 発展レベル_20220928本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-405",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "古文上達 読解と演習56",
+      "edition": "版不明",
+      "fileNames": [
+        "★古文上達 読解と演習56_20231101本部.pdf"
+      ],
+      "aliases": [
+        "古文上達 読解と演習56"
+      ],
+      "notes": "同名PDFあり／保存場所要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 68,
+      "sourceFileId": "12xgzWHe9RTIfC7efFqN4kOy9ayqOqse7",
+      "sourceRelativePath": "③古文/④読解問題/古文上達 読解と演習56/★古文上達 読解と演習56_20231101本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-313",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "国公立標準問題集 CanPass 古典",
+      "edition": "版不明",
+      "fileNames": [
+        "★国公立標準問題集 CanPass 古典_20170502本部.pdf"
+      ],
+      "aliases": [
+        "国公立標準問題集 CanPass 古典"
+      ],
+      "notes": "同名PDFあり／保存場所要確認。問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 69,
+      "sourceFileId": "1Uo1BEvXnIO43ga2IcxwimU9tnwAV0i6t",
+      "sourceRelativePath": "③古文/④読解問題/国公立標準問題集 CanPass 古典/★国公立標準問題集 CanPass 古典_20170502本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-369",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "【典型問題編】得点奪取 古文",
+      "edition": "版不明",
+      "fileNames": [
+        "★【典型問題編】得点奪取 古文_20150827本部.pdf"
+      ],
+      "aliases": [
+        "【典型問題編】得点奪取 古文"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 70,
+      "sourceFileId": "1WZ4QLSTgYTPMcmXwMktdKl-rhuVNDBlI",
+      "sourceRelativePath": "③古文/④読解問題/得点奪取 古文/★【典型問題編】得点奪取 古文_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-370",
+      "kind": "PDF",
+      "subject": "古文",
+      "displayName": "【練習問題編】得点奪取 古文",
+      "edition": "版不明",
+      "fileNames": [
+        "★【練習問題編】得点奪取 古文_20150827本部.pdf"
+      ],
+      "aliases": [
+        "【練習問題編】得点奪取 古文"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 71,
+      "sourceFileId": "1yAdMA2A9X0QTZk4aQ-GMTOni1Q3xZUFh",
+      "sourceRelativePath": "③古文/④読解問題/得点奪取 古文/★【練習問題編】得点奪取 古文_20150827本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-774",
+      "kind": "PDF",
+      "subject": "日本史",
+      "displayName": "イチから鍛える日本史問題集 必修編20200622",
+      "edition": "版不明",
+      "fileNames": [
+        "★イチから鍛える日本史問題集 必修編20200622_本部.pdf"
+      ],
+      "aliases": [
+        "イチから鍛える日本史問題集 必修編20200622"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 72,
+      "sourceFileId": "16hoBjrZq2kV-U9byqGOZWkZ_livr4NNK",
+      "sourceRelativePath": "⑤日本史/▲ルート外/イチから鍛える日本史 必修編/★イチから鍛える日本史問題集 必修編20200622_本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1SGU0ei7cTEk_jX_g4jPbkM0jYx67Pnxg",
+      "kind": "PDF",
+      "subject": "日本史",
+      "displayName": "[第1版5刷]スピードマスター 日本史問題集",
+      "edition": "版不明",
+      "fileNames": [
+        "[第1版5刷]スピードマスター 日本史問題集_20180206本部.pdf"
+      ],
+      "aliases": [
+        "[第1版5刷]スピードマスター 日本史問題集"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 73,
+      "sourceFileId": "1SGU0ei7cTEk_jX_g4jPbkM0jYx67Pnxg",
+      "sourceRelativePath": "⑤日本史/▲ルート外/スピードマスター 日本史問題集/[第1版5刷]スピードマスター 日本史問題集_20180206本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-19lGFRtArX2g6HxHr79l01RiUGZ9dMZC8",
+      "kind": "PDF",
+      "subject": "日本史",
+      "displayName": "[第6版]一橋大の日本史20カ年",
+      "edition": "版不明",
+      "fileNames": [
+        "★[第6版]一橋大の日本史20カ年_20250527本部.pdf"
+      ],
+      "aliases": [
+        "[第6版]一橋大の日本史20カ年"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 74,
+      "sourceFileId": "19lGFRtArX2g6HxHr79l01RiUGZ9dMZC8",
+      "sourceRelativePath": "⑤日本史/★[第6版]一橋大の日本史20カ年_20250527本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1t_PfYtiD4bHD3Qlo5rX1kSJ88mMMEY7E",
+      "kind": "PDF",
+      "subject": "世界史",
+      "displayName": "世界史用語マルチ・トレーニング STEP2",
+      "edition": "版不明",
+      "fileNames": [
+        "世界史用語マルチ・トレーニング STEP2_20200516本部.pdf"
+      ],
+      "aliases": [
+        "世界史用語マルチ・トレーニング STEP2"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 75,
+      "sourceFileId": "1t_PfYtiD4bHD3Qlo5rX1kSJ88mMMEY7E",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/STEP2（地図で定着）/世界史用語マルチ・トレーニング STEP2_20200516本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-181d7VG6IX4h6gNBviAZJOyB6LI3wiZb0",
+      "kind": "PDF",
+      "subject": "世界史",
+      "displayName": "世界史用語マルチ・トレーニング STEP3",
+      "edition": "版不明",
+      "fileNames": [
+        "世界史用語マルチ・トレーニング STEP3_20201116本部.pdf"
+      ],
+      "aliases": [
+        "世界史用語マルチ・トレーニング STEP3"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 76,
+      "sourceFileId": "181d7VG6IX4h6gNBviAZJOyB6LI3wiZb0",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/STEP3（年表で定着）/世界史用語マルチ・トレーニング STEP3_20201116本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1k6AN-jGLdG593qmOVREuxecgex2FGjng",
+      "kind": "PDF",
+      "subject": "世界史",
+      "displayName": "世界史用語マルチトレーニング 赤字回答(MARCHレベル)",
+      "edition": "版不明",
+      "fileNames": [
+        "世界史用語マルチトレーニング 赤字回答(MARCHレベル)_20200720本部.pdf"
+      ],
+      "aliases": [
+        "世界史用語マルチトレーニング 赤字回答(MARCHレベル)"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 77,
+      "sourceFileId": "1k6AN-jGLdG593qmOVREuxecgex2FGjng",
+      "sourceRelativePath": "⑥世界史/世界史用語マルチ・トレーニング/赤字解答（2周目以降）/世界史用語マルチトレーニング 赤字回答(MARCHレベル)_20200720本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-651",
+      "kind": "PDF",
+      "subject": "政治・経済",
+      "displayName": "【3章～6章】畠山のスパっととける 政治・経済 爽快問題集",
+      "edition": "改訂第4版",
+      "fileNames": [
+        "★[改訂第4版]【3章～6章】畠山のスパっととける 政治・経済 爽快問題集_20200706本部.pdf"
+      ],
+      "aliases": [
+        "【3章～6章】畠山のスパっととける 政治・経済 爽快問題集"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 78,
+      "sourceFileId": "15iuET33fm_FEqPPVP5eWBp4zitN2U3ix",
+      "sourceRelativePath": "⑦政治・経済/▲ルート外/畠山のスパッととける 政治・経済 爽快問題集/★[改訂第4版]【3章～6章】畠山のスパっととける 政治・経済 爽快問題集_20200706本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-655",
+      "kind": "PDF",
+      "subject": "政治・経済",
+      "displayName": "【経済編】畠山のスパっととける 政治・経済 爽快問題集",
+      "edition": "改訂第4版",
+      "fileNames": [
+        "★[改訂第4版]【経済編】畠山のスパっととける 政治・経済 爽快問題集_20200706本部.pdf"
+      ],
+      "aliases": [
+        "【経済編】畠山のスパっととける 政治・経済 爽快問題集"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 79,
+      "sourceFileId": "12B0rqHPvbIWnl1mOf8O1QS5iw0ndZs7d",
+      "sourceRelativePath": "⑦政治・経済/▲ルート外/畠山のスパッととける 政治・経済 爽快問題集/★[改訂第4版]【経済編】畠山のスパっととける 政治・経済 爽快問題集_20200706本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-658",
+      "kind": "PDF",
+      "subject": "政治・経済",
+      "displayName": "【政治編】畠山のスパっととける 政治・経済 爽快問題集",
+      "edition": "改訂第4版",
+      "fileNames": [
+        "★[改訂第4版]【政治編】畠山のスパっととける 政治・経済 爽快問題集_20200523本部.pdf"
+      ],
+      "aliases": [
+        "【政治編】畠山のスパっととける 政治・経済 爽快問題集"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 80,
+      "sourceFileId": "1njTF5JB3B1ZV9xPMXq224mIpUT25IlZ3",
+      "sourceRelativePath": "⑦政治・経済/▲ルート外/畠山のスパッととける 政治・経済 爽快問題集/★[改訂第4版]【政治編】畠山のスパっととける 政治・経済 爽快問題集_20200523本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "shared-pdf-694",
+      "kind": "PDF",
+      "subject": "政治・経済",
+      "displayName": "畠山のスパッととける 政治・経済 爽快問題集",
+      "edition": "版不明",
+      "fileNames": [
+        "畠山のスパッととける 政治・経済 爽快問題集_20170704本部.pdf"
+      ],
+      "aliases": [
+        "畠山のスパッととける 政治・経済 爽快問題集"
+      ],
+      "notes": "問題番号↔ページ未確認 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 81,
+      "sourceFileId": "1ze3ktjFOnhGvKlmZjsOG7VjjvLPZXitp",
+      "sourceRelativePath": "⑦政治・経済/▲ルート外/畠山のスパッととける 政治・経済 爽快問題集/畠山のスパッととける 政治・経済 爽快問題集_20170704本部.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1Bn43KZuVSaBnVtWMUZ4MoWTqxvP1XqFL",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "確認テスト解答用紙（英作文）",
+      "edition": "版不明",
+      "fileNames": [
+        "★確認テスト解答用紙（英作文）.pdf"
+      ],
+      "aliases": [
+        "確認テスト解答用紙（英作文）"
+      ],
+      "notes": "補助用紙。通常教材の問題範囲指定の対象外。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 82,
+      "sourceFileId": "1Bn43KZuVSaBnVtWMUZ4MoWTqxvP1XqFL",
+      "sourceRelativePath": "確認テストファイル表紙・解答用紙/★確認テスト解答用紙（英作文）.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1YV6xK64tzjtCVXmHJzpDPn5RucAishtO",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "確認テスト解答用紙（理系科目）",
+      "edition": "版不明",
+      "fileNames": [
+        "★確認テスト解答用紙（理系科目）.pdf"
+      ],
+      "aliases": [
+        "確認テスト解答用紙（理系科目）"
+      ],
+      "notes": "補助用紙。通常教材の問題範囲指定の対象外。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 83,
+      "sourceFileId": "1YV6xK64tzjtCVXmHJzpDPn5RucAishtO",
+      "sourceRelativePath": "確認テストファイル表紙・解答用紙/★確認テスト解答用紙（理系科目）.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1jUwevWfi8IZ8X7Sc6wPQ0evzJ17kPcRr",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "方眼紙",
+      "edition": "版不明",
+      "fileNames": [
+        "方眼紙.pdf"
+      ],
+      "aliases": [
+        "方眼紙"
+      ],
+      "notes": "補助用紙。通常教材の問題範囲指定の対象外。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 84,
+      "sourceFileId": "1jUwevWfi8IZ8X7Sc6wPQ0evzJ17kPcRr",
+      "sourceRelativePath": "確認テストファイル表紙・解答用紙/方眼紙.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1_nrJlSSvowaq8WNmtog4HLRSkgMksbsY",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2022英語R_解答_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2022英語R_解答_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2022英語R_解答_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 85,
+      "sourceFileId": "1_nrJlSSvowaq8WNmtog4HLRSkgMksbsY",
+      "sourceRelativePath": "共通テスト過去問/英語/2022/2022英語R_解答_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1ThBAAfnL6du1NmjNZO1V68jXYUzrozJs",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2022英語R_問題_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2022英語R_問題_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2022英語R_問題_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 86,
+      "sourceFileId": "1ThBAAfnL6du1NmjNZO1V68jXYUzrozJs",
+      "sourceRelativePath": "共通テスト過去問/英語/2022/2022英語R_問題_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1WL70MCs748yAThvDI19DZH9wcLvYj-qZ",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2023英語R_解説_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2023英語R_解説_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2023英語R_解説_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 87,
+      "sourceFileId": "1WL70MCs748yAThvDI19DZH9wcLvYj-qZ",
+      "sourceRelativePath": "共通テスト過去問/英語/2023/2023英語R_解説_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1R8zIveEPoMehR9PLRyrmB8VEJmAkc73A",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2023英語R_解答_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2023英語R_解答_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2023英語R_解答_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 88,
+      "sourceFileId": "1R8zIveEPoMehR9PLRyrmB8VEJmAkc73A",
+      "sourceRelativePath": "共通テスト過去問/英語/2023/2023英語R_解答_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1iCPfIKd4klvfssprbZtxnfhH1FCda9c_",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2023英語R_問題_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2023英語R_問題_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2023英語R_問題_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 89,
+      "sourceFileId": "1iCPfIKd4klvfssprbZtxnfhH1FCda9c_",
+      "sourceRelativePath": "共通テスト過去問/英語/2023/2023英語R_問題_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1HCcc0PsV5AzF3rWcspLKDHBRNzY2TEoE",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2024英語R_解説_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2024英語R_解説_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2024英語R_解説_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 90,
+      "sourceFileId": "1HCcc0PsV5AzF3rWcspLKDHBRNzY2TEoE",
+      "sourceRelativePath": "共通テスト過去問/英語/2024/2024英語R_解説_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-12A_ZnZSGAGBDC0D3kVL0TqR2ti8zkecR",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2024英語R_解答_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2024英語R_解答_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2024英語R_解答_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 91,
+      "sourceFileId": "12A_ZnZSGAGBDC0D3kVL0TqR2ti8zkecR",
+      "sourceRelativePath": "共通テスト過去問/英語/2024/2024英語R_解答_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1UPKdGKvhk2pojVMJH5F2-uPX8rrEUjhL",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2024英語R_問題_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2024英語R_問題_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2024英語R_問題_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 92,
+      "sourceFileId": "1UPKdGKvhk2pojVMJH5F2-uPX8rrEUjhL",
+      "sourceRelativePath": "共通テスト過去問/英語/2024/2024英語R_問題_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1NdcApIYrtnjq9--zXK1VUu4NOb9qqT1K",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2025英語R_解説_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2025英語R_解説_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2025英語R_解説_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 93,
+      "sourceFileId": "1NdcApIYrtnjq9--zXK1VUu4NOb9qqT1K",
+      "sourceRelativePath": "共通テスト過去問/英語/2025/2025英語R_解説_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1CisNxlQ_pHAwU4rp--ajmn-yZMWfQ89F",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2025英語R_解答_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2025英語R_解答_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2025英語R_解答_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 94,
+      "sourceFileId": "1CisNxlQ_pHAwU4rp--ajmn-yZMWfQ89F",
+      "sourceRelativePath": "共通テスト過去問/英語/2025/2025英語R_解答_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1Tne9HhjBFxfa_725hnWzT2v27GPmp1ag",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2025英語R_問題_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2025英語R_問題_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2025英語R_問題_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 95,
+      "sourceFileId": "1Tne9HhjBFxfa_725hnWzT2v27GPmp1ag",
+      "sourceRelativePath": "共通テスト過去問/英語/2025/2025英語R_問題_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1m4Zz7mt-uT30_RvYWAZ8TUf4mvX9qGPf",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2026英語R_解説_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2026英語R_解説_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2026英語R_解説_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 96,
+      "sourceFileId": "1m4Zz7mt-uT30_RvYWAZ8TUf4mvX9qGPf",
+      "sourceRelativePath": "共通テスト過去問/英語/2026/2026英語R_解説_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1O3Qx4aTaP8lpYwzdzrioHfr7iZaq17Nu",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2026英語R_解答_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2026英語R_解答_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2026英語R_解答_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 97,
+      "sourceFileId": "1O3Qx4aTaP8lpYwzdzrioHfr7iZaq17Nu",
+      "sourceRelativePath": "共通テスト過去問/英語/2026/2026英語R_解答_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1m1dCWCcEGYfughQ7h7NRWL9sNlIrQ5Oj",
+      "kind": "PDF",
+      "subject": "その他",
+      "displayName": "2026英語R_問題_共通テスト",
+      "edition": "版不明",
+      "fileNames": [
+        "2026英語R_問題_共通テスト.pdf"
+      ],
+      "aliases": [
+        "2026英語R_問題_共通テスト"
+      ],
+      "notes": "問題番号↔ページ未確認。解答の有無は未確認。 今回の原本内容は未解析（解答編の有無も未確認）。\nページ対応または原本一致が未確認のため、自動作成対象外。",
+      "sourceSheet": "通常PDF教材",
+      "sourceRow": 98,
+      "sourceFileId": "1m1dCWCcEGYfughQ7h7NRWL9sNlIrQ5Oj",
+      "sourceRelativePath": "共通テスト過去問/英語/2026/2026英語R_問題_共通テスト.pdf",
+      "autoEnabled": false,
+      "questions": []
+    },
+    {
+      "id": "scoped-1l4OPxEctefp1y-TZVgquyvuA17HzCDP7",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 MARCH 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文MARCHレベルver.2018-2_20190629本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 MARCH 第2回",
+        "段階突破 漢文 2018年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 2,
+      "sourceFileId": "1l4OPxEctefp1y-TZVgquyvuA17HzCDP7",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/MARCHレベル/漢文MARCHレベルver.2018-2_20190629本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文MARCHレベルver.2018-2_20190629本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1PH8QVC7ApYFXsx0j7g3I16X6jxpg4D7o",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 早稲田 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文早稲田レベルver.2018-1_20190720本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 早稲田 第1回",
+        "段階突破 漢文 2018年度 早稲田レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 3,
+      "sourceFileId": "1PH8QVC7ApYFXsx0j7g3I16X6jxpg4D7o",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/早稲田レベル/漢文早稲田レベルver.2018-1_20190720本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文早稲田レベルver.2018-1_20190720本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-17AZ59RlkIoIV3kslb20w-m16Gll-YV_X",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 早稲田 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文早稲田レベルver.2018-2_20190720本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 早稲田 第2回",
+        "段階突破 漢文 2018年度 早稲田レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 4,
+      "sourceFileId": "17AZ59RlkIoIV3kslb20w-m16Gll-YV_X",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/早稲田レベル/漢文早稲田レベルver.2018-2_20190720本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文早稲田レベルver.2018-2_20190720本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-14dV87VLvcRER9Ojgkih_otqI-klSRRIO",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 地方国公立 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文地方国公立レベルver.2018-1_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 地方国公立 第1回",
+        "段階突破 漢文 2018年度 地方国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 5,
+      "sourceFileId": "14dV87VLvcRER9Ojgkih_otqI-klSRRIO",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/地方国公立レベル/漢文地方国公立レベルver.2018-1_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文地方国公立レベルver.2018-1_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1uxOeS5Bsyj3N168x2TljjRm3XfYYrDbd",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 地方国公立 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文地方国公立レベルver.2018-2_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 地方国公立 第2回",
+        "段階突破 漢文 2018年度 地方国公立レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 6,
+      "sourceFileId": "1uxOeS5Bsyj3N168x2TljjRm3XfYYrDbd",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/地方国公立レベル/漢文地方国公立レベルver.2018-2_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文地方国公立レベルver.2018-2_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-13qbizmNMwIuys1k203bwMZgitQ6tIkWC",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 東大 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文東大レベルver.2018-1_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 東大 第1回",
+        "段階突破 漢文 2018年度 東大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 7,
+      "sourceFileId": "13qbizmNMwIuys1k203bwMZgitQ6tIkWC",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/東大レベル/漢文東大レベルver.2018-1_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文東大レベルver.2018-1_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1H2HZuZ4pel-vetCuzLRgkU5UkDIq5TJg",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 東大 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文東大レベルver.2018-2_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 東大 第2回",
+        "段階突破 漢文 2018年度 東大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 8,
+      "sourceFileId": "1H2HZuZ4pel-vetCuzLRgkU5UkDIq5TJg",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/東大レベル/漢文東大レベルver.2018-2_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文東大レベルver.2018-2_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-16RD-CTJIQE4uASXwAEExjR2M5a9yZO5b",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2018年度 日大 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "漢文日大レベルver.2018-1_20190511本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2018年度 日大 第1回",
+        "段階突破 漢文 2018年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 9,
+      "sourceFileId": "16RD-CTJIQE4uASXwAEExjR2M5a9yZO5b",
+      "sourceRelativePath": "⓪段階突破テスト/2018/漢文/日大レベル/漢文日大レベルver.2018-1_20190511本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文日大レベルver.2018-1_20190511本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1wdJGiukYvjzKy5YIAys0-DvgX50_tMZA",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2018年度 MARCH 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "文系数学MARCHレベルver.2018-2_20190629本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2018年度 MARCH 第2回",
+        "段階突破 文系数学 2018年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 10,
+      "sourceFileId": "1wdJGiukYvjzKy5YIAys0-DvgX50_tMZA",
+      "sourceRelativePath": "⓪段階突破テスト/2018/文系数学/MARCHレベル/文系数学MARCHレベルver.2018-2_20190629本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学MARCHレベルver.2018-2_20190629本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-11kq2gn6EPS2mZV7YjgSFtN1AEGJ7YWoY",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2018年度 地方国公立 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "文系数学地方国公立レベルver.2018-1_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2018年度 地方国公立 第1回",
+        "段階突破 文系数学 2018年度 地方国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 11,
+      "sourceFileId": "11kq2gn6EPS2mZV7YjgSFtN1AEGJ7YWoY",
+      "sourceRelativePath": "⓪段階突破テスト/2018/文系数学/地方国公立レベル/文系数学地方国公立レベルver.2018-1_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学地方国公立レベルver.2018-1_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-19rfWB1IZNthOVC9y4BNPs_V7VkO5V5ka",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2018年度 地方国公立 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "文系数学地方国公立レベルver.2018-2_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2018年度 地方国公立 第2回",
+        "段階突破 文系数学 2018年度 地方国公立レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 12,
+      "sourceFileId": "19rfWB1IZNthOVC9y4BNPs_V7VkO5V5ka",
+      "sourceRelativePath": "⓪段階突破テスト/2018/文系数学/地方国公立レベル/文系数学地方国公立レベルver.2018-2_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学地方国公立レベルver.2018-2_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1N0G8u6PKWZAC0OLDP0OGMZoDUtJVPULT",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2018年度 東大 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "文系数学東大レベルver.2018-2_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2018年度 東大 第2回",
+        "段階突破 文系数学 2018年度 東大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 13,
+      "sourceFileId": "1N0G8u6PKWZAC0OLDP0OGMZoDUtJVPULT",
+      "sourceRelativePath": "⓪段階突破テスト/2018/文系数学/東大レベル/文系数学東大レベルver.2018-2_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学東大レベルver.2018-2_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1_CyOVIyeNn9UXazMVKoXtxcq2SzZjpG5",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 MARCH 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学MARCHレベルver.2018-1_20190629本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 MARCH 第1回",
+        "段階突破 理系数学 2018年度 MARCHレベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 14,
+      "sourceFileId": "1_CyOVIyeNn9UXazMVKoXtxcq2SzZjpG5",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/MARCHレベル/理系数学MARCHレベルver.2018-1_20190629本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学MARCHレベルver.2018-1_20190629本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1Ettkr2_pZZsVO_swlUxsgC8Imw21qpFi",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 MARCH 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学MARCHレベルver.2018-2_20190629本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 MARCH 第2回",
+        "段階突破 理系数学 2018年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 15,
+      "sourceFileId": "1Ettkr2_pZZsVO_swlUxsgC8Imw21qpFi",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/MARCHレベル/理系数学MARCHレベルver.2018-2_20190629本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学MARCHレベルver.2018-2_20190629本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1hDM6Q456xW02ls8VyZ5ZYUjkZsG20-BQ",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 地方国公立 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学地方国公立レベルver.2018-1_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 地方国公立 第1回",
+        "段階突破 理系数学 2018年度 地方国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 16,
+      "sourceFileId": "1hDM6Q456xW02ls8VyZ5ZYUjkZsG20-BQ",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/地方国公立レベル/理系数学地方国公立レベルver.2018-1_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学地方国公立レベルver.2018-1_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1XcPcSyemgsnD-8_wsUNBg0Nqt1OPcV92",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 地方国公立 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学地方国公立レベルver.2018-2_20191019本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 地方国公立 第2回",
+        "段階突破 理系数学 2018年度 地方国公立レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 17,
+      "sourceFileId": "1XcPcSyemgsnD-8_wsUNBg0Nqt1OPcV92",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/地方国公立レベル/理系数学地方国公立レベルver.2018-2_20191019本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学地方国公立レベルver.2018-2_20191019本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1euhxJoEhrRudMcOllQpJIBPVBAkKZnTH",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 日大 第1回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学日大レベルver2018-1_20190511本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 日大 第1回",
+        "段階突破 理系数学 2018年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 18,
+      "sourceFileId": "1euhxJoEhrRudMcOllQpJIBPVBAkKZnTH",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/日大レベル/理系数学日大レベルver2018-1_20190511本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver2018-1_20190511本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "scoped-1KgGaVpBzYqaz-DXwkICrcBUnCGyUGYmO",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2018年度 日大 第2回",
+      "edition": "2018年度",
+      "fileNames": [
+        "理系数学日大レベルver2018-2_20190511本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2018年度 日大 第2回",
+        "段階突破 理系数学 2018年度 日大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 19,
+      "sourceFileId": "1KgGaVpBzYqaz-DXwkICrcBUnCGyUGYmO",
+      "sourceRelativePath": "⓪段階突破テスト/2018/理系数学/日大レベル/理系数学日大レベルver2018-2_20190511本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver2018-2_20190511本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-34",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 MARCH 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文MARCHレベルver.2019-1_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 MARCH 第1回",
+        "段階突破 漢文 2019年度 MARCHレベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 20,
+      "sourceFileId": "1d_lVBBLSmiPx7TdE1SAzvPFe-30PuuDD",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/MARCHレベル/漢文MARCHレベルver.2019-1_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文MARCHレベルver.2019-1_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-35",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 MARCH 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文MARCHレベルver.2019-2_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 MARCH 第2回",
+        "段階突破 漢文 2019年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 21,
+      "sourceFileId": "1vEPoOHmi6tAk_SZxOrZDTygEUtWGkrwy",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/MARCHレベル/漢文MARCHレベルver.2019-2_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文MARCHレベルver.2019-2_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-41",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 東大 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文東大レベルver2019-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 東大 第1回",
+        "段階突破 漢文 2019年度 東大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 22,
+      "sourceFileId": "1LoZHgHZkpF4i48Le75JOaDjoodN20ANR",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/東大レベル/漢文東大レベルver2019-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文東大レベルver2019-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-42",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 東大 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文東大レベルver2019-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 東大 第2回",
+        "段階突破 漢文 2019年度 東大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 23,
+      "sourceFileId": "1WPVTYdrui1q17oSh8aMB-0VSV1ByhwyO",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/東大レベル/漢文東大レベルver2019-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文東大レベルver2019-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-32",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 日大 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文日大レベルver.2019-1_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 日大 第1回",
+        "段階突破 漢文 2019年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 24,
+      "sourceFileId": "1lKIve5oQp1gfWkrI6gNWkIaKFTpcZ34X",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/日大レベル/漢文日大レベルver.2019-1_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文日大レベルver.2019-1_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-33",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2019年度 日大 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "漢文日大レベルver.2019-2_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2019年度 日大 第2回",
+        "段階突破 漢文 2019年度 日大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 25,
+      "sourceFileId": "1Z0tR9VEWH4DA0Gw0HkYuOB2y2QBGagLi",
+      "sourceRelativePath": "⓪段階突破テスト/2019/漢文/日大レベル/漢文日大レベルver.2019-2_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文日大レベルver.2019-2_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-72",
+      "kind": "段階突破",
+      "subject": "世界史",
+      "displayName": "段階突破 世界史 2019年度 東大 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "世界史東大レベルver2019-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 世界史 2019年度 東大 第1回",
+        "段階突破 世界史 2019年度 東大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 26,
+      "sourceFileId": "1DyNCYj1TQEK9IGhBQwcQTPb9Ypezrdvh",
+      "sourceRelativePath": "⓪段階突破テスト/2019/世界史/世界史東大レベルver2019-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "世界史東大レベルver2019-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-73",
+      "kind": "段階突破",
+      "subject": "世界史",
+      "displayName": "段階突破 世界史 2019年度 東大 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "世界史東大レベルver2019-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 世界史 2019年度 東大 第2回",
+        "段階突破 世界史 2019年度 東大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 27,
+      "sourceFileId": "1QG1-cVT0tAA49s4QYzuBWB2B-0W6jAh9",
+      "sourceRelativePath": "⓪段階突破テスト/2019/世界史/世界史東大レベルver2019-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "世界史東大レベルver2019-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-127",
+      "kind": "段階突破",
+      "subject": "物理",
+      "displayName": "段階突破 物理 2019年度 東大 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "物理東大レベルver2019-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 物理 2019年度 東大 第1回",
+        "段階突破 物理 2019年度 東大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。同名PDFが複数あり／保存場所要確認 今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 28,
+      "sourceFileId": "1u_uISGDeNfdg3za7KrDyEeqCLo2rZojc",
+      "sourceRelativePath": "⓪段階突破テスト/2019/物理/物理東大レベルver2019-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "物理東大レベルver2019-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-132",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2019年度 MARCH 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "文系数学MARCHレベルver.2019-1_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2019年度 MARCH 第1回",
+        "段階突破 文系数学 2019年度 MARCHレベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 29,
+      "sourceFileId": "1szvt0DVan3ey8aBDsgaeAPIFG5nbZYDN",
+      "sourceRelativePath": "⓪段階突破テスト/2019/文系数学/MARCHレベル/文系数学MARCHレベルver.2019-1_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学MARCHレベルver.2019-1_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-134",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2019年度 地方国公立 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "文系数学地方国公立レベルver.2019-1_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2019年度 地方国公立 第1回",
+        "段階突破 文系数学 2019年度 地方国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 30,
+      "sourceFileId": "16vldD2y_5_2z5BijIp6ISmLEQFytA6TY",
+      "sourceRelativePath": "⓪段階突破テスト/2019/文系数学/地方国公立レベル/文系数学地方国公立レベルver.2019-1_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学地方国公立レベルver.2019-1_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-139",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2019年度 東大 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "文系数学東大レベルver2019-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2019年度 東大 第2回",
+        "段階突破 文系数学 2019年度 東大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 31,
+      "sourceFileId": "1Qom1TecIGbbZ2ORZbeTE5Zo1a9kSohiS",
+      "sourceRelativePath": "⓪段階突破テスト/2019/文系数学/文系数学東大レベルver2019-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学東大レベルver2019-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-143",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2019年度 MARCH 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "理系数学MARCHレベルver.2019-2_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2019年度 MARCH 第2回",
+        "段階突破 理系数学 2019年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 32,
+      "sourceFileId": "1qoKjR5H2aU0CVbyRZHqiepjpLv43tnjL",
+      "sourceRelativePath": "⓪段階突破テスト/2019/理系数学/MARCHレベル/理系数学MARCHレベルver.2019-2_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学MARCHレベルver.2019-2_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-140",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2019年度 日大 第1回",
+      "edition": "2019年度",
+      "fileNames": [
+        "理系数学日大レベルver.2019-1_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2019年度 日大 第1回",
+        "段階突破 理系数学 2019年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 33,
+      "sourceFileId": "17qISPD_poQVyAemVOpiUDxlVF1TrzYGF",
+      "sourceRelativePath": "⓪段階突破テスト/2019/理系数学/日大レベル/理系数学日大レベルver.2019-1_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver.2019-1_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-141",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2019年度 日大 第2回",
+      "edition": "2019年度",
+      "fileNames": [
+        "理系数学日大レベルver.2019-2_20200629.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2019年度 日大 第2回",
+        "段階突破 理系数学 2019年度 日大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 34,
+      "sourceFileId": "1vgdag9LFO1YmZ17AtnSUOvDSxh5w8wBB",
+      "sourceRelativePath": "⓪段階突破テスト/2019/理系数学/日大レベル/理系数学日大レベルver.2019-2_20200629.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver.2019-2_20200629.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-170",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2020年度 日大 第1回",
+      "edition": "2020年度",
+      "fileNames": [
+        "漢文日大レベルver.2020-1_20210208本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2020年度 日大 第1回",
+        "段階突破 漢文 2020年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 35,
+      "sourceFileId": "175_XqmOJAsBMe_fvrSA2L6Wp_DEEqVeg",
+      "sourceRelativePath": "⓪段階突破テスト/2020/①日大レベル/国語/漢文/漢文日大レベルver.2020-1_20210208本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文日大レベルver.2020-1_20210208本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-171",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2020年度 日大 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "漢文日大レベルver.2020-2_20210208本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2020年度 日大 第2回",
+        "段階突破 漢文 2020年度 日大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 36,
+      "sourceFileId": "1jNM9_MI-DZXY5wMNw_SZi_i0p61F8tEq",
+      "sourceRelativePath": "⓪段階突破テスト/2020/①日大レベル/国語/漢文/漢文日大レベルver.2020-2_20210208本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文日大レベルver.2020-2_20210208本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-229",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2020年度 日大 第1回",
+      "edition": "2020年度",
+      "fileNames": [
+        "文系数学日大レベルver.2020-1_20210208本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2020年度 日大 第1回",
+        "段階突破 文系数学 2020年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 37,
+      "sourceFileId": "1FWA6T2oSsGIh24s2u-BgkWw56zYkO8os",
+      "sourceRelativePath": "⓪段階突破テスト/2020/①日大レベル/数学/文系数学/文系数学日大レベルver.2020-1_20210208本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学日大レベルver.2020-1_20210208本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-235",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2020年度 日大 第1回",
+      "edition": "2020年度",
+      "fileNames": [
+        "理系数学日大レベルver.2020-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2020年度 日大 第1回",
+        "段階突破 理系数学 2020年度 日大レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 38,
+      "sourceFileId": "1KWoNJsnRNJfS3E70Na9P0yRMsCTo7q-m",
+      "sourceRelativePath": "⓪段階突破テスト/2020/①日大レベル/数学/理系数学/理系数学日大レベルver.2020-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver.2020-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-236",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2020年度 日大 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "理系数学日大レベルver.2020-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2020年度 日大 第2回",
+        "段階突破 理系数学 2020年度 日大レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 39,
+      "sourceFileId": "1-o9orDIWJu1n-AZ06prLvcbA6Yaphe_v",
+      "sourceRelativePath": "⓪段階突破テスト/2020/①日大レベル/数学/理系数学/理系数学日大レベルver.2020-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学日大レベルver.2020-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-173",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2020年度 MARCH 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "漢文MARCHレベルver.2020-2_20210208本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2020年度 MARCH 第2回",
+        "段階突破 漢文 2020年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 40,
+      "sourceFileId": "1-Ij2AW-7ONWnsVqHHA7MTBrMsodbytsu",
+      "sourceRelativePath": "⓪段階突破テスト/2020/②MARCHレベル/国語/漢文/漢文MARCHレベルver.2020-2_20210208本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文MARCHレベルver.2020-2_20210208本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-232",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2020年度 MARCH 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "文系数学MARCHレベルver.2020-2_20210208本部.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2020年度 MARCH 第2回",
+        "段階突破 文系数学 2020年度 MARCHレベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 41,
+      "sourceFileId": "1GWK88aSTkXrYMABAE6OZlteHRahNme9p",
+      "sourceRelativePath": "⓪段階突破テスト/2020/②MARCHレベル/数学/文系数学/文系数学MARCHレベルver.2020-2_20210208本部.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学MARCHレベルver.2020-2_20210208本部.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-175",
+      "kind": "段階突破",
+      "subject": "漢文",
+      "displayName": "段階突破 漢文 2020年度 地方国公立 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "漢文地方国公立レベルver.2020-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 漢文 2020年度 地方国公立 第2回",
+        "段階突破 漢文 2020年度 地方国公立レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 42,
+      "sourceFileId": "13hnQ7vZRlIEaiIn5guv8U1SlWHwu8i5H",
+      "sourceRelativePath": "⓪段階突破テスト/2020/③地方国公立レベル/国語/漢文/漢文地方国公立レベルver.2020-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "漢文地方国公立レベルver.2020-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-233",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2020年度 地方国公立 第1回",
+      "edition": "2020年度",
+      "fileNames": [
+        "文系数学地方国公立レベルver.2020-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2020年度 地方国公立 第1回",
+        "段階突破 文系数学 2020年度 地方国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 43,
+      "sourceFileId": "1p7visyEQOLCLKlhzPRjDV2FTyrjS3ico",
+      "sourceRelativePath": "⓪段階突破テスト/2020/③地方国公立レベル/数学/文系数学/文系数学地方国公立レベルver.2020-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学地方国公立レベルver.2020-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-234",
+      "kind": "段階突破",
+      "subject": "文系数学",
+      "displayName": "段階突破 文系数学 2020年度 地方国公立 第2回",
+      "edition": "2020年度",
+      "fileNames": [
+        "文系数学地方国公立レベルver.2020-2.pdf"
+      ],
+      "aliases": [
+        "段階突破 文系数学 2020年度 地方国公立 第2回",
+        "段階突破 文系数学 2020年度 地方国公立レベル 第2回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 44,
+      "sourceFileId": "191gNDPhmriGYRSoFcXZK07QbNFgUkHvV",
+      "sourceRelativePath": "⓪段階突破テスト/2020/③地方国公立レベル/数学/文系数学/文系数学地方国公立レベルver.2020-2.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "文系数学地方国公立レベルver.2020-2.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    },
+    {
+      "id": "shared-stage-241",
+      "kind": "段階突破",
+      "subject": "理系数学",
+      "displayName": "段階突破 理系数学 2020年度 難関国公立 第1回",
+      "edition": "2020年度",
+      "fileNames": [
+        "理系数学難関国公立レベルver.2020-1.pdf"
+      ],
+      "aliases": [
+        "段階突破 理系数学 2020年度 難関国公立 第1回",
+        "段階突破 理系数学 2020年度 難関国公立レベル 第1回"
+      ],
+      "notes": "全文使用・問題と解答の分離なし（運用方針）。今回の原本のページ数・収録内容は未検証。",
+      "sourceSheet": "段階突破テスト",
+      "sourceRow": 45,
+      "sourceFileId": "1RhRmdu0xkzj0fLvUl8jRQPy4whcCzL_n",
+      "sourceRelativePath": "⓪段階突破テスト/2020/④難関国公立レベル（理系科目のみ）/理系数学/理系数学難関国公立レベルver.2020-1.pdf",
+      "autoEnabled": true,
+      "questions": [
+        {
+          "number": 1,
+          "fileName": "理系数学難関国公立レベルver.2020-1.pdf",
+          "pages": "",
+          "answerFileName": "",
+          "answerPages": ""
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,64 @@
+<Window x:Class="AutomaticTestPrinting.App.PdfMaterialWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="PDF教材からテストを作成" Width="1050" Height="680" MinWidth="850" MinHeight="560"
+        WindowStartupLocation="CenterOwner" Background="#F2F4F7" Closing="Window_Closing">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="PDF教材からテストを作成" FontSize="24" FontWeight="Bold" />
+            <TextBlock Margin="0,8,0,0" TextWrapping="Wrap" Foreground="{StaticResource MutedTextBrush}"
+                       Text="長文・分割済みPDF・段階突破テストに使えます。現在は手動指定です（レポートからの自動選択は未対応）。" />
+            <Border Margin="0,12,0,12" Padding="12" Background="#EFF4FF" CornerRadius="6">
+                <TextBlock TextWrapping="Wrap" Text="ページ欄はPDFビューアーのページ番号を入力（例：1-3,5）。空欄は全ページ。教材に印字されたページ番号・問題番号とは異なります。元PDFは変更しません。" />
+            </Border>
+        </StackPanel>
+        <StackPanel x:Name="SelectionPanel" Grid.Row="1" Orientation="Horizontal" Margin="0,0,0,12">
+            <TextBlock VerticalAlignment="Center" Text="生徒名（追加時）" Margin="0,0,8,0" />
+            <TextBox x:Name="StudentTextBox" Width="160" Padding="8,6" Margin="0,0,12,0" />
+            <Button Style="{StaticResource SecondaryButton}" Click="AddFiles_Click" Content="教材PDFを追加" />
+            <Button Style="{StaticResource SecondaryButton}" Margin="8,0,0,0" Click="Remove_Click" Content="選択した行を外す" />
+        </StackPanel>
+        <DataGrid x:Name="JobsGrid" Grid.Row="2" AutoGenerateColumns="False" CanUserAddRows="False"
+                  CanUserDeleteRows="False" SelectionMode="Extended" HeadersVisibility="Column"
+                  RowHeight="36" BorderBrush="{StaticResource BorderBrush}">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="生徒名" Width="130" Binding="{Binding StudentName}" />
+                <DataGridTextColumn Header="教材名" Width="180" Binding="{Binding MaterialName}" />
+                <DataGridTextColumn Header="元PDF（追加順で結合）" Width="*" IsReadOnly="True" Binding="{Binding FileName}" />
+                <DataGridTextColumn Header="総ページ" Width="75" IsReadOnly="True" Binding="{Binding PageCount}" />
+                <DataGridTextColumn Header="使うページ（空欄＝全て）" Width="175" Binding="{Binding Pages}" />
+                <DataGridCheckBoxColumn Header="解答" Width="55" Binding="{Binding IsAnswer}" />
+            </DataGrid.Columns>
+        </DataGrid>
+        <StackPanel Grid.Row="3" Margin="0,14,0,14">
+            <CheckBox x:Name="DuplexCheckBox" IsChecked="True"
+                      Content="両面用：ファイルの境目に白紙を挿入し、次のPDFを新しい用紙から開始" />
+            <TextBlock Margin="0,8,0,0" Foreground="{StaticResource MutedTextBrush}" TextWrapping="Wrap"
+                       Text="問題と解答は別々の一括PDFになります。作成後に内容を確認し、PDFビューアーから白黒・両面を指定して印刷してください。プリンターへの自動送信はしません。" />
+            <TextBlock x:Name="StatusText" Margin="0,10,0,0" TextWrapping="Wrap" />
+        </StackPanel>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="Auto" />
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal">
+                <Button x:Name="OpenProblemButton" IsEnabled="False" Style="{StaticResource SecondaryButton}"
+                        Click="OpenProblem_Click" Content="問題一括PDFを開く" />
+                <Button x:Name="OpenAnswerButton" IsEnabled="False" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}"
+                        Click="OpenAnswer_Click" Content="解答一括PDFを開く" />
+                <Button x:Name="OpenFolderButton" IsEnabled="False" Margin="8,0,0,0" Style="{StaticResource SecondaryButton}"
+                        Click="OpenFolder_Click" Content="保存先を開く" />
+            </StackPanel>
+            <Button x:Name="CreateButton" Grid.Column="1" Style="{StaticResource PrimaryButton}"
+                    Click="Create_Click" Content="印刷用PDFを作成" />
+        </Grid>
+    </Grid>
+</Window>

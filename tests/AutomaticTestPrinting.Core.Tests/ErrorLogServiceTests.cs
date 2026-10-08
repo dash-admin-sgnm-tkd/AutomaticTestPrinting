@@ -16,7 +16,7 @@ public sealed class ErrorLogServiceTests
             new ErrorLogEntry(
                 createdAt,
                 "PDF作成",
-                "来栖凛奈",
+                "テスト生徒",
                 "report.pdf",
                 2,
                 "教材名",
@@ -38,7 +38,7 @@ public sealed class ErrorLogServiceTests
             var bytes = await File.ReadAllBytesAsync(path);
             Assert.Equal([0xEF, 0xBB, 0xBF], bytes[..3]);
             var csv = Encoding.UTF8.GetString(bytes[3..]);
-            Assert.Contains("PDF作成,来栖凛奈,report.pdf,2,教材名,101-200,50", csv);
+            Assert.Contains("PDF作成,テスト生徒,report.pdf,2,教材名,101-200,50", csv);
             Assert.Contains("0x800A03EC", csv);
             Assert.Contains("\"1行目\n詳細,値\"", csv);
         }

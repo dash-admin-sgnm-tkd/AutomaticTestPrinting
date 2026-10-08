@@ -146,11 +146,7 @@ public partial class BulkMaterialRegistrationWindow : Window
 
         RegisterSelectedButton.IsEnabled = false;
         RegistrationStatusText.Text = $"教材 {newProfiles.Length}件を登録しています…";
-        var customProfiles = _configuration.Profiles
-            .Where(profile => profile.Id.StartsWith("custom-", StringComparison.OrdinalIgnoreCase))
-            .Concat(newProfiles)
-            .ToArray();
-        var saved = ExcelTemplateProfileStore.SaveUserProfiles(customProfiles);
+        var saved = ExcelTemplateProfileStore.SaveUserProfileUpdates(newProfiles);
         if (!saved.IsValid)
         {
             RegisterSelectedButton.IsEnabled = true;
@@ -230,6 +226,7 @@ public partial class BulkMaterialRegistrationWindow : Window
                 Id = $"custom-{DateTime.UtcNow:yyyyMMddHHmmss}-{uniqueSuffix}",
                 DisplayName = displayName,
                 WorkbookNameKeyword = workbookStem,
+                WorkbookFileName = item.WorkbookFileName,
                 WorkbookNameExcludedKeywords = [],
                 MaterialNameKeywords = keywords,
                 MaximumQuestionNumber = maximumQuestionNumber,

@@ -5,6 +5,62 @@ namespace AutomaticTestPrinting.Core.Tests;
 
 public sealed class ReportTextParserTests
 {
+    [Theory]
+    [InlineData("100題", 100)]
+    [InlineData("25問", 25)]
+    [InlineData("25", 25)]
+    public void Parse_AcceptsMisrecognizedCountSuffixWithinRequestRow(string count, int expected)
+    {
+        var words = new[]
+        {
+            new RecognizedWord("次回までの宿題", 10, 10, 140, 20, 0),
+            new RecognizedWord("高校英語", 380, 50, 80, 20, 1),
+            new RecognizedWord("教材A", 380, 85, 80, 20, 2),
+            new RecognizedWord("月日", 10, 150, 40, 20, 3),
+            new RecognizedWord("1-200", 380, 150, 80, 20, 4),
+            new RecognizedWord("テスト作成依頼", 10, 300, 140, 20, 5),
+            new RecognizedWord(count, 400, 302, 40, 20, 6)
+        };
+        var report = ReportTextParser.Parse("report.pdf", [new(1, 0, "次回までの宿題 テスト作成依頼", 1000, 500, words)]);
+        Assert.Equal(expected, Assert.Single(report.NormalTestRequests!).QuestionCount);
+        Assert.Empty(report.NormalTestReadWarning);
+    }
+
+    [Fact]
+    public void Parse_MissingCountStaysAsUnconfirmedCandidateAndDoesNotCopyOtherCount()
+    {
+        var words = new[]
+        {
+            new RecognizedWord("次回までの宿題", 10, 10, 140, 20, 0),
+            new RecognizedWord("高校英語", 380, 50, 80, 20, 1),
+            new RecognizedWord("高校英語", 580, 50, 80, 20, 1),
+            new RecognizedWord("教材A", 380, 85, 80, 20, 2),
+            new RecognizedWord("教材B", 580, 85, 80, 20, 3),
+            new RecognizedWord("月日", 10, 150, 40, 20, 4),
+            new RecognizedWord("1-200", 380, 150, 80, 20, 5),
+            new RecognizedWord("1-20", 580, 150, 80, 20, 6),
+            new RecognizedWord("テスト作成依頼", 10, 300, 140, 20, 7),
+            new RecognizedWord("25題", 400, 302, 40, 20, 7)
+        };
+        var report = ReportTextParser.Parse("report.pdf", [new(1, 0, "次回までの宿題 テスト作成依頼", 1000, 500, words)]);
+        Assert.Equal(2, report.NormalTestRequests!.Count);
+        Assert.Equal(25, report.NormalTestRequests[0].QuestionCount);
+        Assert.Equal("教材B", report.NormalTestRequests[1].MaterialName);
+        Assert.Equal(0, report.NormalTestRequests[1].QuestionCount);
+        Assert.True(report.NormalTestRequests[1].RequiresReview);
+    }
+
+    [Fact]
+    public void Parse_ZeroRequestsWithVisibleRequestLabelHasExplicitWarning()
+    {
+        var words = new[] { new RecognizedWord("次回までの宿題", 10, 10, 100, 20, 0),
+            new RecognizedWord("テスト作成依頼", 10, 300, 140, 20, 1) };
+        var report = ReportTextParser.Parse("report.pdf", [new(1, 0, "次回までの宿題 テスト作成依頼", 1000, 500, words)]);
+        Assert.Empty(report.NormalTestRequests!);
+        Assert.Contains("要確認", report.NormalTestSummary);
+        Assert.Contains("依頼なしとは判断せず", report.NormalTestReadWarning);
+    }
+
     [Fact]
     public void Parse_HandlesSpacesInsertedByJapaneseOcr()
     {
@@ -46,6 +102,10 @@ public sealed class ReportTextParserTests
 
         Assert.Equal("石村光彩", result.StudentName);
         Assert.Equal("段階突破：国語（古文）・2020年度・第2回", result.StageTestSummary);
+        Assert.NotNull(result.StageTestRequest);
+        Assert.Equal("段階突破 国語（古文） 2020年度 日大 第2回", result.StageTestRequest.MaterialName);
+        Assert.Equal("1-1", result.StageTestRequest.Range);
+        Assert.Single(result.TestRequests);
     }
 
     [Fact]
@@ -84,7 +144,7 @@ public sealed class ReportTextParserTests
     }
 
     [Fact]
-    public void Parse_RepairsKnownTarget1900OcrErrors()
+    public void Parse_DoesNotGuessTarget1900RangeDigits()
     {
         var words = new[]
         {
@@ -102,7 +162,7 @@ public sealed class ReportTextParserTests
             new RecognizedReportPage(
                 1,
                 0,
-                "生徒名:来栖凜奈 次回までの宿題 テスト作成依頼",
+                "生徒名:テスト生徒 次回までの宿題 テスト作成依頼",
                 1000,
                 500,
                 words)
@@ -112,7 +172,7 @@ public sealed class ReportTextParserTests
 
         var request = Assert.Single(result.TestRequests);
         Assert.Equal("[六]英単語ターゲット1900", request.MaterialName);
-        Assert.Equal("1101-1900", request.Range);
+        Assert.Equal("1901-1900", request.Range);
         Assert.Equal(50, request.QuestionCount);
     }
 
@@ -120,6 +180,7 @@ public sealed class ReportTextParserTests
     [InlineData("ｲ1101-1900", "1101-1900")]
     [InlineData("範囲ｲ1101～1900問", "1101-1900")]
     [InlineData("１１０１－１９００", "1101-1900")]
+    [InlineData("1-900", "1-900")]
     public void Parse_RemovesOcrNoiseAroundRangeNumbers(string ocrRange, string expectedRange)
     {
         var words = new[]
@@ -136,7 +197,7 @@ public sealed class ReportTextParserTests
             new RecognizedReportPage(
                 1,
                 0,
-                "生徒名:来栖凜奈 次回までの宿題 テスト作成依頼",
+                "生徒名:テスト生徒 次回までの宿題 テスト作成依頼",
                 1000,
                 500,
                 words)

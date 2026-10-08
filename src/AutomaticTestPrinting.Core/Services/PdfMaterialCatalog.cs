@@ -1,0 +1,108 @@
+using System.Globalization;
+using AutomaticTestPrinting.Core.Models;
+using PdfSharp.Pdf;
+using PdfSharp.Pdf.IO;
+
+namespace AutomaticTestPrinting.Core.Services;
+
+public static class PdfMaterialCatalog
+{
+    public static PdfRequestPreparation Prepare(NormalTestRequestCandidate request,
+        IReadOnlyCollection<string> folders, IReadOnlyList<PdfMaterialProfile>? profiles = null)
+    {
+        try
+        {
+            var usesSharedCatalog = profiles is null;
+            profiles ??= PdfMaterialProfileStore.Load();
+            var name = PdfMaterialProfileStore.NormalizeName(request.MaterialName);
+            var matches = profiles.Where(profile => profile.Aliases.Append(profile.DisplayName)
+                .Any(alias => PdfMaterialProfileStore.NormalizeName(alias) == name)).ToArray();
+            if (matches.Length == 0)
+            {
+                if (usesSharedCatalog && SharedMaterialCatalog.Load().Items.Any(item => item.Kind != "Excel" && !item.AutoEnabled &&
+                    item.Aliases.Append(item.DisplayName).Any(alias => PdfMaterialProfileStore.NormalizeName(alias) == name)))
+                    return new(true, false, "PDF教材はカタログ登録済みですが、問題番号とページの対応などの作成設定が未完了です。「PDF教材を登録」で対応表・使用ファイルを確認して登録してください。");
+                if (name.StartsWith("段階突破", StringComparison.Ordinal))
+                    return new(true, false, $"この段階突破PDFは未登録です：{request.MaterialName}。科目・年度・段階・回が一致するPDFを用意し、「PDF教材を登録」で段階突破として登録してください。別年度・別の回は自動選択しません。");
+                return new(false, false, "未登録のPDF教材です。");
+            }
+            if (matches.Length != 1) return new(true, false, "PDF教材名が複数の登録に一致しています。");
+            var bounds = request.Range.Split('-');
+            if (bounds.Length != 2 || !int.TryParse(bounds[0], out var start) || !int.TryParse(bounds[1], out var end) || start < 1 || end < start)
+                return new(true, false, "範囲を「開始番号-終了番号」の形で確認してください。");
+            var profile = matches[0];
+            if (profile.IsStageTest && (start != 1 || end != 1 || request.QuestionCount != 1))
+                return new(true, false, "段階突破は範囲1-1・問題数1で全ページを作成します。");
+            var inRange = profile.Questions.Where(question => question.Number >= start && question.Number <= end).OrderBy(question => question.Number).ToArray();
+            if ((long)end - start + 1 != inRange.Length)
+                return new(true, false, "指定範囲に未登録の問題番号があります。PDF教材の対応表を補完してください。");
+            if (request.QuestionCount < 1 || request.QuestionCount > inRange.Length)
+                return new(true, false, $"問題数は1-{inRange.Length}問で指定してください。");
+            var files = folders.Where(Directory.Exists).Distinct(StringComparer.OrdinalIgnoreCase)
+                .SelectMany(folder => Directory.EnumerateFiles(folder, "*", SearchOption.AllDirectories))
+                .Where(path => path.EndsWith(".pdf", StringComparison.OrdinalIgnoreCase))
+                .Select(Path.GetFullPath).Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
+            string Resolve(string fileName)
+            {
+                return PdfFileResolutionService.Resolve(fileName, files);
+            }
+            var resolved = inRange.Select(question => new ResolvedPdfQuestion(question.Number, Resolve(question.FileName), question.Pages,
+                string.IsNullOrWhiteSpace(question.AnswerFileName) ? null : Resolve(question.AnswerFileName), question.AnswerPages, question.ExpectedPageCount)).ToArray();
+            foreach (var group in resolved.Where(q => q.ExpectedPageCount.HasValue).GroupBy(q => q.Path))
+            {
+                var actual = PdfMaterialGenerationService.GetPageCount(group.Key);
+                if (group.Any(q => q.ExpectedPageCount != actual))
+                    return new(true, false, $"PDF総ページ数が対応表と違います：{Path.GetFileName(group.Key)}（実際：{actual}ページ）。版・ファイルを確認してください。");
+                foreach (var question in group) PdfMaterialGenerationService.ParsePages(question.Pages, actual);
+            }
+            return new(true, true, profile.IsStageTest
+                ? "段階突破PDF連携準備OK：全ページを作成します（問題・解答を分けません）"
+                : $"PDF連携準備OK：範囲 {start}-{end}／{request.QuestionCount}問（範囲から抽選）", resolved);
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or InvalidOperationException or ArgumentException or System.Text.Json.JsonException or PdfReaderException)
+        {
+            return new(true, false, $"PDF教材設定を確認してください：{exception.Message}");
+        }
+    }
+
+    public static ExcelPdfGenerationResult Generate(TestGenerationPlan plan, string outputFolder)
+    {
+        var available = plan.PdfQuestions ?? throw new ArgumentException("PDFの対応表がありません。", nameof(plan));
+        if (plan.QuestionCount < 1 || plan.QuestionCount > available.Count)
+            throw new ArgumentException("問題数が登録範囲外です。", nameof(plan));
+        var shuffled = available.ToArray();
+        Random.Shared.Shuffle(shuffled);
+        var selected = shuffled.Take(plan.QuestionCount).OrderBy(question => question.Number).ToArray();
+        var folder = Path.Combine(outputFolder, $"PDF自動作成_{DateTime.Now:yyyyMMdd_HHmmss}_{Guid.NewGuid():N}");
+        Directory.CreateDirectory(folder);
+        var problem = Path.Combine(folder, "問題.pdf");
+        var answer = selected.All(question => question.AnswerPath is not null) ? Path.Combine(folder, "解答.pdf") : null;
+
+        void Export(string destination, bool isAnswer)
+        {
+            using var output = new PdfDocument();
+            foreach (var question in selected)
+            {
+                var source = isAnswer ? question.AnswerPath! : question.Path;
+                using var input = PdfReader.Open(source, PdfDocumentOpenMode.Import);
+                if (!isAnswer && question.ExpectedPageCount.HasValue && question.ExpectedPageCount != input.PageCount)
+                    throw new InvalidOperationException($"PDF総ページ数が対応表と違います：{source}。版・ファイルを確認してください。");
+                try
+                {
+                    var pages = PdfMaterialGenerationService.ParsePages(isAnswer ? question.AnswerPages : question.Pages, input.PageCount);
+                    foreach (var page in pages) output.AddPage(input.Pages[page - 1]);
+                }
+                catch (ArgumentException exception)
+                {
+                    throw new InvalidOperationException($"{plan.MaterialName}／問題番号 {question.Number}／PDF：{source}：{exception.Message}", exception);
+                }
+            }
+            output.Save(destination);
+        }
+        Export(problem, false);
+        if (answer is not null) Export(answer, true);
+        File.WriteAllText(Path.Combine(folder, "作成内容.txt"),
+            $"生徒名：{plan.StudentName}\n教材：{plan.MaterialName}\nレポート：{plan.SourceReportFileName}\n範囲：{plan.Range}\n選択した問題番号：{string.Join(',', selected.Select(question => question.Number.ToString(CultureInfo.InvariantCulture)))}");
+        return new(problem, answer);
+    }
+}

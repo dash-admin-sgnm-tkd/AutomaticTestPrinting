@@ -1,0 +1,50 @@
+<Window x:Class="AutomaticTestPrinting.App.SharedMaterialCatalogWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="共通教材カタログ" Width="1120" Height="780" MinWidth="900" MinHeight="640"
+        WindowStartupLocation="CenterOwner" Background="#F2F4F7">
+    <Grid Margin="24">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/><RowDefinition Height="Auto"/>
+            <RowDefinition Height="*"/><RowDefinition Height="180"/><RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+        <StackPanel>
+            <TextBlock Text="共通教材カタログ" FontSize="24" FontWeight="Bold"/>
+            <TextBlock x:Name="SummaryText" Margin="0,8,0,4" TextWrapping="Wrap"/>
+            <TextBlock Text="Excelは既存の校舎別登録設定を使用します。対応表のあるPDF・段階突破はレポートから選択できます。要確認教材は自動有効化しません。"
+                       TextWrapping="Wrap" Foreground="{StaticResource MutedTextBrush}"/>
+        </StackPanel>
+        <Grid Grid.Row="1" Margin="0,16,0,12">
+            <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="180"/></Grid.ColumnDefinitions>
+            <StackPanel>
+                <TextBlock Text="教材名・科目・版・ファイル名で検索" Margin="0,0,0,5"/>
+                <TextBox x:Name="SearchTextBox" Padding="10,8" TextChanged="Filter_Changed"
+                         ToolTip="教材名・科目・版・ファイル名で検索"/>
+            </StackPanel>
+            <ComboBox x:Name="KindComboBox" Grid.Column="1" Margin="12,0,0,0" Padding="8,5"
+                      SelectionChanged="Filter_Changed"/>
+        </Grid>
+        <DataGrid x:Name="MaterialsGrid" Grid.Row="2" AutoGenerateColumns="False" IsReadOnly="True"
+                  CanUserAddRows="False" SelectionMode="Single" SelectionChanged="Selection_Changed"
+                  EnableRowVirtualization="True" EnableColumnVirtualization="True" HeadersVisibility="Column">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="種類" Binding="{Binding Kind}" Width="85"/>
+                <DataGridTextColumn Header="科目" Binding="{Binding Subject}" Width="95"/>
+                <DataGridTextColumn Header="教材名" Binding="{Binding DisplayName}" Width="*"/>
+                <DataGridTextColumn Header="版・年度" Binding="{Binding Edition}" Width="100"/>
+                <DataGridTextColumn Header="共通データの確認状態" Binding="{Binding Status}" Width="230"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Border Grid.Row="3" Margin="0,12,0,12" Background="White" BorderBrush="{StaticResource BorderBrush}" BorderThickness="1" Padding="12">
+            <ScrollViewer VerticalScrollBarVisibility="Auto">
+                <TextBlock x:Name="DetailText" TextWrapping="Wrap" Text="一覧から教材を選ぶと、ファイル名・調査の根拠・残る確認事項を表示します。"/>
+            </ScrollViewer>
+        </Border>
+        <StackPanel Grid.Row="4" Orientation="Horizontal" HorizontalAlignment="Right">
+            <Button Style="{StaticResource SecondaryButton}" Click="BulkExcel_Click" Content="Excelをまとめて登録"/>
+            <Button x:Name="RegisterButton" Margin="10,0,0,0" Style="{StaticResource PrimaryButton}"
+                    Click="Register_Click" IsEnabled="False" Content="選択教材の登録・修正"/>
+            <Button Margin="10,0,0,0" Style="{StaticResource SecondaryButton}" Click="Close_Click" Content="閉じる"/>
+        </StackPanel>
+    </Grid>
+</Window>

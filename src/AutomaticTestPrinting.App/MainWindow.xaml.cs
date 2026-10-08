@@ -15,14 +15,76 @@ namespace AutomaticTestPrinting.App;
 
 public partial class MainWindow : Window
 {
+    private bool _isChoosingWorkbook;
+
+    private void ApplyMaterialSuggestion_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { DataContext: EditableTestRequestItem item } ||
+            item.SelectedMaterialSuggestion is not { } selected) return;
+        if (MessageBox.Show(this,
+            $"教材名を「{item.MaterialName}」から「{selected}」へ変更します。\n原本の教材・版と一致していますか？\n範囲・問題数は変更しません。",
+            "教材名の確認", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
+            item.MaterialName = selected;
+    }
+
+    private async void ChooseWorkbook_Click(object sender, RoutedEventArgs e)
+    {
+        if (_isChoosingWorkbook || _isAddingMaterialFolders || !ValidateButton.IsEnabled ||
+            sender is not FrameworkElement { DataContext: EditableTestRequestItem item } ||
+            item.WorkbookProfile is not { } profile || item.WorkbookCandidates.Count == 0)
+            return;
+        var roots = GetAvailableMaterialFolders();
+        var candidates = item.WorkbookCandidates.ToArray();
+        var window = new WorkbookChoiceWindow(candidates, profile.DisplayName) { Owner = this };
+        if (window.ShowDialog() != true || window.SelectedPath is not { } selectedPath) return;
+        _isChoosingWorkbook = true;
+        ValidateButton.IsEnabled = false;
+        UpdateRecognitionResultState();
+        var affected = _recognitionResults.SelectMany(report => report.Requests)
+            .Where(request => request.WorkbookProfile?.Id == profile.Id)
+            .Select(request => (Item: request, Candidate: request.BuildCandidate())).ToArray();
+        StatusText.Text = "使用Excelを保存・確認中（この教材の依頼だけ確認します）";
+        try
+        {
+            var relative = roots.Select(root => WorkbookResolutionService.GetRelativePath(root, selectedPath))
+                .FirstOrDefault(path => path is not null) ?? throw new InvalidOperationException("教材フォルダー内のExcelを選択してください。");
+            var results = await Task.Run(() =>
+            {
+                if (!candidates.Contains(selectedPath, StringComparer.OrdinalIgnoreCase))
+                    throw new InvalidOperationException("表示中の候補からExcelを選択してください。");
+                WorkbookChoiceStore.Save(profile.Id, new WorkbookChoice(relative, WorkbookResolutionService.GetHash(selectedPath)));
+                return affected.Where(entry => entry.Candidate is not null)
+                    .Select(entry => entry.Candidate!).Distinct()
+                    .ToDictionary(candidate => candidate, candidate => ExcelTemplateCatalog.Prepare(candidate, roots, candidates));
+            });
+            foreach (var entry in affected)
+            {
+                if (entry.Candidate is not null && entry.Item.BuildCandidate() == entry.Candidate &&
+                    results.TryGetValue(entry.Candidate, out var result))
+                    entry.Item.ApplyExcelPreparation(result);
+            }
+            ConfirmResultsCheckBox.IsChecked = false;
+            _recognitionResultsView.Refresh();
+            StatusText.Text = "使用Excelを保存しました。対象教材の確認結果を更新しました";
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.Text.Json.JsonException or InvalidOperationException)
+        {
+            MessageBox.Show(this, $"使用Excelを保存できませんでした：{exception.Message}", "Excelの選択");
+        }
+        finally
+        {
+            _isChoosingWorkbook = false;
+            ValidateButton.IsEnabled = true;
+            UpdateRecognitionResultState();
+        }
+    }
     private readonly ObservableCollection<ReportFile> _reports = [];
     private readonly ObservableCollection<string> _materialFolders = [];
     private readonly ObservableCollection<RecognitionResultItem> _recognitionResults = [];
     private readonly ICollectionView _recognitionResultsView;
     private readonly JsonSettingsStore _settingsStore;
     private bool _showOnlyNeedsAttention;
-    private string? _batchProblemPdfPath;
-    private string? _batchAnswerPdfPath;
+    private string? _batchPrintPdfPath;
 
     public MainWindow()
     {
@@ -64,13 +126,38 @@ public partial class MainWindow : Window
         UpdateStatus();
     }
 
-    private async void Window_Closing(object? sender, CancelEventArgs e)
+    private void SharedCatalog_Click(object sender, RoutedEventArgs e)
     {
-        await SaveSettingsAsync();
+        var window = new SharedMaterialCatalogWindow(GetAvailableMaterialFolders()) { Owner = this };
+        window.ShowDialog();
+        if (!window.WasSaved) return;
+        ConfirmResultsCheckBox.IsChecked = false;
+        foreach (var report in _recognitionResults)
+            foreach (var request in report.Requests) request.RefreshValidation();
+        UpdateRecognitionResultState();
+        UpdatePdfGenerationState();
+    }
+
+    private void PdfMaterials_Click(object sender, RoutedEventArgs e)
+    {
+        new PdfMaterialWindow(GetAvailableMaterialFolders(), OutputFolderTextBox.Text) { Owner = this }.ShowDialog();
+    }
+
+    private void RegisterPdfMaterial_Click(object sender, RoutedEventArgs e)
+    {
+        var window = new PdfMaterialRegistrationWindow(GetAvailableMaterialFolders()) { Owner = this };
+        window.ShowDialog();
+        if (!window.WasSaved) return;
+        ConfirmResultsCheckBox.IsChecked = false;
+        foreach (var report in _recognitionResults)
+            foreach (var request in report.Requests) request.RefreshValidation();
+        UpdateRecognitionResultState();
+        UpdatePdfGenerationState();
     }
 
     private async void AddMaterialFolder_Click(object sender, RoutedEventArgs e)
     {
+        if (_isAddingMaterialFolders || _isChoosingWorkbook || !ValidateButton.IsEnabled) return;
         var folder = SelectFolder("Excel・PDF教材を保存しているフォルダーを選択してください");
         if (folder is null)
         {
@@ -96,6 +183,7 @@ public partial class MainWindow : Window
 
     private async void RemoveMaterialFolder_Click(object sender, RoutedEventArgs e)
     {
+        if (_isAddingMaterialFolders || _isChoosingWorkbook || !ValidateButton.IsEnabled) return;
         if (MaterialFoldersListBox.SelectedItem is not string folder)
         {
             MessageBox.Show(this,
@@ -110,6 +198,54 @@ public partial class MainWindow : Window
         InvalidateRecognitionResults();
         UpdateStatus();
         await SaveSettingsAsync();
+    }
+
+    private bool _isAddingMaterialFolders;
+
+    private void MaterialFolders_DragOver(object sender, DragEventArgs e)
+    {
+        e.Effects = !_isAddingMaterialFolders && !_isChoosingWorkbook && ValidateButton.IsEnabled &&
+                    e.Data.GetDataPresent(DataFormats.FileDrop) && (e.AllowedEffects & DragDropEffects.Copy) != 0
+            ? DragDropEffects.Copy : DragDropEffects.None;
+        e.Handled = true;
+    }
+
+    private async void MaterialFolders_Drop(object sender, DragEventArgs e)
+    {
+        e.Handled = true;
+        e.Effects = DragDropEffects.None;
+        if (_isAddingMaterialFolders || _isChoosingWorkbook || !ValidateButton.IsEnabled ||
+            e.Data.GetData(DataFormats.FileDrop) is not string[] paths) return;
+        _isAddingMaterialFolders = true;
+        ValidateButton.IsEnabled = false;
+        UpdatePdfGenerationState();
+        var existing = _materialFolders.ToArray();
+        StatusText.Text = "ドロップしたフォルダーを確認しています…";
+        try
+        {
+            var result = await Task.Run(() => MaterialFolderDropService.Plan(paths, existing));
+            foreach (var folder in result.AddedFolders) _materialFolders.Add(folder);
+            if (result.AddedFolders.Count > 0)
+            {
+                InvalidateRecognitionResults();
+                await SaveSettingsAsync();
+            }
+            UpdateStatus();
+            StatusText.Text = $"教材フォルダーを{result.AddedFolders.Count}件追加しました" +
+                (result.DuplicateCount > 0 ? $"／登録済み{result.DuplicateCount}件は追加せず" : "") +
+                (result.IgnoredCount > 0 ? $"／ファイル・利用できない項目{result.IgnoredCount}件は対象外" : "");
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or ArgumentException)
+        {
+            MessageBox.Show(this, $"教材フォルダーの追加・設定保存に失敗しました：{exception.Message}", "フォルダー追加");
+            StatusText.Text = "設定を保存できませんでした。フォルダー一覧を確認してください";
+        }
+        finally
+        {
+            _isAddingMaterialFolders = false;
+            ValidateButton.IsEnabled = true;
+            UpdatePdfGenerationState();
+        }
     }
 
     private void RegisterMaterial_Click(object sender, RoutedEventArgs e)
@@ -263,6 +399,8 @@ public partial class MainWindow : Window
 
     private async void ValidateButton_Click(object sender, RoutedEventArgs e)
     {
+        if (_isBusy) return;
+        using var busy = BeginBusy("レポートを読み取っています");
         var validation = SetupValidator.ValidateFolders(
             GetAvailableMaterialFolders(),
             OutputFolderTextBox.Text,
@@ -275,7 +413,13 @@ public partial class MainWindow : Window
             return;
         }
 
-        await SaveSettingsAsync();
+        try { await SaveSettingsAsync(); }
+        catch (Exception exception)
+        {
+            StatusText.Text = "設定を保存できませんでした";
+            MessageBox.Show(this, exception.Message, "設定の保存", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
         ValidateButton.IsEnabled = false;
         _recognitionResults.Clear();
         ConfirmResultsCheckBox.IsChecked = false;
@@ -285,9 +429,16 @@ public partial class MainWindow : Window
         {
             var reports = _reports.ToArray();
             var materialFolders = GetAvailableMaterialFolders();
-            IProgress<string> progress = new Progress<string>(message => StatusText.Text = message);
-            using var concurrencyGate = new SemaphoreSlim(2);
             var completedCount = 0;
+            var readingCompleted = false;
+            SetBusyProgress("レポートを読み取っています", 0, reports.Length);
+            IProgress<string> progress = new Progress<string>(message =>
+            {
+                if (!_isBusy || readingCompleted) return;
+                StatusText.Text = message;
+                SetBusyProgress("レポートを読み取っています", completedCount, reports.Length);
+            });
+            using var concurrencyGate = new SemaphoreSlim(2);
             var recognitionTasks = reports.Select(async report =>
             {
                 await concurrencyGate.WaitAsync();
@@ -295,7 +446,7 @@ public partial class MainWindow : Window
                 {
                     var service = new WindowsReportOcrService();
                     var recognized = await service.RecognizeAsync(report.FullPath, progress);
-                    return RecognitionResultItem.Success(recognized, materialFolders);
+                    return await Task.Run(() => RecognitionResultItem.Success(recognized, materialFolders));
                 }
                 catch (Exception exception)
                 {
@@ -310,6 +461,7 @@ public partial class MainWindow : Window
             }).ToArray();
 
             var recognitionResults = await Task.WhenAll(recognitionTasks);
+            readingCompleted = true;
             foreach (var result in recognitionResults)
             {
                 AddRecognitionResult(result);
@@ -328,6 +480,14 @@ public partial class MainWindow : Window
                       (errorLogPath is null ? string.Empty : "（詳細ログ保存済み）")
                 : $"読み取り完了：成功 {_recognitionResults.Count - failedCount}件、要確認 {errorCount}件" +
                   (errorLogPath is null ? string.Empty : "（詳細ログ保存済み）");
+            if (_recognitionResults.Any(result => result.HasReadingWarning) && !_closeAfterBusy)
+                MessageBox.Show(this, "依頼欄があるのに通常テストが0件のレポートがあります。\n依頼なしとは判断せず、「要確認だけ表示」と原本PDFを確認してください。詳細はエラーCSVにも記録しています。",
+                    "読み取り漏れの可能性", MessageBoxButton.OK, MessageBoxImage.Warning);
+        }
+        catch (Exception exception)
+        {
+            StatusText.Text = "レポートの読み取り中にエラーが発生しました";
+            MessageBox.Show(this, exception.Message, "レポートの読み取り", MessageBoxButton.OK, MessageBoxImage.Error);
         }
         finally
         {
@@ -431,11 +591,21 @@ public partial class MainWindow : Window
 
     private async void CreatePdfsButton_Click(object sender, RoutedEventArgs e)
     {
-        var requests = BuildPdfGenerationRequests();
+        if (_isBusy) return;
+        using var busy = BeginBusy("テストの作成内容を確認しています");
+        StatusText.Text = "教材と依頼内容を照合しています…";
+        List<TestGenerationPlan> requests;
+        try { requests = await BuildPdfGenerationRequestsAsync(); }
+        catch (Exception exception)
+        {
+            StatusText.Text = "教材の照合中にエラーが発生しました";
+            MessageBox.Show(this, exception.Message, "テスト作成の準備", MessageBoxButton.OK, MessageBoxImage.Error);
+            return;
+        }
         if (requests.Count == 0)
         {
             MessageBox.Show(this,
-                "作成できる通常テストがありません。教材フォルダーと読み取り結果を確認してください。",
+                "作成できるテストがありません。教材フォルダーと読み取り結果を確認してください。",
                 "PDFを作成できません",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -448,7 +618,7 @@ public partial class MainWindow : Window
         if (requests.Count != expectedRequestCount)
         {
             MessageBox.Show(this,
-                "未対応または入力エラーのテストがあります。青字のExcel連携表示を確認してください。",
+                "未対応または入力エラーのテストがあります。教材の連携表示を確認してください。",
                 "PDFを作成できません",
                 MessageBoxButton.OK,
                 MessageBoxImage.Warning);
@@ -456,8 +626,9 @@ public partial class MainWindow : Window
         }
 
         var confirmation = MessageBox.Show(this,
-            $"通常テスト {requests.Count}件の個別PDFと一括印刷用PDFを作成します。\n" +
-            "作成後に一括PDFを開き、内容を確認してから印刷してください。続けますか？",
+            $"テスト {requests.Count}件の個別PDFと一括印刷用PDFを作成します。\n" +
+            "レポートごとに「問題 → 解答」の順で一括PDFにまとめます。\n" +
+            "作成後に内容を確認してから印刷してください。続けますか？",
             "一括PDFを作成します",
             MessageBoxButton.YesNo,
             MessageBoxImage.Question);
@@ -470,7 +641,8 @@ public partial class MainWindow : Window
         ValidateButton.IsEnabled = false;
         ConfirmResultsCheckBox.IsEnabled = false;
         InvalidateBatchOutputs();
-        var generatedTests = new List<ExcelPdfGenerationResult>();
+        var generatedTests = new List<GeneratedReportTest>();
+        var outputFolder = OutputFolderTextBox.Text;
         var generationErrors = new List<ErrorLogEntry>();
         string? skippedLogPath = null;
         string? errorLogPath = null;
@@ -481,11 +653,15 @@ public partial class MainWindow : Window
             for (var index = 0; index < requests.Count; index++)
             {
                 StatusText.Text = $"PDFを作成中：{index + 1}/{requests.Count}";
+                SetBusyProgress("テストPDFを作成しています", index, requests.Count);
                 var activeRequest = requests[index];
                 try
                 {
-                    var result = await ExcelPdfGenerationService.GenerateAsync(activeRequest);
-                    generatedTests.Add(result);
+                    var result = activeRequest.ExcelRequest is not null
+                        ? await ExcelPdfGenerationService.GenerateAsync(activeRequest.ExcelRequest)
+                        : await Task.Run(() => PdfMaterialCatalog.Generate(activeRequest, outputFolder));
+                    generatedTests.Add(new GeneratedReportTest(
+                        activeRequest.SourceReportPath ?? activeRequest.SourceReportFileName, result));
                 }
                 catch (Exception exception)
                 {
@@ -511,22 +687,26 @@ public partial class MainWindow : Window
             }
 
             StatusText.Text = $"一括PDFを結合中：{generatedTests.Count}件";
-            var batchResult = await Task.Run(() => PdfBatchMergeService.Merge(
+            BusyTitleText.Text = "一括印刷用PDFをまとめています";
+            BusyProgressBar.IsIndeterminate = true;
+            BusyCountText.Text = $"個別PDFの処理完了：{requests.Count}件（結合・保存中）";
+            var batchResult = await Task.Run(() => PdfBatchMergeService.MergeByReport(
                 generatedTests,
-                OutputFolderTextBox.Text,
-                DateTimeOffset.Now));
-            _batchProblemPdfPath = batchResult.ProblemPdfPath;
-            _batchAnswerPdfPath = batchResult.AnswerPdfPath;
+                outputFolder,
+                DateTimeOffset.Now,
+                duplex: requests.Any(request => request.PdfQuestions is not null)));
+            _batchPrintPdfPath = batchResult.PrintPdfPath;
             BatchPdfActionsPanel.Visibility = Visibility.Visible;
 
             StatusText.Text = generationErrors.Count == 0
                 ? $"一括PDF作成完了：{generatedTests.Count}件"
                 : $"一括PDF作成完了：成功 {generatedTests.Count}件、失敗 {generationErrors.Count}件";
-            MessageBox.Show(this,
-                $"問題一括PDFと解答一括PDFを作成しました。\n" +
+            if (!_closeAfterBusy) MessageBox.Show(this,
+                "レポートごとに「問題 → 解答」の順で一括PDFを作成しました。\n" +
+                "段階突破は問題・解答一体、解答未登録の教材は問題のみです。\n" +
                 $"成功：{generatedTests.Count}件" +
                 (generationErrors.Count == 0 ? string.Empty : $"\n失敗：{generationErrors.Count}件") +
-                $"\n\n保存先：{Path.GetDirectoryName(batchResult.ProblemPdfPath)}" +
+                $"\n\n保存先：{Path.GetDirectoryName(batchResult.PrintPdfPath)}" +
                 (skippedLogPath is null ? string.Empty : $"\nスキップ一覧：{skippedLogPath}") +
                 (errorLogPath is null ? string.Empty : $"\nエラー詳細：{errorLogPath}"),
                 "一括PDF作成完了",
@@ -559,11 +739,8 @@ public partial class MainWindow : Window
         }
     }
 
-    private void OpenBatchProblemPdf_Click(object sender, RoutedEventArgs e) =>
-        OpenBatchPdf(_batchProblemPdfPath, "問題一括PDF");
-
-    private void OpenBatchAnswerPdf_Click(object sender, RoutedEventArgs e) =>
-        OpenBatchPdf(_batchAnswerPdfPath, "解答一括PDF");
+    private void OpenBatchPrintPdf_Click(object sender, RoutedEventArgs e) =>
+        OpenBatchPdf(_batchPrintPdfPath, "レポート順の印刷用一括PDF");
 
     private void OpenBatchPdf(string? path, string displayName)
     {
@@ -635,6 +812,8 @@ public partial class MainWindow : Window
         SaveSkippedLogButton.IsEnabled = GetSkippedLogEntries(DateTimeOffset.Now).Count > 0;
         SaveErrorLogButton.IsEnabled = GetCurrentErrorLogEntries(DateTimeOffset.Now).Count > 0;
         CreatePdfsButton.IsEnabled =
+            !_isAddingMaterialFolders &&
+            !_isChoosingWorkbook &&
             ConfirmResultsCheckBox.IsChecked == true &&
             _recognitionResults.Count > 0 &&
             _recognitionResults.All(result => result.IsReady) &&
@@ -652,32 +831,42 @@ public partial class MainWindow : Window
 
     private void InvalidateBatchOutputs()
     {
-        _batchProblemPdfPath = null;
-        _batchAnswerPdfPath = null;
+        _batchPrintPdfPath = null;
         BatchPdfActionsPanel.Visibility = Visibility.Collapsed;
     }
 
-    private List<ExcelPdfGenerationRequest> BuildPdfGenerationRequests()
+    private async Task<List<TestGenerationPlan>> BuildPdfGenerationRequestsAsync()
     {
-        var requests = new List<ExcelPdfGenerationRequest>();
-        foreach (var result in _recognitionResults)
+        // Snapshot editable UI state before preparing files on a background thread.
+        var entries = _recognitionResults.Where(result => result.IsIncluded)
+            .SelectMany(result => result.Requests.Where(request => request.IsIncluded)
+                .Select(request => (Candidate: request.BuildCandidate(), StudentName: result.StudentName.Trim(),
+                    result.FileName, result.SourcePath, request.DisplayNumber))).ToArray();
+        var materialFolders = GetAvailableMaterialFolders();
+        var outputFolder = OutputFolderTextBox.Text;
+        return await Task.Run(() =>
         {
-            if (!result.IsIncluded)
-            {
-                continue;
-            }
-
-            foreach (var editableRequest in result.Requests.Where(request => request.IsIncluded))
-            {
-                var testRequest = editableRequest.BuildCandidate();
+        var requests = new List<TestGenerationPlan>();
+        foreach (var entry in entries)
+        {
+                var testRequest = entry.Candidate;
                 if (testRequest is null)
                 {
                     continue;
                 }
 
+                var pdf = PdfMaterialCatalog.Prepare(testRequest, materialFolders);
+                if (pdf.IsSupported)
+                {
+                    if (pdf.IsValid && pdf.Questions is not null)
+                        requests.Add(new TestGenerationPlan(entry.StudentName, testRequest.MaterialName,
+                            testRequest.Range, testRequest.QuestionCount, entry.FileName, entry.DisplayNumber,
+                            PdfQuestions: pdf.Questions, SourceReportPath: entry.SourcePath));
+                    continue;
+                }
                 var preparation = ExcelTemplateCatalog.Prepare(
                     testRequest,
-                    GetAvailableMaterialFolders());
+                    materialFolders);
                 if (!preparation.IsValid ||
                     preparation.Profile is null ||
                     preparation.WorkbookPath is null ||
@@ -687,21 +876,24 @@ public partial class MainWindow : Window
                     continue;
                 }
 
-                requests.Add(new ExcelPdfGenerationRequest(
-                    result.StudentName.Trim(),
+                var excelRequest = new ExcelPdfGenerationRequest(
+                    entry.StudentName,
                     testRequest.MaterialName,
                     testRequest.QuestionCount,
                     preparation.StartNumber.Value,
                     preparation.EndNumber.Value,
                     preparation.WorkbookPath,
-                    OutputFolderTextBox.Text,
+                    outputFolder,
                     preparation.Profile,
-                    result.FileName,
-                    editableRequest.DisplayNumber));
-            }
+                    entry.FileName,
+                    entry.DisplayNumber);
+                requests.Add(new TestGenerationPlan(entry.StudentName, testRequest.MaterialName,
+                    testRequest.Range, testRequest.QuestionCount, entry.FileName, entry.DisplayNumber, excelRequest,
+                    SourceReportPath: entry.SourcePath));
         }
 
         return requests;
+        });
     }
 
     private async Task<string?> SaveSkippedLogAsync(bool showWhenEmpty)
@@ -779,7 +971,7 @@ public partial class MainWindow : Window
 
     private static ErrorLogEntry CreateGenerationErrorLogEntry(
         DateTimeOffset loggedAt,
-        ExcelPdfGenerationRequest request,
+        TestGenerationPlan request,
         Exception exception) => CreateExceptionErrorLogEntry(
             loggedAt,
             "PDF作成",
@@ -787,7 +979,7 @@ public partial class MainWindow : Window
             request.SourceReportFileName,
             request.TestNumber,
             request.MaterialName,
-            $"{request.StartNumber}-{request.EndNumber}",
+            request.Range,
             request.QuestionCount.ToString(CultureInfo.InvariantCulture),
             exception);
 
@@ -843,6 +1035,10 @@ public partial class MainWindow : Window
         var entries = new List<ErrorLogEntry>();
         foreach (var result in _recognitionResults)
         {
+            if (result.HasReadingWarning)
+                entries.Add(new ErrorLogEntry(loggedAt, "レポート読み取り", result.StudentName.Trim(), result.FileName,
+                    null, string.Empty, string.Empty, string.Empty, "RecognitionWarning", string.Empty,
+                    result.NormalTestReadWarning, "通常テスト依頼欄は検出されましたが、教材・範囲・問題数の組み合わせを抽出できませんでした。"));
             if (result.HasError)
             {
                 entries.Add(new ErrorLogEntry(
@@ -902,7 +1098,7 @@ public partial class MainWindow : Window
             exception.GetType().FullName ?? exception.GetType().Name,
             $"0x{exception.HResult:X8}",
             exception.Message,
-            exception.ToString());
+            $"使用Excelファイル={exception.Data["SourceWorkbookPath"] ?? "未取得"}\n{exception}");
 
     private List<SkippedTestLogEntry> GetSkippedLogEntries(DateTimeOffset loggedAt)
     {

@@ -3,6 +3,7 @@
   "materials": [
     {
       "id": "target-1900-sixth-edition",
+      "workbookFileName": "★(6訂版)ターゲット1900_20221007本部.xlsm",
       "displayName": "ターゲット1900（6訂版）",
       "workbookNameKeyword": "ターゲット1900",
       "workbookNameExcludedKeywords": ["派生語"],
@@ -20,6 +21,7 @@
     },
     {
       "id": "eiken-pre1-ex-second-edition",
+      "workbookFileName": "★[第2版]出る順で最短合格！英検 準1級単熟語EX_202306本部.xlsm",
       "displayName": "英検準1級単熟語EX（第2版）",
       "workbookNameKeyword": "準1級単熟語EX",
       "materialNameKeywords": ["英検準1級単熟語EX第2版", "英検準1級単熟語EX", "準1級単熟語EX"],
@@ -36,6 +38,7 @@
     },
     {
       "id": "target-1000-fifth-edition",
+      "workbookFileName": "★[5訂版]英熟語ターゲット1000_20220227本部.xlsm",
       "displayName": "英熟語ターゲット1000（5訂版）",
       "workbookNameKeyword": "英熟語ターゲット1000",
       "materialNameKeywords": ["英熟語ターゲット1000", "ターゲット1000"],
@@ -52,6 +55,7 @@
     },
     {
       "id": "vintage-fourth-edition",
+      "workbookFileName": "★Vintage 4th Edition_20231030本部.xlsm",
       "displayName": "Vintage（4th Edition）",
       "workbookNameKeyword": "Vintage",
       "materialNameKeywords": ["Vintage4thEdition", "Vintage"],
@@ -68,6 +72,7 @@
     },
     {
       "id": "vocabulary-1700-sigma-best",
+      "workbookFileName": "国語力を伸ばす 語彙1700_20230301本部.xlsm",
       "displayName": "国語力を伸ばす 語彙1700（シグマベスト）",
       "workbookNameKeyword": "国語力を伸ばす 語彙1700",
       "materialNameKeywords": ["国語力を伸ばす語彙1700", "語彙1700"],
@@ -81,10 +86,12 @@
       "studentSheetName": "生徒用",
       "useWideAnswerLayout": true,
       "finishedLayoutId": "japanese-vocabulary",
-      "finishedLayoutName": "国語（語彙・漢字・古文の1問1答）"
+      "useStackedQuestionAnswerLayout": true,
+      "finishedLayoutName": "国語・漢字（縦書き・問題と解答欄を上下）"
     },
     {
       "id": "rapid-reading-idioms-revised",
+      "workbookFileName": "★[改訂版]速読英熟語_20240301本部.xlsm",
       "displayName": "速読英熟語（新版・改訂版）",
       "workbookNameKeyword": "速読英熟語",
       "materialNameKeywords": ["速読英熟語改訂版", "速読英熟語"],
@@ -105,6 +112,7 @@
     },
     {
       "id": "civic-politics-economics-fifth-edition",
+      "workbookFileName": "★[五訂版]共通テスト 公共、政治・経済 集中講義 必携一問一答問題集 別冊_20240830本部.xlsm",
       "displayName": "共通テスト 公共、政治・経済 集中講義（五訂版）",
       "workbookNameKeyword": "共通テスト 公共、政治・経済 集中講義",
       "materialNameKeywords": [

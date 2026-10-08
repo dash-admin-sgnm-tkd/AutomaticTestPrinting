@@ -132,6 +132,15 @@ public static class ExcelTemplateProfileStore
         }
     }
 
+    public static ExcelTemplateProfileLoadResult SaveUserProfileUpdates(IReadOnlyList<ExcelTemplateProfile> updates)
+    {
+        // Read the actual override file, not a custom-ID subset of the merged catalog.
+        // Built-in IDs can have user overrides, which must survive later registrations.
+        var user = File.Exists(UserConfigurationPath) ? LoadFromFile(UserConfigurationPath) : null;
+        if (user is not null && !user.IsValid) return user;
+        return SaveUserProfiles(ExcelMaterialEditingService.Upsert(user?.Profiles ?? [], updates));
+    }
+
     private static ExcelTemplateProfileLoadResult LoadDefaultCore()
     {
         var externalPath = Path.Combine(AppContext.BaseDirectory, DefaultFileName);
@@ -224,6 +233,11 @@ public static class ExcelTemplateProfileStore
 
         foreach (var profile in configuration.Materials)
         {
+            if (!string.IsNullOrEmpty(profile.WorkbookFileName) &&
+                (profile.WorkbookFileName != Path.GetFileName(profile.WorkbookFileName) ||
+                 profile.WorkbookFileName.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0 ||
+                 !profile.WorkbookFileName.EndsWith(".xlsm", StringComparison.OrdinalIgnoreCase)))
+                return "使用Excelはパスではなく.xlsmのファイル名だけを指定してください。";
             var name = string.IsNullOrWhiteSpace(profile.DisplayName)
                 ? profile.Id
                 : profile.DisplayName;

@@ -30,6 +30,7 @@ public static class ExcelMaterialFormatCatalog
 
     private static MaterialFormatKey CreateFormatKey(ExcelTemplateProfile profile) => new(
         profile.FinishedLayoutId,
+        StackedQuestionAnswerLayout.UsesLayout(profile),
         profile.UseWideAnswerLayout,
         profile.SourceHasSeparateDisplayNumber,
         profile.QuestionColumnWidth,
@@ -66,6 +67,10 @@ public static class ExcelMaterialFormatCatalog
 
     private static string CreateDisplayName(ExcelTemplateProfile profile)
     {
+        if (StackedQuestionAnswerLayout.UsesLayout(profile))
+        {
+            return "国語・漢字（縦書き・問題と解答欄を上下）";
+        }
         if (!string.IsNullOrWhiteSpace(profile.FinishedLayoutName))
         {
             return profile.FinishedLayoutName;
@@ -113,7 +118,7 @@ public static class ExcelMaterialFormatCatalog
         {
             "word-pair-list" => "英単語・英熟語を答える、短い1問1答形式です。",
             "grammar-choice" => "問題文と選択肢を広く表示する、文法・選択問題向けの形式です。",
-            "japanese-vocabulary" => "国語の語彙・漢字・古文などを答える1問1答形式です。",
+            "japanese-vocabulary" => "A4横向き。各列の上に番号、中央に縦書きの問題、下に解答欄を配置します。標準25問／ページ、長い文章は列数を減らして改ページします。",
             "balanced-two-column" => "問題と解答を同じくらいの幅で並べる形式です。",
             "question-wide-variable-row" => "長い問題文を広く表示し、文章量に応じて行の高さを変える形式です。",
             "answer-wide" => "短い問題に対して解答欄を広く取る形式です。",
@@ -125,7 +130,7 @@ public static class ExcelMaterialFormatCatalog
         {
             "word-pair-list" => "1. abandon\n2. accurate\n3. benefit",
             "grammar-choice" => "1. 問題文（空所・下線部など）\n   ① 選択肢  ② 選択肢  ③ 選択肢",
-            "japanese-vocabulary" => "1. 語句の意味・読み・書きを答えなさい。",
+            "japanese-vocabulary" => "上：問題番号\n中央：語句・読み・書きを縦書き表示\n下：解答欄（生徒用は空欄）",
             "question-wide-variable-row" => "1. 次の文章を読み、問いに答えなさい。\n   （長い問題文が入ります）",
             _ => "1. 問題文\n2. 問題文\n3. 問題文"
         };
@@ -142,6 +147,7 @@ public static class ExcelMaterialFormatCatalog
 
     private sealed record MaterialFormatKey(
         string FinishedLayoutId,
+        bool UseStackedQuestionAnswerLayout,
         bool UseWideAnswerLayout,
         bool SourceHasSeparateDisplayNumber,
         double QuestionColumnWidth,

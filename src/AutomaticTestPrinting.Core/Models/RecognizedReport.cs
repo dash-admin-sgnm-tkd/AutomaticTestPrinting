@@ -6,15 +6,19 @@ public sealed record RecognizedReport(
     string NormalTestSummary,
     string StageTestSummary,
     IReadOnlyList<RecognizedReportPage> Pages,
-    IReadOnlyList<NormalTestRequestCandidate>? NormalTestRequests = null)
+    IReadOnlyList<NormalTestRequestCandidate>? NormalTestRequests = null,
+    NormalTestRequestCandidate? StageTestRequest = null,
+    string NormalTestReadWarning = "")
 {
     public string FileName => Path.GetFileName(SourcePath);
 
-    public string OrientationSummary => Pages.Any(page => page.RotationDegrees == 180)
+    public string OrientationSummary => string.Join("／", Pages.Select(page => page.ExtractionMethod).Distinct()) + "：" + (Pages.Any(page => page.RotationDegrees == 180)
         ? "上下逆のページを自動補正しました"
-        : "向きの補正はありません";
+        : "向きの補正はありません");
 
-    public IReadOnlyList<NormalTestRequestCandidate> TestRequests => NormalTestRequests ?? [];
+    public IReadOnlyList<NormalTestRequestCandidate> TestRequests => StageTestRequest is null
+        ? NormalTestRequests ?? []
+        : [.. NormalTestRequests ?? [], StageTestRequest];
 }
 
 public sealed record NormalTestRequestCandidate(
@@ -30,7 +34,8 @@ public sealed record RecognizedReportPage(
     string Text,
     int PixelWidth = 0,
     int PixelHeight = 0,
-    IReadOnlyList<RecognizedWord>? Words = null)
+    IReadOnlyList<RecognizedWord>? Words = null,
+    string ExtractionMethod = "OCR")
 {
     public IReadOnlyList<RecognizedWord> RecognizedWords => Words ?? [];
 }
