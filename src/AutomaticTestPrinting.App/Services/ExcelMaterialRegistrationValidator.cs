@@ -1,4 +1,5 @@
 using System.Runtime.InteropServices;
+using System.Globalization;
 using AutomaticTestPrinting.Core.Models;
 
 namespace AutomaticTestPrinting.App.Services;
@@ -50,6 +51,7 @@ public static class ExcelMaterialRegistrationValidator
         var openedSheets = new List<object>();
         object? startRange = null;
         object? endRange = null;
+        var step = "Excelの起動";
 
         try
         {
@@ -66,6 +68,7 @@ public static class ExcelMaterialRegistrationValidator
             excelApplication.AutomationSecurity = AutomationSecurityForceDisable;
 
             workbooks = excelApplication.Workbooks;
+            step = "ファイルを読み取り専用で開く";
             workbook = ((dynamic)workbooks).Open(
                 workbookPath,
                 UpdateLinks: 0,
@@ -87,6 +90,7 @@ public static class ExcelMaterialRegistrationValidator
 
             foreach (var sheetName in requiredSheetNames)
             {
+                step = $"「{sheetName}」シートの取得";
                 var sheet = ((dynamic)worksheets)[sheetName];
                 openedSheets.Add(sheet);
             }
@@ -94,6 +98,7 @@ public static class ExcelMaterialRegistrationValidator
             if (!profile.RangeUsesSectionMapping)
             {
                 dynamic workingSheet = openedSheets[0];
+                step = $"範囲セル {profile.RangeStartCell}・{profile.RangeEndCell} の確認";
                 startRange = workingSheet.Range[profile.RangeStartCell];
                 endRange = workingSheet.Range[profile.RangeEndCell];
             }
@@ -102,11 +107,13 @@ public static class ExcelMaterialRegistrationValidator
                 true,
                 $"「{profile.DisplayName}」と同じ形式で利用できます。");
         }
-        catch (COMException)
+        catch (COMException exception)
         {
             return new ExcelMaterialValidationResult(
                 false,
-                $"「{profile.DisplayName}」と同じシート構成ではありません。近い形式を選び直してください。");
+                $"Excelの確認中に「{step}」で失敗しました（0x{exception.HResult.ToString("X8", CultureInfo.InvariantCulture)}）。\n" +
+                $"対象：{workbookPath}\n" +
+                "ファイルを開く段階で失敗した場合はDriveの同期・アクセスを確認してください。シートや範囲セルで失敗した場合は、選んだファイルと教材の形式を確認してください。");
         }
         finally
         {

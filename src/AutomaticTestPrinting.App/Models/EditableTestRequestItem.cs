@@ -29,7 +29,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         PageNumber = request.PageNumber;
         RequiresReview = request.RequiresReview;
         OriginalMaterialName = request.MaterialName;
-        _materialName = request.MaterialName;
+        _materialName = ConfirmedReportMaterialNames.Resolve(request.MaterialName);
         (_startNumber, _endNumber) = SplitRange(request.Range);
         _questionCount = request.QuestionCount > 0 ? request.QuestionCount.ToString(CultureInfo.CurrentCulture) : string.Empty;
         Revalidate();
@@ -50,6 +50,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     public IReadOnlyList<string> WorkbookCandidates { get; private set; } = [];
     public ExcelTemplateProfile? WorkbookProfile { get; private set; }
     public bool CanChooseWorkbook => WorkbookCandidates.Count > 0;
+    public bool CanEditWorkbook => WorkbookProfile is not null && !IsValid;
 
     public string MaterialName
     {
@@ -93,6 +94,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
 
             _isValid = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsValid)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanEditWorkbook)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
         }
     }
@@ -159,6 +161,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         UpdateMaterialSuggestions(refreshSuggestions);
         WorkbookCandidates = [];
         WorkbookProfile = null;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanEditWorkbook)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanChooseWorkbook)));
         var candidate = BuildCandidate();
         if (candidate is null || string.IsNullOrWhiteSpace(candidate.MaterialName))
@@ -196,6 +199,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         WorkbookCandidates = preparation.WorkbookCandidates ?? [];
         IsValid = preparation.IsValid;
         ValidationMessage = preparation.Message;
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanEditWorkbook)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(CanChooseWorkbook)));
     }
 

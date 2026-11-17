@@ -9,6 +9,7 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
 {
     private string _studentName;
     private bool _isIncluded = true;
+    public bool IsDetailsExpanded { get; set; }
 
     private RecognitionResultItem(
         string sourcePath,
@@ -36,6 +37,7 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
         foreach (var request in Requests)
         {
             request.Edited += Request_Edited;
+            request.PropertyChanged += Request_PropertyChanged;
         }
     }
 
@@ -71,6 +73,7 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasIncludedRequests)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NeedsAttention)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReviewStatus)));
             Edited?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -88,6 +91,9 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
             _studentName = value;
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(StudentName)));
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HeaderName)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NeedsAttention)));
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReviewStatus)));
             Edited?.Invoke(this, EventArgs.Empty);
         }
     }
@@ -104,7 +110,21 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
 
     public bool NeedsAttention =>
         IsIncluded &&
-        (HasError || HasReadingWarning || Requests.Any(request => request.IsIncluded && !request.IsValid));
+        (HasError || HasReadingWarning || !IsReady);
+
+    public string HeaderName => HasError || string.IsNullOrWhiteSpace(StudentName) ? FileName : StudentName;
+
+    public string ReviewStatus
+    {
+        get
+        {
+            if (!IsIncluded) return "対象外";
+            if (HasError) return "読み取りエラー";
+            if (NeedsAttention) return "要確認";
+            if (HasIncludedRequests) return "作成可能";
+            return Requests.Count == 0 ? "依頼なし" : "対象外";
+        }
+    }
 
     public static RecognitionResultItem Success(
         RecognizedReport report,
@@ -140,9 +160,23 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
 
     private void Request_Edited(object? sender, EventArgs e)
     {
+        NotifyReviewStatusChanged();
+        Edited?.Invoke(this, EventArgs.Empty);
+    }
+
+    private void Request_PropertyChanged(object? sender, PropertyChangedEventArgs e)
+    {
+        if (e.PropertyName == nameof(EditableTestRequestItem.IsValid))
+        {
+            NotifyReviewStatusChanged();
+        }
+    }
+
+    private void NotifyReviewStatusChanged()
+    {
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(IsReady)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(HasIncludedRequests)));
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(NeedsAttention)));
-        Edited?.Invoke(this, EventArgs.Empty);
+        PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(ReviewStatus)));
     }
 }

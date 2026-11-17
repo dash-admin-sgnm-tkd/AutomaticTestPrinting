@@ -17,6 +17,24 @@ public static partial class WorkbookDiscoveryService
     private static readonly XNamespace PackageRelationshipNamespace =
         "http://schemas.openxmlformats.org/package/2006/relationships";
 
+    public static (ExcelTemplateProfile? Profile, int MaximumQuestionNumber) SuggestFormat(
+        string path, IReadOnlyList<ExcelTemplateProfile> profiles)
+    {
+        if (MaterialLocationPolicy.IsExcluded(path)) return (null, 0);
+        using var archive = ZipFile.OpenRead(path);
+        var map = ReadWorkbookMap(archive);
+        var matches = profiles.Where(profile => HasRequiredSheets(profile, map.Keys)).ToArray();
+        if (matches.Length == 0) return (null, 0);
+        var layout = InferFinishedLayoutId(archive, map, path, Path.GetFileNameWithoutExtension(path), matches);
+        if (layout is not null)
+            matches = matches.Where(profile => profile.FinishedLayoutId == layout).ToArray();
+        if (matches.Select(CreateFormatSignature).Distinct(StringComparer.Ordinal).Count() != 1)
+            return (null, 0);
+        var best = matches.OrderByDescending(profile => profile.MaximumQuestionCount).First();
+        return (best, best.RangeUsesSectionMapping ? 0 :
+            ReadMaximumQuestionNumber(archive, map, best.QuestionListSheetName));
+    }
+
     public static WorkbookDiscoveryResult Discover(
         string materialFolder,
         IReadOnlyList<ExcelTemplateProfile> registeredProfiles) =>
@@ -295,6 +313,8 @@ public static partial class WorkbookDiscoveryService
         '|',
         profile.FinishedLayoutId,
         profile.WorkingSheetName,
+        profile.RangeStartCell,
+        profile.RangeEndCell,
         profile.QuestionListSheetName,
         profile.TeacherSheetName,
         profile.StudentSheetName,

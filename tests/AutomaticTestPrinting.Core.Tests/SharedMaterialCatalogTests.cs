@@ -24,7 +24,7 @@ public sealed class SharedMaterialCatalogTests : IDisposable
         Assert.Equal(92, original.Count(e => e.Kind == "Excel"));
         Assert.Equal(97, catalog.Items.Count(e => e.Kind == "PDF"));
         Assert.Equal(44, original.Count(e => e.Kind == "段階突破"));
-        Assert.Equal(5, catalog.Items.Count(e => e.Kind == "PDF" && e.AutoEnabled));
+        Assert.Equal(9, catalog.Items.Count(e => e.Kind == "PDF" && e.AutoEnabled));
         Assert.Equal(44, original.Count(e => e.Kind == "段階突破" && e.AutoEnabled));
         Assert.Equal(original.Length, original.Select(e => e.SourceFileId).Distinct().Count());
         Assert.All(original, e => {
@@ -39,7 +39,18 @@ public sealed class SharedMaterialCatalogTests : IDisposable
         Assert.DoesNotContain(catalog.Items, e => e.Kind == "Excel" && e.AutoEnabled);
         Assert.DoesNotContain(catalog.Items, e => e.FileNames.Contains("速読英単語2 上級編_20210818本部-LAPTOP-BQO04MKK.xlsm"));
         Assert.DoesNotContain(catalog.Items, e => e.FileNames.Contains("入門問題精講数学IAIIB_対照表.xlsx"));
-        Assert.False(catalog.Items.Single(e => e.FileNames.Contains("★関正生のThe Rules 英語長文問題集1_20211003本部.pdf")).AutoEnabled);
+        foreach (var name in new[]
+        {
+            "関正生のThe Rules 英語長文問題集1",
+            "関正生のThe Rules 英語長文問題集3",
+            "関正生の英語長文ポラリス1 標準レベル",
+            "現代文読解力の開発講座"
+        })
+        {
+            var entry = Assert.Single(catalog.Items, e => e.DisplayName == name);
+            Assert.True(entry.AutoEnabled);
+            Assert.NotEmpty(entry.Questions);
+        }
         PdfMaterialProfileStore.Validate(SharedMaterialCatalog.CreatePdfProfiles());
     }
 

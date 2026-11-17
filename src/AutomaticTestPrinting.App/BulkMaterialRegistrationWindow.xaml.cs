@@ -227,6 +227,8 @@ public partial class BulkMaterialRegistrationWindow : Window
                 DisplayName = displayName,
                 WorkbookNameKeyword = workbookStem,
                 WorkbookFileName = item.WorkbookFileName,
+                VerifiedWorkbookSha256 = string.Empty,
+                ExactMaterialNameOnly = false,
                 WorkbookNameExcludedKeywords = [],
                 MaterialNameKeywords = keywords,
                 MaximumQuestionNumber = maximumQuestionNumber,

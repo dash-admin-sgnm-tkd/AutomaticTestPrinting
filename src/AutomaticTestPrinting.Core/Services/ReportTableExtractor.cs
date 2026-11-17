@@ -55,13 +55,8 @@ public static partial class ReportTableExtractor
 
             var halfColumnWidth = page.PixelWidth * 0.055;
             var columns = countLines.Select(item => (CenterX: item.Line.CenterX, item.Count)).ToList();
-            // A material column with an unreadable/blank count must be reviewed, not silently dropped.
-            foreach (var heading in lines.Where(line => page.ExtractionMethod != "PDF文字抽出" &&
-                line.Top > marker.Bottom && line.Bottom < rangeAnchor.Top - 8 && IsSubjectHeading(line.Text)))
-            {
-                if (!columns.Any(column => Math.Abs(column.CenterX - heading.CenterX) <= halfColumnWidth))
-                    columns.Add((heading.CenterX, 0));
-            }
+            // Homework alone is not a test request. Only positive counts in the request row
+            // create candidates; blank/unreadable cells must not invent additional tests.
             var results = new List<NormalTestRequestCandidate>(columns.Count);
             foreach (var item in columns.OrderBy(column => column.CenterX))
             {

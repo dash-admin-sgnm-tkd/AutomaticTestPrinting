@@ -14,7 +14,8 @@ public static class ExcelMaterialNameMatcher
             Profile = profile,
             Score = profile.MaterialNameKeywords.Append(profile.DisplayName)
                 .Select(PdfMaterialProfileStore.NormalizeName)
-                .Where(key => key.Length > 0 && name.Contains(key, StringComparison.Ordinal))
+                .Where(key => key.Length > 0 && (profile.ExactMaterialNameOnly
+                    ? key == name : name.Contains(key, StringComparison.Ordinal)))
                 .Select(key => key == name ? int.MaxValue : key.Length).DefaultIfEmpty(0).Max()
         }).Where(match => match.Score > 0).ToArray();
         if (ranked.Length == 0) return [];

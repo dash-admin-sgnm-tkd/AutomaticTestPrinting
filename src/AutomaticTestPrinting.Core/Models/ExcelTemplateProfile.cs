@@ -6,8 +6,10 @@ public sealed record ExcelTemplateProfile
     public string DisplayName { get; init; } = string.Empty;
     public string WorkbookNameKeyword { get; init; } = string.Empty;
     public string WorkbookFileName { get; init; } = string.Empty;
+    public string VerifiedWorkbookSha256 { get; init; } = string.Empty;
     public IReadOnlyList<string> WorkbookNameExcludedKeywords { get; init; } = [];
     public IReadOnlyList<string> MaterialNameKeywords { get; init; } = [];
+    public bool ExactMaterialNameOnly { get; init; }
     public int MaximumQuestionNumber { get; init; }
     public int MaximumQuestionCount { get; init; }
     public string WorkingSheetName { get; init; } = string.Empty;
@@ -22,6 +24,10 @@ public sealed record ExcelTemplateProfile
     public string? SectionMappingSheetName { get; init; }
     public bool SectionMappingUsesGridPairs { get; init; }
     public bool SourceHasSeparateDisplayNumber { get; init; }
+    public bool QuestionListUsesSectionNumbers { get; init; }
+    public bool UseOriginalGrammarLayout { get; init; }
+    public int OriginalGrammarQuestionsPerPage { get; init; } = 25;
+    public double OriginalGrammarRowHeight { get; init; } = 61.5;
     public double QuestionColumnWidth { get; init; } = 18;
     public double AnswerColumnWidth { get; init; } = 72;
     public double OutputRowHeight { get; init; } = 30;
@@ -32,6 +38,15 @@ public sealed record ExcelTemplateProfile
     public bool FitToSinglePageTall { get; init; }
     public string FinishedLayoutId { get; init; } = string.Empty;
     public string FinishedLayoutName { get; init; } = string.Empty;
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesDirectGrammarQuestions => FinishedLayoutId == "grammar-choice" &&
+        !RangeUsesSectionMapping && !QuestionListUsesSectionNumbers &&
+        (!SourceHasSeparateDisplayNumber || UseOriginalGrammarLayout);
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public int EffectiveMaximumQuestionCount => UsesDirectGrammarQuestions && !UseOriginalGrammarLayout
+        ? 100 : Math.Min(MaximumQuestionCount, 100);
 }
 
 public sealed record ExcelRequestPreparation(

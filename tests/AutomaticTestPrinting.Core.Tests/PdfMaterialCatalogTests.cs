@@ -116,22 +116,31 @@ public sealed class PdfMaterialCatalogTests : IDisposable
     }
 
     [Fact]
-    public void Generate_CombinesMappedPagesAndCorrespondingAnswersWithoutModifyingSource()
+    public void Generate_CombinesSharedProblemAndAnswerPagesOnceWithoutModifyingSource()
     {
         var source = CreatePdf("book.pdf", 4);
         var bytes = File.ReadAllBytes(source);
         var ready = PdfMaterialCatalog.Prepare(new("長文教材第1版", "1-2", 2, 1, true), [_folder],
-            [Profile([new(1, "book.pdf", "1", "book.pdf", "3"), new(2, "book.pdf", "2", "book.pdf", "4")])]);
+            [Profile([new(1, "book.pdf", "1-2", "book.pdf", "3"), new(2, "book.pdf", "2", "book.pdf", "3-4")])]);
         var plan = new TestGenerationPlan("生徒A", "長文教材第1版", "1-2", 2, "report.pdf", 1, PdfQuestions: ready.Questions);
         var result = PdfMaterialCatalog.Generate(plan, _folder);
         using var problem = PdfReader.Open(result.ProblemPdfPath, PdfDocumentOpenMode.Import);
         using var answer = PdfReader.Open(result.AnswerPdfPath!, PdfDocumentOpenMode.Import);
         Assert.Equal(2, problem.PageCount);
         Assert.Equal(2, answer.PageCount);
-        Assert.Equal(1, problem.Pages[0].Rotate / 90); // unique marker in each source page
-        Assert.Equal(3, answer.Pages[0].Rotate / 90);
+        Assert.Equal(90, problem.Pages[0].Rotate);
+        Assert.Equal(180, problem.Pages[1].Rotate);
+        Assert.Equal(270, answer.Pages[0].Rotate);
+        Assert.Equal(0, answer.Pages[1].Rotate);
         Assert.Equal(bytes, File.ReadAllBytes(source));
-        Assert.Contains("1,2", File.ReadAllText(Path.Combine(Path.GetDirectoryName(result.ProblemPdfPath)!, "作成内容.txt")));
+        Assert.Equal(_folder, Path.GetDirectoryName(result.ProblemPdfPath));
+        Assert.Equal(_folder, Path.GetDirectoryName(result.AnswerPdfPath));
+        Assert.Empty(Directory.EnumerateFiles(_folder, "*.txt"));
+        Assert.Single(Directory.EnumerateDirectories(_folder)); // source PDFs only
+
+        var repeated = PdfMaterialCatalog.Generate(plan, _folder);
+        Assert.NotEqual(result.ProblemPdfPath, repeated.ProblemPdfPath);
+        Assert.NotEqual(result.AnswerPdfPath, repeated.AnswerPdfPath);
     }
 
     [Fact]

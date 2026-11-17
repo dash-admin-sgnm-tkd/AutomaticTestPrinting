@@ -21,10 +21,38 @@ public partial class MainWindow : Window
     {
         if (sender is not FrameworkElement { DataContext: EditableTestRequestItem item } ||
             item.SelectedMaterialSuggestion is not { } selected) return;
-        if (MessageBox.Show(this,
-            $"教材名を「{item.MaterialName}」から「{selected}」へ変更します。\n原本の教材・版と一致していますか？\n範囲・問題数は変更しません。",
-            "教材名の確認", MessageBoxButton.YesNo, MessageBoxImage.Question, MessageBoxResult.No) == MessageBoxResult.Yes)
-            item.MaterialName = selected;
+        var action = MessageBox.Show(this,
+            $"教材名を「{item.OriginalMaterialName}」から「{selected}」へ変更します。原本の教材・版を確認してください。\n\nはい：同じ表記に今回と次回以降も適用\nいいえ：この依頼にだけ適用\nキャンセル：変更しない\n\n範囲・問題数は変更しません。",
+            "教材名の確認", MessageBoxButton.YesNoCancel, MessageBoxImage.Question, MessageBoxResult.Cancel);
+        if (action == MessageBoxResult.Cancel) return;
+        if (action == MessageBoxResult.Yes)
+        {
+            try
+            {
+                ConfirmedReportMaterialNames.Save(item.OriginalMaterialName, selected);
+                foreach (var other in _recognitionResults.SelectMany(report => report.Requests).Where(other =>
+                    string.Equals(other.OriginalMaterialName.Trim(), item.OriginalMaterialName.Trim(), StringComparison.Ordinal) &&
+                    string.Equals(other.MaterialName, other.OriginalMaterialName, StringComparison.Ordinal)))
+                    other.MaterialName = selected;
+            }
+            catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.Text.Json.JsonException)
+            {
+                MessageBox.Show(this, $"次回用に保存できませんでした。今回は適用します。\n{exception.Message}", "教材名の保存");
+            }
+        }
+        item.MaterialName = selected;
+    }
+
+    private void EditWorkbook_Click(object sender, RoutedEventArgs e)
+    {
+        if (sender is not FrameworkElement { DataContext: EditableTestRequestItem { WorkbookProfile: { } profile } }) return;
+        var window = new MaterialRegistrationWindow(GetAvailableMaterialFolders(), editingProfile: profile) { Owner = this };
+        if (window.ShowDialog() != true) return;
+        ConfirmResultsCheckBox.IsChecked = false;
+        foreach (var request in _recognitionResults.SelectMany(report => report.Requests))
+            request.RefreshValidation();
+        UpdateRecognitionResultState();
+        UpdatePdfGenerationState();
     }
 
     private async void ChooseWorkbook_Click(object sender, RoutedEventArgs e)
@@ -52,7 +80,7 @@ public partial class MainWindow : Window
             {
                 if (!candidates.Contains(selectedPath, StringComparer.OrdinalIgnoreCase))
                     throw new InvalidOperationException("表示中の候補からExcelを選択してください。");
-                WorkbookChoiceStore.Save(profile.Id, new WorkbookChoice(relative, WorkbookResolutionService.GetHash(selectedPath)));
+                WorkbookChoiceStore.Save(profile.Id, new WorkbookChoice(relative, WorkbookResolutionService.GetHash(selectedPath), new FileInfo(selectedPath).Length));
                 return affected.Where(entry => entry.Candidate is not null)
                     .Select(entry => entry.Candidate!).Distinct()
                     .ToDictionary(candidate => candidate, candidate => ExcelTemplateCatalog.Prepare(candidate, roots, candidates));
@@ -97,6 +125,11 @@ public partial class MainWindow : Window
 
         _settingsStore = new JsonSettingsStore(settingsPath);
         _recognitionResultsView = CollectionViewSource.GetDefaultView(_recognitionResults);
+        if (_recognitionResultsView is ICollectionViewLiveShaping { CanChangeLiveFiltering: true } liveView)
+        {
+            liveView.LiveFilteringProperties.Add(nameof(RecognitionResultItem.NeedsAttention));
+            liveView.IsLiveFiltering = true;
+        }
         DataContext = new
         {
             Reports = _reports,
@@ -586,7 +619,6 @@ public partial class MainWindow : Window
         AttentionFilterButton.Content = _showOnlyNeedsAttention
             ? "すべて表示"
             : "要確認だけ表示";
-        _recognitionResultsView.Refresh();
     }
 
     private async void CreatePdfsButton_Click(object sender, RoutedEventArgs e)
@@ -1167,7 +1199,6 @@ public partial class MainWindow : Window
         ConfirmResultsCheckBox.IsChecked = false;
         InvalidateBatchOutputs();
         StatusText.Text = "修正内容を原本と照合し、確認チェックを入れ直してください";
-        _recognitionResultsView.Refresh();
         UpdatePdfGenerationState();
     }
 

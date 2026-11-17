@@ -5,7 +5,7 @@ using AutomaticTestPrinting.Core.Models;
 
 namespace AutomaticTestPrinting.Core.Services;
 
-public sealed record WorkbookChoice(string RelativePath, string Sha256);
+public sealed record WorkbookChoice(string RelativePath, string Sha256, long? FileLength = null);
 public sealed record WorkbookResolution(string? Path, IReadOnlyList<string> Candidates, string Message);
 
 public static class WorkbookResolutionService
@@ -33,6 +33,8 @@ public static class WorkbookResolutionService
         WorkbookChoice? choice = null, IReadOnlyList<string>? knownCandidates = null)
     {
         var matches = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var possibleRenames = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+        var savedPathExists = false;
         try
         {
             foreach (var root in roots.Distinct(StringComparer.OrdinalIgnoreCase))
@@ -43,15 +45,31 @@ public static class WorkbookResolutionService
                     : knownCandidates.Where(path => GetRelativePath(root, path) is not null && File.Exists(path));
                 foreach (var path in paths)
                 {
+                    if (choice is not null && string.Equals(GetRelativePath(root, path), choice.RelativePath,
+                            StringComparison.OrdinalIgnoreCase))
+                        savedPathExists = true;
                     var exact = !string.IsNullOrWhiteSpace(profile.WorkbookFileName)
                         ? string.Equals(System.IO.Path.GetFileName(path), profile.WorkbookFileName, StringComparison.OrdinalIgnoreCase)
                         : string.Equals(System.IO.Path.GetFileNameWithoutExtension(path), profile.WorkbookNameKeyword, StringComparison.OrdinalIgnoreCase);
                     if (exact && !profile.WorkbookNameExcludedKeywords.Any(keyword =>
                             Normalize(System.IO.Path.GetFileNameWithoutExtension(path)).Contains(Normalize(keyword), StringComparison.Ordinal)))
                         matches.Add(System.IO.Path.GetFullPath(path));
+                    else if (choice?.FileLength is not null && !MaterialLocationPolicy.IsExcluded(path) &&
+                             System.IO.Path.GetExtension(path).Equals(".xlsm", StringComparison.OrdinalIgnoreCase) &&
+                             !profile.WorkbookNameExcludedKeywords.Any(keyword =>
+                                 Normalize(System.IO.Path.GetFileNameWithoutExtension(path)).Contains(Normalize(keyword), StringComparison.Ordinal)))
+                        possibleRenames.Add(System.IO.Path.GetFullPath(path));
                 }
             }
             var candidates = MaterialLocationPolicy.SelectCandidates(matches);
+            if (profile.VerifiedWorkbookSha256.Length > 0 && candidates.Length > 0)
+            {
+                var verified = candidates.Where(path => string.Equals(GetHash(path), profile.VerifiedWorkbookSha256,
+                    StringComparison.OrdinalIgnoreCase)).ToArray();
+                if (verified.Length == 0)
+                    return new(null, [], "同名Excelはありますが、動作確認済みのファイルと内容が異なります。「登録Excelを変更」で形式を確認して選び直すか、この依頼をスキップしてください。");
+                return new(verified[0], verified, "動作確認済みの内容と一致するExcelを選びました。");
+            }
             if (choice is not null)
             {
                 var selected = candidates.Where(path => roots.Any(root =>
@@ -61,6 +79,16 @@ public static class WorkbookResolutionService
                     var unchanged = selected.Where(path => GetHash(path) == choice.Sha256).ToArray();
                     if (unchanged.Length > 0)
                         return new(unchanged[0], candidates, "保存した使用Excelを選択しました。");
+                }
+                if (!savedPathExists && !MaterialLocationPolicy.IsExcluded(choice.RelativePath))
+                {
+                    // Confirm identity before following a move or rename. Old choices have no size,
+                    // so only exact filename matches are considered for them.
+                    var identical = matches.Where(path => !MaterialLocationPolicy.IsExcluded(path))
+                        .Concat(possibleRenames.Where(path => new FileInfo(path).Length == choice.FileLength))
+                        .Where(path => GetHash(path) == choice.Sha256).Take(2).ToArray();
+                    if (identical.Length == 1)
+                        return new(identical[0], [identical[0]], "保存したExcelと同じ内容のファイルを移動先・改名先で確認しました。");
                 }
                 return new(null, candidates, "保存したExcelが移動・更新されたか、参照対象外（国立校など）になっています。「使用Excelを選ぶ」で再確認してください。別ファイルへ自動変更しません。");
             }

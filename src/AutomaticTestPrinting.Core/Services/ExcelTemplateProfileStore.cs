@@ -272,6 +272,13 @@ public static class ExcelTemplateProfileStore
                 return $"教材「{name}」の範囲対応表シートが設定されていません。";
             }
 
+            if (profile.UseOriginalGrammarLayout &&
+                (profile.OriginalGrammarQuestionsPerPage is < 1 or > 25 ||
+                 !double.IsFinite(profile.OriginalGrammarRowHeight) || profile.OriginalGrammarRowHeight <= 0))
+            {
+                return $"教材「{name}」の1ページあたりの問題数または行の高さが不正です。";
+            }
+
             if (profile.UseWideAnswerLayout &&
                 (profile.QuestionColumnWidth <= 0 ||
                  profile.AnswerColumnWidth <= 0 ||

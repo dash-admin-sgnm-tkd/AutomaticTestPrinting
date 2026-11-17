@@ -27,7 +27,7 @@
                     <StackPanel>
                         <TextBlock FontWeight="SemiBold" Text="形式が近い教材" />
                         <TextBlock Margin="0,5,0,8" FontSize="12" Foreground="{StaticResource MutedTextBrush}"
-                                   Text="シート構成やPDFのレイアウトが同じ教材を選んでください。" />
+                                   Text="先に登録する教材のExcelファイルを選んでください。一意に判定できる場合は近い形式を自動で入れます。" />
                         <ComboBox x:Name="ReferenceProfileComboBox" Height="40" Padding="10,7"
                                   DisplayMemberPath="DisplayName" SelectionChanged="ReferenceProfileComboBox_SelectionChanged" />
 

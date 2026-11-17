@@ -92,6 +92,46 @@ public sealed class WorkbookResolutionServiceTests : IDisposable
     }
 
     [Fact]
+    public void Resolve_FollowsIdenticalWorkbookAfterMoveWithLegacyChoice()
+    {
+        var original = Add("a/教材.xlsm", "selected");
+        var choice = new WorkbookChoice(Path.Combine("a", "教材.xlsm"), WorkbookResolutionService.GetHash(original));
+        var moved = Add("b/教材.xlsm", "selected");
+        File.Delete(original);
+        Assert.Equal(moved, WorkbookResolutionService.Resolve([_root], Profile, choice).Path);
+    }
+
+    [Fact]
+    public void Resolve_FollowsRenamedWorkbookOnlyWhenOneEligibleFileHasIdenticalContent()
+    {
+        var original = Add("a/教材.xlsm", "selected");
+        var choice = new WorkbookChoice(Path.Combine("a", "教材.xlsm"),
+            WorkbookResolutionService.GetHash(original), new FileInfo(original).Length);
+        File.Delete(original);
+        var renamed = Add("b/改名.xlsm", "selected");
+        Add("b/別教材.xlsm", "different");
+        Add("国立校 確認テスト作成/別名.xlsm", "selected");
+        Assert.Equal(renamed, WorkbookResolutionService.Resolve([_root], Profile, choice).Path);
+
+        Add("c/改名コピー.xlsm", "selected");
+        Assert.Null(WorkbookResolutionService.Resolve([_root], Profile, choice).Path);
+    }
+
+    [Fact]
+    public void Resolve_VerifiedContentDisambiguatesSameNameWithoutUsingWrongCopy()
+    {
+        var correct = Add("①英語/確認済み/教材.xlsm", "original");
+        Add("①英語/別形式/教材.xlsm", "different");
+        var profile = Profile with { VerifiedWorkbookSha256 = WorkbookResolutionService.GetHash(correct) };
+        Assert.Equal(correct, WorkbookResolutionService.Resolve([_root], profile).Path);
+        File.Delete(correct);
+        var result = WorkbookResolutionService.Resolve([_root], profile);
+        Assert.Null(result.Path);
+        Assert.Empty(result.Candidates);
+        Assert.Contains("内容が異なります", result.Message);
+    }
+
+    [Fact]
     public void Resolve_DoesNotAcceptAnotherEdition()
     {
         Add("教材旧版.xlsm", "other edition");

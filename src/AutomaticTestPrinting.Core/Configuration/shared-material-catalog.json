@@ -1957,12 +1957,12 @@
       "aliases": [
         "関正生のThe Rules 英語長文問題集1"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。既存のページ対応表を使用します。隣接問題が同じページに載る場合も、ページ全体を出力します。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 7,
       "sourceFileId": "1UkYMUMNLl4sJkCqEdKl2ngWYMHjIcehW",
       "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集1/★関正生のThe Rules 英語長文問題集1_20211003本部.pdf",
-      "autoEnabled": false,
+      "autoEnabled": true,
       "questions": [
         {
           "number": 1,
@@ -2092,7 +2092,8 @@
         "★関正生のThe Rules 英語長文問題集2_20211003本部.pdf"
       ],
       "aliases": [
-        "関正生のThe Rules 英語長文問題集2"
+        "関正生のThe Rules 英語長文問題集2",
+        "関正生のThe Rules 英語長文問題集2 入試標準"
       ],
       "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n原本のSHA-256一致を確認。対応表の番号付き問題のみ自動作成対象（例題・その他の単位は対象外）。実印刷未検証。",
       "sourceSheet": "通常PDF教材",
@@ -2229,14 +2230,15 @@
         "★関正生のThe Rules 英語長文問題集3_20211003本部.pdf"
       ],
       "aliases": [
-        "関正生のThe Rules 英語長文問題集3"
+        "関正生のThe Rules 英語長文問題集3",
+        "関正生のThe Rules 英語長文問題集3 入試難関"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。既存のページ対応表を使用します。隣接問題が同じページに載る場合も、ページ全体を出力します。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 11,
       "sourceFileId": "1ZALK71yapDKCkvRkJn19tuLeWQTsy_UN",
       "sourceRelativePath": "①英語/⑤長文/The Rules 英語長文問題集3/★関正生のThe Rules 英語長文問題集3_20211003本部.pdf",
-      "autoEnabled": false,
+      "autoEnabled": true,
       "questions": [
         {
           "number": 1,
@@ -2408,7 +2410,7 @@
       "aliases": [
         "大学入試 英語長文プラス 速読トレーニング問題集"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n問題番号とページの対応表が未登録です。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 15,
       "sourceFileId": "1D2oXQ2w3UPkP8-8TyTJxXbN0sYx3H5o1",
@@ -2448,12 +2450,12 @@
       "aliases": [
         "関正生の英語長文ポラリス1 標準レベル"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。既存のページ対応表を使用します。隣接問題が同じページに載る場合も、ページ全体を出力します。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 17,
       "sourceFileId": "1YoBptW7NJ-g_NAym2Pyuv8mHhDk6lRbc",
       "sourceRelativePath": "①英語/⑤長文/英語長文ポラリス1 標準レベル/★関正生の英語長文ポラリス1 標準レベル_20170131本部.pdf",
-      "autoEnabled": false,
+      "autoEnabled": true,
       "questions": [
         {
           "number": 1,
@@ -2685,7 +2687,7 @@
       "aliases": [
         "船口のゼロから読み解く最強の現代文"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n問題番号とページの対応表が未登録です。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 24,
       "sourceFileId": "1cmMEhYuuVZiYVFQxG4cDHKa72mwH4ikf",
@@ -3265,12 +3267,12 @@
       "aliases": [
         "現代文読解力の開発講座"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。既存のページ対応表を使用します。隣接問題が同じページに載る場合も、ページ全体を出力します。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 32,
       "sourceFileId": "1Y4RogdHj5McDo9zmmotjFmHqX4OUvpWW",
       "sourceRelativePath": "②現代文/②MARCH・地方国公立/現代文読解力の開発講座/★現代文読解力の開発講座_20150827本部.pdf",
-      "autoEnabled": false,
+      "autoEnabled": true,
       "questions": [
         {
           "number": 1,
@@ -3406,7 +3408,7 @@
       "aliases": [
         "船口の最強の現代文 記述トレーニング"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n問題番号とページの対応表が未登録です。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 35,
       "sourceFileId": "1PXqbNDu3G8Y5eUUAbSaGSl8Cn-QNkOEC",
@@ -3966,7 +3968,7 @@
       "aliases": [
         "富井の古典文法をはじめからていねいに"
       ],
-      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "前回解析PDFとSHA-256完全一致。ページ対応は別シート参照。問題番号↔ページ未確認\n問題番号とページの対応表が未登録です。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 63,
       "sourceFileId": "1eA29dHWmKy3Dk1BeKSFH7WPLYZL8c_Nh",
@@ -3986,7 +3988,7 @@
       "aliases": [
         "GMARCH&関関同立の古文"
       ],
-      "notes": "今回のPDFは約307MBで取得上限超過。ページ・解答の対応は未確認。\n共有ページがあるため自動作成対象外。隣接問題の印刷可否を確認して登録してください。",
+      "notes": "今回のPDFは約307MBで取得上限超過。ページ・解答の対応は未確認。\n問題番号とページの対応表が未登録です。",
       "sourceSheet": "通常PDF教材",
       "sourceRow": 64,
       "sourceFileId": "1JBGn4_LrEGBZUOH8YKsy0LgByU1ameFu",

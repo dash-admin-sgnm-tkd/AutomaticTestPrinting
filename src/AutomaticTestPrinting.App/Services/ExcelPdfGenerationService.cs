@@ -15,6 +15,9 @@ public static class ExcelPdfGenerationService
     private const int FixedFormatPdf = 0;
     private const int QualityStandard = 0;
     private const int AutomationSecurityForceDisable = 3;
+    private const int GrammarQuestionsPerPage = 25;
+    private const double GrammarRowHeight = 32;
+    private const double OriginalGrammarQuestionFontSize = 16;
 
     public static Task<ExcelPdfGenerationResult> GenerateAsync(
         ExcelPdfGenerationRequest request,
@@ -131,7 +134,8 @@ public static class ExcelPdfGenerationService
                 studentSheet,
                 request);
 
-            outputPaths = CreateOutputPaths(request);
+            outputPaths = TestPdfOutputPaths.FindAvailable(request.OutputFolder, request.StudentName,
+                request.MaterialName, $"{request.StartNumber}-{request.EndNumber}", request.QuestionCount, includeAnswers: true);
             ExportSheetToPdf(teacherSheet, outputPaths.AnswerPdfPath!);
             cancellationToken.ThrowIfCancellationRequested();
             ExportSheetToPdf(studentSheet, outputPaths.ProblemPdfPath);
@@ -209,6 +213,7 @@ public static class ExcelPdfGenerationService
         dynamic studentSheet,
         ExcelPdfGenerationRequest request)
     {
+        var useOriginalGrammarLayout = request.Profile.Id == "vintage-fourth-edition" || request.Profile.UseOriginalGrammarLayout;
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
         {
             dynamic outputRange = sheet.Range[StackedQuestionAnswerLayout.UsesLayout(request.Profile) ? "B1:H201" : "B1:H101"];
@@ -216,7 +221,8 @@ public static class ExcelPdfGenerationService
             try
             {
                 outputRange.ClearContents();
-                borders.LineStyle = LineStyleNone;
+                if (!useOriginalGrammarLayout)
+                    borders.LineStyle = LineStyleNone;
             }
             finally
             {
@@ -226,9 +232,9 @@ public static class ExcelPdfGenerationService
         }
 
         List<QuestionData> questions;
-        if (request.Profile.RangeUsesSectionMapping)
+        if (request.Profile.RangeUsesSectionMapping || request.Profile.QuestionListUsesSectionNumbers)
         {
-            if (sectionMappingSheet is null)
+            if (sectionMappingSheet is null && !request.Profile.QuestionListUsesSectionNumbers)
             {
                 throw new InvalidOperationException("教材の対応表シートが見つかりません。");
             }
@@ -240,7 +246,13 @@ public static class ExcelPdfGenerationService
                 request.EndNumber,
                 request.QuestionCount,
                 request.Profile.SectionMappingUsesGridPairs,
-                request.Profile.SourceHasSeparateDisplayNumber);
+                request.Profile.SourceHasSeparateDisplayNumber,
+                request.Profile.QuestionListUsesSectionNumbers);
+        }
+        else if (request.Profile.UsesDirectGrammarQuestions)
+        {
+            questions = ReadQuestions(backgroundSheet, questionListSheet, request.QuestionCount,
+                request.StartNumber, request.EndNumber, request.Profile.SourceHasSeparateDisplayNumber);
         }
         else
         {
@@ -252,6 +264,15 @@ public static class ExcelPdfGenerationService
                 questionListSheet,
                 request.QuestionCount);
         }
+        if (useOriginalGrammarLayout)
+        {
+            ApplyOriginalGrammarTemplate(teacherSheet, questions, request, includeAnswers: true);
+            ApplyOriginalGrammarTemplate(studentSheet, questions, request, includeAnswers: false);
+            ValidateGeneratedQuestions(teacherSheet, questions.Count, 0);
+            ValidateStudentAnswerCellsAreEmpty(studentSheet, questions.Count, 0);
+            return;
+        }
+
         if (VerticalJapaneseQuestionLayout.UsesLayout(request.Profile))
         {
             var verticalQuestions = questions.Select(q => new StackedQuestion(q.Number, q.Question, q.Answer)).ToArray();
@@ -261,8 +282,10 @@ public static class ExcelPdfGenerationService
             VerticalJapaneseExcelLayout.Apply(studentSheet, verticalQuestions, title, range, includeAnswers: false);
             return;
         }
-        var firstPageCount = Math.Min(request.QuestionCount, 50);
-        var secondPageCount = Math.Max(request.QuestionCount - 50, 0);
+        var grammar = request.Profile.UsesDirectGrammarQuestions;
+        var headerSize = grammar ? 12 : 20;
+        var firstPageCount = grammar ? request.QuestionCount : Math.Min(request.QuestionCount, 50);
+        var secondPageCount = request.QuestionCount - firstPageCount;
         var titles = new object[,] { { "番号", "問題", "解答" } };
 
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
@@ -270,14 +293,20 @@ public static class ExcelPdfGenerationService
             SetRangeValue(sheet, "B1:D1", titles);
             SetRightHeader(
                 sheet,
-                $"&20 範囲：{request.StartNumber}-{request.EndNumber}");
+                $"&{headerSize} 範囲：{request.StartNumber}-{request.EndNumber}");
         }
-        SetCenterHeader(teacherSheet, $"&20 {request.Profile.TeacherHeaderText}");
-        SetCenterHeader(studentSheet, $"&20 {request.Profile.StudentHeaderText}");
-        if (!string.IsNullOrWhiteSpace(request.Profile.HeaderTitle))
+        SetCenterHeader(teacherSheet, $"&{headerSize} {request.Profile.TeacherHeaderText}");
+        SetCenterHeader(studentSheet, $"&{headerSize} {request.Profile.StudentHeaderText}");
+        var headerTitle = request.Profile.HeaderTitle;
+        if (grammar && string.IsNullOrWhiteSpace(headerTitle))
         {
-            SetLeftHeader(teacherSheet, $"&20{request.Profile.HeaderTitle}");
-            SetLeftHeader(studentSheet, $"&20{request.Profile.HeaderTitle}");
+            headerTitle = request.Profile.DisplayName;
+        }
+        if (!string.IsNullOrWhiteSpace(headerTitle))
+        {
+            var escapedTitle = headerTitle.Replace("&", "&&", StringComparison.Ordinal);
+            SetLeftHeader(teacherSheet, $"&{headerSize} {escapedTitle}");
+            SetLeftHeader(studentSheet, $"&{headerSize} {escapedTitle}");
         }
 
         if (request.Profile.SourceHasSeparateDisplayNumber)
@@ -324,17 +353,18 @@ public static class ExcelPdfGenerationService
         SetPrintArea(teacherSheet, printArea);
         SetPrintArea(studentSheet, printArea);
 
-        if (request.Profile.UseWideAnswerLayout)
+        if (request.Profile.UseWideAnswerLayout || grammar)
         {
             ApplyWideAnswerLayout(
                 teacherSheet,
                 studentSheet,
                 firstPageCount,
-                request.Profile.QuestionColumnWidth,
-                request.Profile.AnswerColumnWidth,
+                grammar ? 64 : request.Profile.QuestionColumnWidth,
+                grammar ? 28 : request.Profile.AnswerColumnWidth,
                 request.Profile.OutputRowHeight,
                 request.Profile.AutoFitOutputRows,
-                request.Profile.FitToSinglePageTall);
+                request.Profile.FitToSinglePageTall,
+                grammar);
         }
 
         ValidateGeneratedQuestions(teacherSheet, firstPageCount, secondPageCount);
@@ -375,20 +405,22 @@ public static class ExcelPdfGenerationService
     private static List<QuestionData> ReadQuestions(
         dynamic backgroundSheet,
         dynamic questionListSheet,
-        int questionCount)
+        int questionCount, int? directStart = null, int? directEnd = null, bool separateDisplayNumber = false)
     {
-        dynamic selectedNumberRange = backgroundSheet.Range[$"A2:A{questionCount + 1}"];
+        dynamic? selectedNumberRange = directStart is null ? backgroundSheet.Range[$"A2:A{questionCount + 1}"] : null;
         dynamic usedRange = questionListSheet.UsedRange;
         dynamic usedRows = usedRange.Rows;
         var lastUsedRow = Convert.ToInt32(usedRange.Row, CultureInfo.InvariantCulture) +
             Convert.ToInt32(usedRows.Count, CultureInfo.InvariantCulture) - 1;
-        dynamic sourceRange = questionListSheet.Range[$"B2:D{lastUsedRow}"];
+        var endColumn = separateDisplayNumber ? "E" : "D";
+        dynamic sourceRange = questionListSheet.Range[$"B2:{endColumn}{lastUsedRow}"];
         try
         {
-            object? selectedNumbers = selectedNumberRange.Value2;
+            object? selectedNumbers = selectedNumberRange?.Value2;
             var selectedNumberMatrix = selectedNumbers as object[,];
             var sourceValues = (object[,])sourceRange.Value2;
             var sourceByNumber = new Dictionary<int, QuestionData>();
+            var questionColumn = separateDisplayNumber ? 3 : 2;
             for (var row = 1; row <= sourceValues.GetLength(0); row++)
             {
                 if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number))
@@ -396,18 +428,34 @@ public static class ExcelPdfGenerationService
                     continue;
                 }
 
-                var question = Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture);
-                var answer = Convert.ToString(sourceValues[row, 3], CultureInfo.InvariantCulture);
+                if (directStart.HasValue && (number < directStart.Value || number > directEnd.GetValueOrDefault()))
+                    continue;
+                var question = Convert.ToString(sourceValues[row, questionColumn], CultureInfo.InvariantCulture);
+                var answer = Convert.ToString(sourceValues[row, questionColumn + 1], CultureInfo.InvariantCulture);
                 if (string.IsNullOrWhiteSpace(question) || string.IsNullOrWhiteSpace(answer))
                 {
                     continue;
                 }
 
-                if (!sourceByNumber.TryAdd(number, new QuestionData(number, question, answer)))
+                var displayNumber = separateDisplayNumber
+                    ? Convert.ToString(sourceValues[row, 2], CultureInfo.InvariantCulture)
+                    : null;
+                if (!sourceByNumber.TryAdd(number, new QuestionData(
+                    string.IsNullOrWhiteSpace(displayNumber) ? number : displayNumber, question, answer)))
                 {
                     throw new InvalidOperationException(
                         $"Excelの問題解答リストに問題番号 {number} が重複しています。");
                 }
+            }
+
+            if (directStart is not null)
+            {
+                var candidates = sourceByNumber.Values.ToArray();
+                if (candidates.Length < questionCount)
+                    throw new InvalidOperationException(
+                        $"問題解答リストの {directStart}-{directEnd} に問題・解答が揃った行が {candidates.Length} 件しかありません。問題数を減らすか、使用Excelの版・形式を確認してください。");
+                Random.Shared.Shuffle(candidates);
+                return candidates.Take(questionCount).ToList();
             }
 
             var questions = new List<QuestionData>(questionCount);
@@ -439,13 +487,14 @@ public static class ExcelPdfGenerationService
     }
 
     private static List<QuestionData> ReadQuestionsFromSectionRange(
-        dynamic sectionMappingSheet,
+        dynamic? sectionMappingSheet,
         dynamic questionListSheet,
         int startSection,
         int endSection,
         int questionCount,
         bool mappingUsesGridPairs,
-        bool sourceHasSeparateDisplayNumber)
+        bool sourceHasSeparateDisplayNumber,
+        bool numberColumnIsSection)
     {
         dynamic usedRange = questionListSheet.UsedRange;
         dynamic usedRows = usedRange.Rows;
@@ -457,15 +506,17 @@ public static class ExcelPdfGenerationService
         try
         {
             SectionMappingData? gridMapping = mappingUsesGridPairs
-                ? ReadGridSectionMapping((object)sectionMappingSheet, startSection, endSection)
+                ? ReadGridSectionMapping((object)sectionMappingSheet!, startSection, endSection)
                 : null;
-            var (firstNumber, lastNumber) = gridMapping is null
-                ? ReadRowSectionBounds((object)sectionMappingSheet, startSection, endSection)
-                : (gridMapping.FirstNumber, gridMapping.LastNumber);
+            var (firstNumber, lastNumber) = numberColumnIsSection
+                ? (startSection, endSection)
+                : gridMapping is null
+                    ? ReadRowSectionBounds((object)sectionMappingSheet!, startSection, endSection)
+                    : (gridMapping.FirstNumber, gridMapping.LastNumber);
 
             var sourceValues = (object[,])sourceRange.Value2;
             var candidates = new List<QuestionData>();
-            var seenNumbers = new HashSet<int>();
+            var seenNumbers = new HashSet<object>();
             for (var row = 1; row <= sourceValues.GetLength(0); row++)
             {
                 if (!TryConvertQuestionNumber(sourceValues[row, 1], out var number) ||
@@ -493,10 +544,10 @@ public static class ExcelPdfGenerationService
                     continue;
                 }
 
-                if (!seenNumbers.Add(number))
+                if (!seenNumbers.Add(numberColumnIsSection ? displayNumber : number))
                 {
                     throw new InvalidOperationException(
-                        $"Excelの問題リストに問題番号 {number} が重複しています。");
+                        $"Excelの問題リストに問題番号 {displayNumber} が重複しています。");
                 }
 
                 candidates.Add(new QuestionData(
@@ -757,7 +808,8 @@ public static class ExcelPdfGenerationService
         double answerColumnWidth,
         double outputRowHeight,
         bool autoFitOutputRows,
-        bool fitToSinglePageTall)
+        bool fitToSinglePageTall,
+        bool grammar)
     {
         foreach (dynamic sheet in new[] { teacherSheet, studentSheet })
         {
@@ -781,16 +833,25 @@ public static class ExcelPdfGenerationService
                 outputRange.Orientation = 0;
                 outputRange.VerticalAlignment = -4160;
                 sheet.ResetAllPageBreaks();
-                pageSetup.Orientation = 2;
-                pageSetup.Zoom = false;
-                pageSetup.FitToPagesWide = 1;
-                if (fitToSinglePageTall)
+                pageSetup.Orientation = grammar ? 1 : 2;
+                if (grammar)
                 {
-                    pageSetup.FitToPagesTall = 1;
+                    pageSetup.PaperSize = 9; // A4
+                    pageSetup.TopMargin = 52;
+                    pageSetup.BottomMargin = 28;
+                    pageSetup.LeftMargin = 28;
+                    pageSetup.RightMargin = 28;
+                    pageSetup.HeaderMargin = 16;
+                    pageSetup.PrintTitleRows = "$1:$1";
+                    pageSetup.PrintTitleColumns = "";
+                    // A fixed scale lets Excel honor the manual page breaks.
+                    pageSetup.Zoom = 85;
                 }
                 else
                 {
-                    pageSetup.FitToPagesTall = false;
+                    pageSetup.Zoom = false;
+                    pageSetup.FitToPagesWide = 1;
+                    pageSetup.FitToPagesTall = fitToSinglePageTall ? (object)1 : false;
                 }
                 pageSetup.CenterHorizontally = true;
             }
@@ -815,7 +876,11 @@ public static class ExcelPdfGenerationService
                 ReleaseComObject(headerRow);
             }
 
-            if (autoFitOutputRows)
+            if (grammar)
+            {
+                ApplyGrammarPagination(sheet, rowCount);
+            }
+            else if (autoFitOutputRows)
             {
                 dynamic dataRange = sheet.Range[$"B2:D{rowCount + 1}"];
                 dynamic dataRows = dataRange.Rows;
@@ -846,6 +911,163 @@ public static class ExcelPdfGenerationService
             }
 
             ApplyBorders(sheet.Range[$"B1:D{rowCount + 1}"]);
+        }
+    }
+
+    private static void ApplyGrammarPagination(dynamic sheet, int questionCount)
+    {
+        FitGrammarColumn(sheet, "C", questionCount, GrammarRowHeight, 10);
+        FitGrammarColumn(sheet, "D", questionCount, GrammarRowHeight, 10);
+        SetGrammarPageBreaks(sheet, questionCount, GrammarRowHeight, GrammarQuestionsPerPage);
+    }
+
+    private static void ApplyOriginalGrammarTemplate(dynamic sheet, IReadOnlyList<QuestionData> questions,
+        ExcelPdfGenerationRequest request, bool includeAnswers)
+    {
+        // Reuse the original worksheet's first page for each subsequent page.
+        var questionCount = questions.Count;
+        var rowsPerPage = request.Profile.OriginalGrammarQuestionsPerPage;
+        var rowHeight = request.Profile.OriginalGrammarRowHeight;
+        dynamic original = sheet.Range[$"B2:D{rowsPerPage + 1}"];
+        try
+        {
+            for (var start = rowsPerPage; start < questionCount; start += rowsPerPage)
+            {
+                dynamic destination = sheet.Range[$"B{start + 2}"];
+                try { original.Copy(Destination: destination); }
+                finally { ReleaseComObject(destination); }
+            }
+        }
+        finally
+        {
+            ReleaseComObject(original);
+        }
+
+        SetRangeValue(sheet, "B1:D1", new object[,] { { "番号", "問題", "解答" } });
+        if (request.Profile.SourceHasSeparateDisplayNumber)
+            SetRangeNumberFormat(sheet, $"B2:B{questionCount + 1}", "@");
+        SetRangeValue(sheet, $"B2:D{questionCount + 1}", CreateOutputValues(questions, 0, questionCount, includeAnswers));
+        dynamic questionCells = sheet.Range[$"C2:C{questionCount + 1}"];
+        dynamic questionFont = questionCells.Font;
+        try
+        {
+            questionFont.Name = "Yu Gothic UI";
+            questionFont.Size = OriginalGrammarQuestionFontSize;
+            questionCells.WrapText = true;
+            questionCells.VerticalAlignment = -4108; // xlCenter
+        }
+        finally
+        {
+            ReleaseComObject(questionFont);
+            ReleaseComObject(questionCells);
+        }
+        FitGrammarColumn(sheet, "C", questionCount, rowHeight, OriginalGrammarQuestionFontSize);
+        if (includeAnswers)
+            FitGrammarColumn(sheet, "D", questionCount, rowHeight, 18);
+        ApplyBorders(sheet.Range[$"B1:D{questionCount + 1}"]);
+
+        sheet.ResetAllPageBreaks();
+        dynamic page = sheet.PageSetup;
+        try
+        {
+            page.PaperSize = 9; // A4
+            page.Orientation = 1;
+            page.Zoom = 50;
+            page.PrintTitleRows = "$1:$1";
+            page.PrintTitleColumns = "";
+            page.PrintArea = $"B1:D{questionCount + 1}";
+            if (request.Profile.Id == "vintage-fourth-edition")
+            {
+                page.LeftHeader = "&24[4th] Vintage";
+            }
+            var centerFormat = System.Text.RegularExpressions.Regex.Match((string)page.CenterHeader, @"^&\d{1,2}").Value;
+            var rightFormat = System.Text.RegularExpressions.Regex.Match((string)page.RightHeader, @"^&\d{1,2}").Value;
+            page.CenterHeader = $"{(centerFormat.Length > 0 ? centerFormat : "&20")}{(includeAnswers ? "講師用" : "生徒用")}";
+            var unit = request.Profile.QuestionListUsesSectionNumbers ? " 講" : "";
+            page.RightHeader = $"{(rightFormat.Length > 0 ? rightFormat : "&20")} 範囲：{request.StartNumber}-{request.EndNumber}{unit} ({questionCount}問)";
+        }
+        finally
+        {
+            ReleaseComObject(page);
+        }
+        SetGrammarPageBreaks(sheet, questionCount, rowHeight, rowsPerPage);
+    }
+
+    private static void SetGrammarPageBreaks(dynamic sheet, int questionCount, double rowHeight, int rowsPerPage)
+    {
+        dynamic rows = sheet.Rows[$"2:{questionCount + 1}"];
+        try
+        {
+            rows.RowHeight = rowHeight;
+            for (var row = rowsPerPage + 2; row <= questionCount + 1; row += rowsPerPage)
+            {
+                dynamic outputRow = sheet.Rows[row];
+                try
+                {
+                    outputRow.PageBreak = -4135; // xlPageBreakManual
+                }
+                finally
+                {
+                    ReleaseComObject(outputRow);
+                }
+            }
+        }
+        finally
+        {
+            ReleaseComObject(rows);
+        }
+    }
+
+    private static void FitGrammarColumn(dynamic sheet, string column, int questionCount, double rowHeight, double defaultFontSize)
+    {
+        dynamic cells = sheet.Range[$"{column}2:{column}{questionCount + 1}"];
+        dynamic rows = cells.Rows;
+        try
+        {
+            rows.AutoFit();
+            if (rows.RowHeight is double uniformHeight && uniformHeight <= rowHeight)
+                return;
+
+            for (var row = 2; row <= questionCount + 1; row++)
+            {
+                dynamic cell = sheet.Range[$"{column}{row}"];
+                try
+                {
+                    if ((double)cell.RowHeight <= rowHeight)
+                        continue;
+
+                    dynamic cellRow = cell.Rows;
+                    dynamic font = cell.Font;
+                    try
+                    {
+                        for (var size = defaultFontSize - 0.5; size >= 5 && (double)cell.RowHeight > rowHeight; size -= 0.5)
+                        {
+                            font.Size = size;
+                            cellRow.AutoFit();
+                        }
+                        if ((double)cell.RowHeight > rowHeight)
+                        {
+                            cell.WrapText = false;
+                            cell.ShrinkToFit = true;
+                            font.Size = defaultFontSize;
+                        }
+                    }
+                    finally
+                    {
+                        ReleaseComObject(font);
+                        ReleaseComObject(cellRow);
+                    }
+                }
+                finally
+                {
+                    ReleaseComObject(cell);
+                }
+            }
+        }
+        finally
+        {
+            ReleaseComObject(rows);
+            ReleaseComObject(cells);
         }
     }
 
@@ -966,43 +1188,6 @@ public static class ExcelPdfGenerationService
         }
     }
 
-    private static ExcelPdfGenerationResult CreateOutputPaths(ExcelPdfGenerationRequest request)
-    {
-        var studentName = SanitizeFileName(request.StudentName, "氏名未確認");
-        var materialName = SanitizeFileName(request.MaterialName, "教材");
-        var baseName =
-            $"{studentName}_{materialName}_{request.StartNumber}-{request.EndNumber}_{request.QuestionCount}問";
-        if (baseName.Length > 120)
-        {
-            baseName = baseName[..120];
-        }
-
-        for (var suffix = 1; ; suffix++)
-        {
-            var suffixText = suffix == 1 ? string.Empty : $"_{suffix}";
-            var problemPath = Path.Combine(
-                request.OutputFolder,
-                $"{baseName}{suffixText}_問題.pdf");
-            var answerPath = Path.Combine(
-                request.OutputFolder,
-                $"{baseName}{suffixText}_解答.pdf");
-            if (!File.Exists(problemPath) && !File.Exists(answerPath))
-            {
-                return new ExcelPdfGenerationResult(problemPath, answerPath);
-            }
-        }
-    }
-
-    private static string SanitizeFileName(string value, string fallback)
-    {
-        var invalidCharacters = Path.GetInvalidFileNameChars();
-        var sanitized = new string(value
-            .Trim()
-            .Select(character => invalidCharacters.Contains(character) ? '_' : character)
-            .ToArray());
-        return string.IsNullOrWhiteSpace(sanitized) ? fallback : sanitized;
-    }
-
     private static void ExportSheetToPdf(dynamic sheet, string outputPath)
     {
         // The source workbook is saved with the teacher and student sheets grouped.
@@ -1056,11 +1241,11 @@ public static class ExcelPdfGenerationService
                 "出題範囲が対応範囲外です。");
         }
 
-        var availableCount = request.Profile.RangeUsesSectionMapping
-            ? request.Profile.MaximumQuestionCount
+        var availableCount = request.Profile.RangeUsesSectionMapping || request.Profile.QuestionListUsesSectionNumbers
+            ? request.Profile.EffectiveMaximumQuestionCount
             : request.EndNumber - request.StartNumber + 1;
         if (request.QuestionCount < 1 ||
-            request.QuestionCount > request.Profile.MaximumQuestionCount ||
+            request.QuestionCount > request.Profile.EffectiveMaximumQuestionCount ||
             request.QuestionCount > availableCount)
         {
             throw new ArgumentOutOfRangeException(

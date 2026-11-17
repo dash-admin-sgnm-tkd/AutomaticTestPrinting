@@ -27,7 +27,7 @@ public sealed class ReportTextParserTests
     }
 
     [Fact]
-    public void Parse_MissingCountStaysAsUnconfirmedCandidateAndDoesNotCopyOtherCount()
+    public void Parse_BlankRequestCountDoesNotCreateTestFromHomework()
     {
         var words = new[]
         {
@@ -43,11 +43,9 @@ public sealed class ReportTextParserTests
             new RecognizedWord("25題", 400, 302, 40, 20, 7)
         };
         var report = ReportTextParser.Parse("report.pdf", [new(1, 0, "次回までの宿題 テスト作成依頼", 1000, 500, words)]);
-        Assert.Equal(2, report.NormalTestRequests!.Count);
-        Assert.Equal(25, report.NormalTestRequests[0].QuestionCount);
-        Assert.Equal("教材B", report.NormalTestRequests[1].MaterialName);
-        Assert.Equal(0, report.NormalTestRequests[1].QuestionCount);
-        Assert.True(report.NormalTestRequests[1].RequiresReview);
+        var request = Assert.Single(report.NormalTestRequests!);
+        Assert.Equal(25, request.QuestionCount);
+        Assert.Equal("教材A", request.MaterialName);
     }
 
     [Fact]

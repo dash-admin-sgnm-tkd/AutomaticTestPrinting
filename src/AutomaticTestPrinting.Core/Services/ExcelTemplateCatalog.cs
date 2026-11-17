@@ -32,7 +32,8 @@ public static partial class ExcelTemplateCatalog
         }
 
         var normalizedMaterialName = NormalizeName(request.MaterialName);
-        var matches = ExcelMaterialNameMatcher.FindBestMatches(catalog.Profiles, request.MaterialName);
+        var (mappedProfile, aliasReview) = ReportExcelAliases.Resolve(catalog.Profiles, request.MaterialName);
+        var matches = mappedProfile is null ? ExcelMaterialNameMatcher.FindBestMatches(catalog.Profiles, request.MaterialName) : [mappedProfile];
         if (matches.Count > 1)
             return new ExcelRequestPreparation(true, false,
                 "教材名が複数の登録に一致しています。カタログで教材名・略称を区別してください：" +
@@ -41,6 +42,9 @@ public static partial class ExcelTemplateCatalog
 
         if (profile is null)
         {
+            if (aliasReview is not null)
+                return new ExcelRequestPreparation(true, false, aliasReview);
+
             try
             {
                 if (SharedMaterialCatalog.Load().Items.Any(item => item.Kind == "Excel" &&
@@ -81,17 +85,17 @@ public static partial class ExcelTemplateCatalog
                 EndNumber: end);
         }
 
-        var availableCount = profile.RangeUsesSectionMapping
-            ? profile.MaximumQuestionCount
+        var availableCount = profile.RangeUsesSectionMapping || profile.QuestionListUsesSectionNumbers
+            ? profile.EffectiveMaximumQuestionCount
             : end - start + 1;
         if (request.QuestionCount < 1 ||
-            request.QuestionCount > profile.MaximumQuestionCount ||
+            request.QuestionCount > profile.EffectiveMaximumQuestionCount ||
             request.QuestionCount > availableCount)
         {
             return new ExcelRequestPreparation(
                 true,
                 false,
-                $"問題数は1-{Math.Min(profile.MaximumQuestionCount, availableCount)}問で指定してください。",
+                $"問題数は1-{Math.Min(profile.EffectiveMaximumQuestionCount, availableCount)}問で指定してください。",
                 profile,
                 StartNumber: start,
                 EndNumber: end);
@@ -116,7 +120,7 @@ public static partial class ExcelTemplateCatalog
             return new ExcelRequestPreparation(
                 true,
                 false,
-                $"教材フォルダーに登録したExcel「{(string.IsNullOrEmpty(profile.WorkbookFileName) ? profile.WorkbookNameKeyword + ".xlsm" : profile.WorkbookFileName)}」が見つかりません。別の版は自動選択しません。",
+                $"登録したExcel「{(string.IsNullOrEmpty(profile.WorkbookFileName) ? profile.WorkbookNameKeyword + ".xlsm" : profile.WorkbookFileName)}」が見つかりません。まず教材フォルダーの指定と同期を確認してください。改名や差し替えの場合は「登録Excelを変更」で使うファイルを選び直してください。処理を続けるには、この依頼のチェックを外せます。",
                 profile,
                 StartNumber: start,
                 EndNumber: end);

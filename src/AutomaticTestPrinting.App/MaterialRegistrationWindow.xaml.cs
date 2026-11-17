@@ -16,7 +16,8 @@ public partial class MaterialRegistrationWindow : Window
     private readonly ExcelTemplateProfileLoadResult _configuration;
     private ExcelTemplateProfile? _editingProfile;
 
-    public MaterialRegistrationWindow(IReadOnlyCollection<string> materialFolders, SharedMaterialEntry? catalogEntry = null)
+    public MaterialRegistrationWindow(IReadOnlyCollection<string> materialFolders, SharedMaterialEntry? catalogEntry = null,
+        ExcelTemplateProfile? editingProfile = null)
     {
         InitializeComponent();
         _materialFolders = materialFolders
@@ -28,6 +29,8 @@ public partial class MaterialRegistrationWindow : Window
 
         ReferenceProfileComboBox.ItemsSource = _configuration.Profiles;
         ReferenceProfileComboBox.SelectedIndex = _configuration.Profiles.Count > 0 ? 0 : -1;
+        if (editingProfile is not null)
+            BeginEditing(editingProfile);
         if (catalogEntry is not null)
         {
             ReferenceProfileComboBox.SelectedIndex = -1;
@@ -54,8 +57,31 @@ public partial class MaterialRegistrationWindow : Window
                 .Where(path => File.Exists(path) && IsInsideMaterialFolder(path) &&
                     string.Equals(Path.GetFileName(path), fileName, StringComparison.OrdinalIgnoreCase))
                 .Distinct(StringComparer.OrdinalIgnoreCase).ToArray();
-            if (paths.Length == 1) WorkbookPathTextBox.Text = paths[0];
+            if (paths.Length == 1 && !MaterialLocationPolicy.IsExcluded(paths[0]))
+                WorkbookPathTextBox.Text = paths[0];
+            if (_editingProfile is null && fileName is { Length: > 0 })
+                Loaded += async (_, _) => await FindCatalogWorkbookAsync(fileName);
         }
+    }
+
+    private async Task FindCatalogWorkbookAsync(string fileName)
+    {
+        if (WorkbookPathTextBox.Text.Length == 0)
+        {
+            RegistrationStatusText.Text = "登録するExcelを教材フォルダーから探しています…";
+            var found = await Task.Run(() => WorkbookResolutionService.Resolve(_materialFolders,
+                new ExcelTemplateProfile { WorkbookFileName = fileName }));
+            if (!IsLoaded || _editingProfile is not null || WorkbookPathTextBox.Text.Length != 0) return;
+            if (found.Path is null)
+            {
+                RegistrationStatusText.Text = found.Candidates.Count > 1
+                    ? "同名Excelが複数あります。「参照」から使うファイルを選んでください。"
+                    : $"「{fileName}」を確認できません。「参照」から教材ファイルを選んでください。";
+                return;
+            }
+            WorkbookPathTextBox.Text = found.Path;
+        }
+        await SuggestFormatAsync(WorkbookPathTextBox.Text);
     }
 
     private void BeginEditing(ExcelTemplateProfile profile)
@@ -68,7 +94,7 @@ public partial class MaterialRegistrationWindow : Window
         DisplayNameTextBox.Text = profile.DisplayName;
         KeywordsTextBox.Text = string.Join(Environment.NewLine, profile.MaterialNameKeywords);
         MaximumRangeTextBox.Text = profile.MaximumQuestionNumber.ToString(CultureInfo.CurrentCulture);
-        MaximumQuestionCountTextBox.Text = profile.MaximumQuestionCount.ToString(CultureInfo.CurrentCulture);
+        MaximumQuestionCountTextBox.Text = profile.EffectiveMaximumQuestionCount.ToString(CultureInfo.CurrentCulture);
         RegisterButton.Content = "確認して保存";
         RegistrationStatusText.Text = $"「{profile.DisplayName}」の設定を編集中。使用するExcelファイルを確認してください。";
     }
@@ -85,10 +111,10 @@ public partial class MaterialRegistrationWindow : Window
         }
 
         MaximumRangeTextBox.Text = profile.MaximumQuestionNumber.ToString(CultureInfo.CurrentCulture);
-        MaximumQuestionCountTextBox.Text = profile.MaximumQuestionCount.ToString(CultureInfo.CurrentCulture);
+        MaximumQuestionCountTextBox.Text = profile.EffectiveMaximumQuestionCount.ToString(CultureInfo.CurrentCulture);
     }
 
-    private void BrowseWorkbook_Click(object sender, RoutedEventArgs e)
+    private async void BrowseWorkbook_Click(object sender, RoutedEventArgs e)
     {
         var dialog = new OpenFileDialog
         {
@@ -110,7 +136,29 @@ public partial class MaterialRegistrationWindow : Window
                     $"このExcelは「{registered[0].DisplayName}」として登録済みです。現在の設定を開いて編集しますか？",
                     "登録済み教材", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
                     BeginEditing(registered[0]);
+                else if (registered.Count == 0)
+                    await SuggestFormatAsync(dialog.FileName);
             }
+        }
+    }
+
+    private async Task SuggestFormatAsync(string path)
+    {
+        RegistrationStatusText.Text = "選んだExcelの形式を判定中…";
+        try
+        {
+            var (format, maximum) = await Task.Run(() =>
+                WorkbookDiscoveryService.SuggestFormat(path, _configuration.Profiles));
+            if (!string.Equals(WorkbookPathTextBox.Text, path, StringComparison.Ordinal) || _editingProfile is not null) return;
+            ReferenceProfileComboBox.SelectedItem = format;
+            if (maximum > 0) MaximumRangeTextBox.Text = maximum.ToString(CultureInfo.CurrentCulture);
+            RegistrationStatusText.Text = format is null
+                ? "対応する形式を一意に判定できません。形式を選ぶか、この教材を保留してください。"
+                : $"「{format.FinishedLayoutName}」を候補に設定しました。形式・上限を確認して登録してください。";
+        }
+        catch (Exception exception) when (exception is IOException or UnauthorizedAccessException or System.Xml.XmlException)
+        {
+            RegistrationStatusText.Text = $"Excelの形式を確認できません：{exception.Message}";
         }
     }
 
@@ -242,10 +290,12 @@ public partial class MaterialRegistrationWindow : Window
             DisplayName = displayName,
             WorkbookNameKeyword = workbookKeyword,
             WorkbookFileName = Path.GetFileName(workbookPath),
+            VerifiedWorkbookSha256 = string.Empty,
             WorkbookNameExcludedKeywords = _editingProfile is not null &&
                 string.Equals(_editingProfile.WorkbookNameKeyword, workbookKeyword, StringComparison.OrdinalIgnoreCase)
                 ? _editingProfile.WorkbookNameExcludedKeywords : [],
             MaterialNameKeywords = keywords,
+            ExactMaterialNameOnly = _editingProfile?.ExactMaterialNameOnly ?? false,
             MaximumQuestionNumber = maximumRange,
             MaximumQuestionCount = maximumQuestionCount,
             HeaderTitle = _editingProfile is not null && referenceProfile.Id == _editingProfile.Id

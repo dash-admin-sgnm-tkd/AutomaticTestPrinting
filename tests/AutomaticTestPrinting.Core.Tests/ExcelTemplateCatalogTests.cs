@@ -237,18 +237,21 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
         Assert.Equal("vintage-fourth-edition", result.Profile?.Id);
     }
 
-    [Fact]
-    public void Prepare_RejectsMoreThanTwentyFiveVintageQuestions()
+    [Theory]
+    [InlineData(50, true)]
+    [InlineData(100, true)]
+    [InlineData(101, false)]
+    public void Prepare_VintageAllowsUpToOneHundredQuestions(int count, bool expected)
     {
         Directory.CreateDirectory(_directory);
-        File.WriteAllBytes(Path.Combine(_directory, "Vintage.xlsm"), []);
+        File.WriteAllBytes(Path.Combine(_directory, "★Vintage 4th Edition_20231030本部.xlsm"), []);
         var request = new NormalTestRequestCandidate(
-            "Vintage4thEdition", "1-100", 26, 1, true);
+            "Vintage4thEdition", "281-560", count, 1, true);
 
         var result = ExcelTemplateCatalog.Prepare(request, _directory);
 
         Assert.True(result.IsSupported);
-        Assert.False(result.IsValid);
+        Assert.Equal(expected, result.IsValid);
     }
 
     [Fact]
@@ -318,7 +321,9 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
             Path.Combine(AppContext.BaseDirectory, "materials.json"));
 
         Assert.True(result.IsValid, result.Message);
-        Assert.Equal(7, result.Profiles.Count);
+        Assert.Equal(18, result.Profiles.Count);
+        Assert.Contains(result.Profiles, profile => profile.Id == "target-1400-fifth-edition");
+        Assert.Empty(ExcelMaterialNameMatcher.FindBestMatches(result.Profiles, "ターゲット1400 英検2級によく出る単語140"));
         Assert.Contains(
             result.Profiles,
             profile => profile.Id == "civic-politics-economics-fifth-edition");
