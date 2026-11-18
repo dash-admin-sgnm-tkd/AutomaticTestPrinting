@@ -60,17 +60,21 @@ public static partial class ReportTableExtractor
             var results = new List<NormalTestRequestCandidate>(columns.Count);
             foreach (var item in columns.OrderBy(column => column.CenterX))
             {
+                var cell = FindRangeCell(page, item.CenterX, rangeAnchor.CenterY);
                 var material = ExtractMaterial(
                     page,
                     item.CenterX,
                     halfColumnWidth,
                     marker.Bottom,
-                    rangeAnchor.Top);
-                var range = ExtractRange(
+                    cell?.Top ?? rangeAnchor.Top);
+                var range = cell is null ? ExtractRange(
                     page,
                     item.CenterX,
                     halfColumnWidth,
-                    rangeAnchor.CenterY);
+                    rangeAnchor.CenterY) : string.Concat(page.RecognizedWords
+                        .Where(word => word.CenterX > cell.Left && word.CenterX < cell.Right &&
+                            word.CenterY > cell.Top && word.CenterY < cell.Bottom)
+                        .GroupBy(word => word.LineIndex).Select(ToLine).OrderBy(line => line.Top).Select(line => line.Text));
 
                 if (material.Contains("段階突破", StringComparison.Ordinal))
                 {
@@ -183,13 +187,19 @@ public static partial class ReportTableExtractor
 
     private static string NormalizeRange(string value)
     {
-        var normalized = value.Normalize(NormalizationForm.FormKC)
+        var normalized = value.Normalize(NormalizationForm.FormKC);
+        // Chapter lists and named exercise ranges have meaning beyond bare numbers.
+        // Keep them for review instead of turning e.g. "1,2章" into question numbers 1-2.
+        if (normalized.Contains('章') || normalized.Contains('講') || normalized.Contains("単元", StringComparison.Ordinal) ||
+            normalized.Contains("演習", StringComparison.Ordinal) || NamedRangeRegex().IsMatch(normalized))
+            return normalized;
+        normalized = normalized
             .Replace('一', '-')
             .Replace('ー', '-')
             .Replace('〜', '-')
             .Replace('～', '-')
-            .Replace('~', '-')
-            .Replace(',', '-');
+            .Replace('~', '-');
+        normalized = normalized.Replace(',', '-');
         normalized = DigitSeparatedShinRegex().Replace(normalized, "-");
 
         // OCRが範囲の数字の前後に「ｲ」などの文字を混ぜることがあるため、
@@ -202,6 +212,21 @@ public static partial class ReportTableExtractor
     private static string NormalizeMaterialName(string value) =>
         value.Replace("ー新版】", "【新版】", StringComparison.Ordinal).Trim();
 
+    private static OcrLine? FindRangeCell(RecognizedReportPage page, double x, double y)
+    {
+        var rules = page.TableLines ?? [];
+        var horizontal = rules.Where(line => Math.Abs(line.Y1 - line.Y2) < 2 &&
+            Math.Min(line.X1,line.X2) < x && Math.Max(line.X1,line.X2) > x).ToArray();
+        var top = horizontal.Where(line => line.Y1 < y).Select(line => line.Y1).DefaultIfEmpty(double.NaN).Max();
+        var bottom = horizontal.Where(line => line.Y1 > y).Select(line => line.Y1).DefaultIfEmpty(double.NaN).Min();
+        if (!double.IsFinite(top) || !double.IsFinite(bottom)) return null;
+        var vertical = rules.Where(line => Math.Abs(line.X1-line.X2) < 2 &&
+            Math.Min(line.Y1,line.Y2) <= y && Math.Max(line.Y1,line.Y2) >= y).ToArray();
+        var left = vertical.Where(line => line.X1 < x).Select(line => line.X1).DefaultIfEmpty(double.NaN).Max();
+        var right = vertical.Where(line => line.X1 > x).Select(line => line.X1).DefaultIfEmpty(double.NaN).Min();
+        return double.IsFinite(left) && double.IsFinite(right) ? new("", left, top, right, bottom) : null;
+    }
+
     private static bool IsSubjectHeading(string value) =>
         value.StartsWith("高校", StringComparison.Ordinal) ||
         (value.Length <= 6 && value.EndsWith("英語", StringComparison.Ordinal)) ||
@@ -212,6 +237,9 @@ public static partial class ReportTableExtractor
 
     [GeneratedRegex(@"\d")]
     private static partial Regex RangeCandidateRegex();
+
+    [GeneratedRegex(@"[A-Za-z]\d")]
+    private static partial Regex NamedRangeRegex();
 
     [GeneratedRegex(@"(?<=\d)新(?=\d)")]
     private static partial Regex DigitSeparatedShinRegex();

@@ -17,6 +17,7 @@ public partial class PdfMaterialRegistrationWindow : Window
     private string? _editingId;
     private bool _saving;
     private bool _isStageTest;
+    private bool _allowSparseRanges;
     public bool WasSaved { get; private set; }
 
     public PdfMaterialRegistrationWindow(IReadOnlyCollection<string> folders, PdfMaterialProfile? initialProfile = null)
@@ -53,6 +54,7 @@ public partial class PdfMaterialRegistrationWindow : Window
     {
         _editingId = profile.Id;
         _isStageTest = profile.IsStageTest;
+        _allowSparseRanges = profile.AllowSparseRanges;
         NameTextBox.Text = profile.DisplayName;
         AliasesTextBox.Text = string.Join(',', profile.Aliases);
         _rows.Clear();
@@ -65,6 +67,7 @@ public partial class PdfMaterialRegistrationWindow : Window
         ProfilesComboBox.SelectedIndex = -1;
         _editingId = null;
         _isStageTest = false;
+        _allowSparseRanges = false;
         NameTextBox.Clear();
         AliasesTextBox.Clear();
         _rows.Clear();
@@ -116,7 +119,7 @@ public partial class PdfMaterialRegistrationWindow : Window
         }
         var profile = new PdfMaterialProfile(_editingId ?? Guid.NewGuid().ToString("N"), NameTextBox.Text.Trim(),
             AliasesTextBox.Text.Split([',', '，'], StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries),
-            _rows.Select(row => new PdfQuestionMapping(row.Number, row.FileName.Trim(), row.Pages.Trim(), row.AnswerFileName.Trim(), row.AnswerPages.Trim(), row.ExpectedPageCount)).ToArray(), _isStageTest);
+            _rows.Select(row => new PdfQuestionMapping(row.Number, row.FileName.Trim(), row.Pages.Trim(), row.AnswerFileName.Trim(), row.AnswerPages.Trim(), row.ExpectedPageCount)).ToArray(), _isStageTest, _allowSparseRanges);
         var updated = _profiles.Where(existing => existing.Id != profile.Id).Append(profile).ToArray();
         SaveButton.IsEnabled = false;
         MappingGrid.IsEnabled = false;

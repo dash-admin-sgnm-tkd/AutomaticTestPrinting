@@ -321,7 +321,7 @@ public sealed class ExcelTemplateCatalogTests : IDisposable
             Path.Combine(AppContext.BaseDirectory, "materials.json"));
 
         Assert.True(result.IsValid, result.Message);
-        Assert.Equal(18, result.Profiles.Count);
+        Assert.Equal(215, result.Profiles.Count);
         Assert.Contains(result.Profiles, profile => profile.Id == "target-1400-fifth-edition");
         Assert.Empty(ExcelMaterialNameMatcher.FindBestMatches(result.Profiles, "ターゲット1400 英検2級によく出る単語140"));
         Assert.Contains(

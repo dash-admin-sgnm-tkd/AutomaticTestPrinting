@@ -4,7 +4,8 @@ public sealed record PdfQuestionMapping(
     int Number, string FileName, string Pages, string AnswerFileName = "", string AnswerPages = "", int? ExpectedPageCount = null);
 
 public sealed record PdfMaterialProfile(
-    string Id, string DisplayName, IReadOnlyList<string> Aliases, IReadOnlyList<PdfQuestionMapping> Questions, bool IsStageTest = false);
+    string Id, string DisplayName, IReadOnlyList<string> Aliases, IReadOnlyList<PdfQuestionMapping> Questions,
+    bool IsStageTest = false, bool AllowSparseRanges = false);
 
 public sealed record ResolvedPdfQuestion(int Number, string Path, string Pages, string? AnswerPath, string AnswerPages, int? ExpectedPageCount = null);
 

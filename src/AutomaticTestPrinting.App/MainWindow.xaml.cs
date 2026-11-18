@@ -462,6 +462,8 @@ public partial class MainWindow : Window
         {
             var reports = _reports.ToArray();
             var materialFolders = GetAvailableMaterialFolders();
+            SetBusyProgress("教材ファイルを検索しています", 0, reports.Length);
+            var materialFiles = await Task.Run(() => MaterialFileSnapshot.TryCapture(materialFolders));
             var completedCount = 0;
             var readingCompleted = false;
             SetBusyProgress("レポートを読み取っています", 0, reports.Length);
@@ -479,7 +481,7 @@ public partial class MainWindow : Window
                 {
                     var service = new WindowsReportOcrService();
                     var recognized = await service.RecognizeAsync(report.FullPath, progress);
-                    return await Task.Run(() => RecognitionResultItem.Success(recognized, materialFolders));
+                    return await Task.Run(() => RecognitionResultItem.Success(recognized, materialFolders, materialFiles));
                 }
                 catch (Exception exception)
                 {
@@ -878,6 +880,7 @@ public partial class MainWindow : Window
         var outputFolder = OutputFolderTextBox.Text;
         return await Task.Run(() =>
         {
+        var materialFiles = MaterialFileSnapshot.TryCapture(materialFolders);
         var requests = new List<TestGenerationPlan>();
         foreach (var entry in entries)
         {
@@ -887,7 +890,7 @@ public partial class MainWindow : Window
                     continue;
                 }
 
-                var pdf = PdfMaterialCatalog.Prepare(testRequest, materialFolders);
+                var pdf = PdfMaterialCatalog.Prepare(testRequest, materialFolders, knownPdfCandidates: materialFiles?.Pdfs);
                 if (pdf.IsSupported)
                 {
                     if (pdf.IsValid && pdf.Questions is not null)
@@ -898,7 +901,8 @@ public partial class MainWindow : Window
                 }
                 var preparation = ExcelTemplateCatalog.Prepare(
                     testRequest,
-                    materialFolders);
+                    materialFolders,
+                    materialFiles?.Workbooks);
                 if (!preparation.IsValid ||
                     preparation.Profile is null ||
                     preparation.WorkbookPath is null ||

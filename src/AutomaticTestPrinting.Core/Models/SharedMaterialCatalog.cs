@@ -17,7 +17,9 @@ public sealed record SharedMaterialEntry
     public string SourceFileId { get; init; } = "";
     public string SourceRelativePath { get; init; } = "";
     public bool AutoEnabled { get; init; }
+    public bool AllowSparseRanges { get; init; }
     public IReadOnlyList<PdfQuestionMapping> Questions { get; init; } = [];
+    public IReadOnlyList<PdfMaterialProfile> PdfVariants { get; init; } = [];
     public string Status => Kind == "Excel"
         ? string.IsNullOrWhiteSpace(RegistrationReviewReason) ? "校舎のExcel登録設定を確認" : "情報要確認（登録は保留）"
         : AutoEnabled ? "対応表あり（実印刷未検証）" : "要確認・自動作成対象外";

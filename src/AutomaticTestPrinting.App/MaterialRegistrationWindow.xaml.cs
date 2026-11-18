@@ -291,6 +291,9 @@ public partial class MaterialRegistrationWindow : Window
             WorkbookNameKeyword = workbookKeyword,
             WorkbookFileName = Path.GetFileName(workbookPath),
             VerifiedWorkbookSha256 = string.Empty,
+            UnavailableQuestionNumbers = [],
+            AdditionalQuestionCounts = new Dictionary<int, int>(),
+            RangeQuestionCounts = new Dictionary<int, int>(),
             WorkbookNameExcludedKeywords = _editingProfile is not null &&
                 string.Equals(_editingProfile.WorkbookNameKeyword, workbookKeyword, StringComparison.OrdinalIgnoreCase)
                 ? _editingProfile.WorkbookNameExcludedKeywords : [],

@@ -9,6 +9,41 @@ public sealed class PdfMaterialCatalogTests : IDisposable
 {
     private readonly string _folder = Path.Combine(Path.GetTempPath(), $"AutomaticTestPrinting-PdfCatalog-{Guid.NewGuid():N}");
 
+    [Fact]
+    public void Prepare_OnlyExplicitSparseProfilesSkipUnprintedItemNumbers()
+    {
+        CreatePdf("sparse.pdf", 2);
+        var sparse = new PdfMaterialProfile("sparse", "練習問題", [],
+            [new(3,"sparse.pdf","1"),new(5,"sparse.pdf","2"),new(6,"sparse.pdf","2")], AllowSparseRanges:true);
+        var ready = PdfMaterialCatalog.Prepare(new("練習問題","1-6",3,1,true),[_folder],[sparse]);
+        Assert.True(ready.IsValid,ready.Message);
+        Assert.Equal([3,5,6],ready.Questions!.Select(q=>q.Number));
+        Assert.Contains("未収録",ready.Message);
+        var strict = PdfMaterialCatalog.Prepare(new("練習問題","3-6",3,1,true),[_folder],[sparse with{AllowSparseRanges=false}]);
+        Assert.False(strict.IsValid);
+        Assert.Contains("未登録",strict.Message);
+        var empty = PdfMaterialCatalog.Prepare(new("練習問題","4-4",1,1,true),[_folder],[sparse]);
+        Assert.False(empty.IsValid);
+        Assert.Contains("収録された練習問題がありません",empty.Message);
+        var beyond = PdfMaterialCatalog.Prepare(new("練習問題","3-7",1,1,true),[_folder],[sparse]);
+        Assert.False(beyond.IsValid);
+        var tooMany = PdfMaterialCatalog.Prepare(new("練習問題","1-6",4,1,true),[_folder],[sparse]);
+        Assert.False(tooMany.IsValid);
+        Assert.Contains("1-3問",tooMany.Message);
+    }
+
+    [Fact]
+    public void SparseRangeSettingSurvivesSavingAndDoesNotApplyToStageTests()
+    {
+        Directory.CreateDirectory(_folder);
+        var path=Path.Combine(_folder,"profiles.json");
+        var profile=new PdfMaterialProfile("sparse","疎な教材",[],[new(3,"sparse.pdf","1")],AllowSparseRanges:true);
+        PdfMaterialProfileStore.Save([profile],path);
+        Assert.True(Assert.Single(PdfMaterialProfileStore.Load(path)).AllowSparseRanges);
+        Assert.Throws<InvalidDataException>(()=>PdfMaterialProfileStore.Validate(
+            [profile with{IsStageTest=true,Questions=[new(1,"stage.pdf","")]}]));
+    }
+
     [Theory]
     [InlineData("現代文")]
     [InlineData("古文")]
@@ -56,6 +91,23 @@ public sealed class PdfMaterialCatalogTests : IDisposable
         Assert.Equal(source, ready.Questions![0].Path);
         var wrong = PdfMaterialCatalog.Prepare(new("長文教材第1版派生", "1-2", 1, 1, true), [_folder], [profile]);
         Assert.False(wrong.IsSupported);
+    }
+
+    [Fact]
+    public void Prepare_ReusesCandidateListAndRejectsFilesRemovedSinceCapture()
+    {
+        var source = CreatePdf("book.pdf", 3);
+        var request = new NormalTestRequestCandidate("長文教材第1版", "1-1", 1, 1, true);
+        var profiles = new[] { Profile([new(1, "book.pdf", "1")]) };
+
+        var initial = PdfMaterialCatalog.Prepare(request, [_folder], profiles, [source]);
+        Assert.True(initial.IsValid, initial.Message);
+        Assert.Equal(source, Assert.Single(initial.Questions!).Path);
+
+        File.Delete(source);
+        var removed = PdfMaterialCatalog.Prepare(request, [_folder], profiles, [source]);
+        Assert.False(removed.IsValid);
+        Assert.Contains("PDFがありません", removed.Message);
     }
 
     [Fact]

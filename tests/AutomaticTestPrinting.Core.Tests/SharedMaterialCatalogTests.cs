@@ -10,6 +10,28 @@ public sealed class SharedMaterialCatalogTests : IDisposable
 {
     private readonly string _folder = Path.Combine(Path.GetTempPath(), $"SharedCatalog-{Guid.NewGuid():N}");
 
+    [Theory]
+    [InlineData("大学入試 英語長文プラス 速読トレーニング問題集",10,10,26,false)]
+    [InlineData("船口の最強の現代文 記述トレーニング",7,7,11,false)]
+    [InlineData("富井の古典文法をはじめからていねいに",29,58,11,true)]
+    public void RestoredPageMapsKeepSourceNumberingAndPageBounds(string name,int count,int last,int pages,bool sparse)
+    {
+        var profile=Assert.Single(SharedMaterialCatalog.CreatePdfProfiles(),p=>p.DisplayName==name);
+        Assert.Equal(count,profile.Questions.Count);
+        Assert.Equal(last,profile.Questions.Max(q=>q.Number));
+        Assert.Equal(sparse,profile.AllowSparseRanges);
+        Assert.All(profile.Questions,q=>{
+            Assert.Equal(pages,q.ExpectedPageCount);
+            Assert.NotEmpty(PdfMaterialGenerationService.ParsePages(q.Pages,pages));
+            Assert.Empty(q.AnswerFileName);
+        });
+        if(sparse)Assert.DoesNotContain(profile.Questions,q=>q.Number==4);
+        if(last==10) {
+            Assert.Equal("13-15",profile.Questions.Single(q=>q.Number==5).Pages);
+            Assert.Equal("15-16",profile.Questions.Single(q=>q.Number==6).Pages);
+        }
+    }
+
     [Fact]
     public void BundledCatalog_ContainsAllThreeKindsAndOnlyReviewedPdfMappings()
     {
@@ -24,7 +46,7 @@ public sealed class SharedMaterialCatalogTests : IDisposable
         Assert.Equal(92, original.Count(e => e.Kind == "Excel"));
         Assert.Equal(97, catalog.Items.Count(e => e.Kind == "PDF"));
         Assert.Equal(44, original.Count(e => e.Kind == "段階突破"));
-        Assert.Equal(9, catalog.Items.Count(e => e.Kind == "PDF" && e.AutoEnabled));
+        Assert.Equal(49, catalog.Items.Count(e => e.Kind == "PDF" && e.AutoEnabled));
         Assert.Equal(44, original.Count(e => e.Kind == "段階突破" && e.AutoEnabled));
         Assert.Equal(original.Length, original.Select(e => e.SourceFileId).Distinct().Count());
         Assert.All(original, e => {
@@ -32,8 +54,8 @@ public sealed class SharedMaterialCatalogTests : IDisposable
             Assert.EndsWith(Assert.Single(e.FileNames), e.SourceRelativePath);
         });
         var unverified = catalog.Items.Single(e => e.FileNames.Contains("GMARCH&関関同立の古文_20150827本部.pdf"));
-        Assert.False(unverified.AutoEnabled);
-        Assert.Empty(unverified.Questions);
+        Assert.True(unverified.AutoEnabled);
+        Assert.Equal(20, unverified.Questions.Count);
         Assert.DoesNotContain(original, e => e.DisplayName == "段階突破 英語 2019年度 日大 第1回");
         Assert.Contains(catalog.Items, e => e.DisplayName == "段階突破 漢文 2018年度 日大 第1回");
         Assert.DoesNotContain(catalog.Items, e => e.Kind == "Excel" && e.AutoEnabled);
@@ -79,7 +101,7 @@ public sealed class SharedMaterialCatalogTests : IDisposable
         var derivative = Assert.Single(added, e => e.SourceRow == 4);
         Assert.Contains("派生語", derivative.DisplayName);
         Assert.Empty(derivative.Aliases);
-        Assert.Equal("2026-10-08", catalog.UpdatedAt);
+        Assert.Equal("2026-11-18", catalog.UpdatedAt);
     }
 
     [Fact]
@@ -188,7 +210,7 @@ public sealed class SharedMaterialCatalogTests : IDisposable
     [Fact]
     public void PendingExcelCatalogEntry_DoesNotBecomeAutomaticProfile()
     {
-        var result = ExcelTemplateCatalog.Prepare(new("高校英文読解をひとつひとつわかりやすく（改訂版） / 基本演習", "1-2", 1, 1, true), [_folder]);
+        var result = ExcelTemplateCatalog.Prepare(new("日本史B表解演習書", "1-2", 1, 1, true), [_folder]);
         Assert.False(result.IsSupported);
         Assert.False(result.IsValid);
         Assert.Contains("カタログ", result.Message);

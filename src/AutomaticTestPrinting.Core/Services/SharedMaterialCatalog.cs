@@ -26,16 +26,21 @@ public static class SharedMaterialCatalog
                 item.Aliases.Any(string.IsNullOrWhiteSpace) || item.FileNames.Any(name =>
                     string.IsNullOrWhiteSpace(name) || name != Path.GetFileName(name) || name.IndexOfAny(Path.GetInvalidFileNameChars()) >= 0))
                 throw new InvalidDataException("共通教材カタログのID・種類・教材名・ファイル名を確認してください。");
-            if (item.AutoEnabled && (item.Kind == "Excel" || item.Questions.Count == 0))
+            if (item.PdfVariants is null || (item.PdfVariants.Count > 0 &&
+                (item.Kind != "PDF" || item.Questions.Count > 0 || item.PdfVariants.Any(p => p is null || p.IsStageTest))))
+                throw new InvalidDataException("用途別PDFの登録内容を確認してください。");
+            if (item.PdfVariants.Count > 0) PdfMaterialProfileStore.Validate(item.PdfVariants);
+            if (item.AutoEnabled && (item.Kind == "Excel" || (item.Questions.Count == 0 && item.PdfVariants.Count == 0)))
                 throw new InvalidDataException($"未確認の教材を自動有効化できません：{item.DisplayName}");
             if (item.AutoEnabled && item.Kind == "段階突破" &&
                 (item.Questions.Count != 1 || item.Questions[0].Number != 1 || item.Questions[0].Pages != "" ||
                  item.Questions[0].AnswerFileName != ""))
                 throw new InvalidDataException("段階突破は全ページを一つのテストとして扱ってください。");
-            if (item.AutoEnabled && item.Questions.Any(q => !item.FileNames.Contains(q.FileName, StringComparer.OrdinalIgnoreCase)))
+            var questions = item.Questions.Concat(item.PdfVariants.SelectMany(p=>p.Questions));
+            if (item.AutoEnabled && questions.Any(q => !item.FileNames.Contains(q.FileName, StringComparer.OrdinalIgnoreCase)))
                 throw new InvalidDataException("対応表のPDFが教材のファイル一覧にありません。");
             if (item.AutoEnabled && item.Kind == "PDF")
-                foreach (var question in item.Questions)
+                foreach (var question in questions)
                 {
                     if (question.ExpectedPageCount is null)
                         throw new InvalidDataException("共通PDF教材には照合用の総ページ数が必要です。");
@@ -48,8 +53,9 @@ public static class SharedMaterialCatalog
 
     public static IReadOnlyList<PdfMaterialProfile> CreatePdfProfiles(SharedMaterialDatabase? database = null) =>
         (database ?? Load()).Items.Where(item => item.AutoEnabled && item.Kind != "Excel")
-            .Select(item => new PdfMaterialProfile(item.Id, item.DisplayName, item.Aliases, item.Questions,
-                IsStageTest: item.Kind == "段階突破")).ToArray();
+            .SelectMany(item => item.PdfVariants.Count > 0 ? item.PdfVariants :
+                (IReadOnlyList<PdfMaterialProfile>)[new(item.Id, item.DisplayName, item.Aliases, item.Questions,
+                    IsStageTest: item.Kind == "段階突破", AllowSparseRanges: item.AllowSparseRanges)]).ToArray();
 
     private static SharedMaterialDatabase LoadCore()
     {

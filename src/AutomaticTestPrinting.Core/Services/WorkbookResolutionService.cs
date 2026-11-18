@@ -42,17 +42,18 @@ public static class WorkbookResolutionService
                 if (!Directory.Exists(root)) continue;
                 var paths = knownCandidates is null
                     ? Directory.EnumerateFiles(root, "*.xlsm", SearchOption.AllDirectories)
-                    : knownCandidates.Where(path => GetRelativePath(root, path) is not null && File.Exists(path));
+                    : knownCandidates.Where(path => GetRelativePath(root, path) is not null);
                 foreach (var path in paths)
                 {
                     if (choice is not null && string.Equals(GetRelativePath(root, path), choice.RelativePath,
-                            StringComparison.OrdinalIgnoreCase))
+                            StringComparison.OrdinalIgnoreCase) && File.Exists(path))
                         savedPathExists = true;
                     var exact = !string.IsNullOrWhiteSpace(profile.WorkbookFileName)
                         ? string.Equals(System.IO.Path.GetFileName(path), profile.WorkbookFileName, StringComparison.OrdinalIgnoreCase)
                         : string.Equals(System.IO.Path.GetFileNameWithoutExtension(path), profile.WorkbookNameKeyword, StringComparison.OrdinalIgnoreCase);
                     if (exact && !profile.WorkbookNameExcludedKeywords.Any(keyword =>
-                            Normalize(System.IO.Path.GetFileNameWithoutExtension(path)).Contains(Normalize(keyword), StringComparison.Ordinal)))
+                            Normalize(System.IO.Path.GetFileNameWithoutExtension(path)).Contains(Normalize(keyword), StringComparison.Ordinal)) &&
+                        File.Exists(path))
                         matches.Add(System.IO.Path.GetFullPath(path));
                     else if (choice?.FileLength is not null && !MaterialLocationPolicy.IsExcluded(path) &&
                              System.IO.Path.GetExtension(path).Equals(".xlsm", StringComparison.OrdinalIgnoreCase) &&
@@ -85,7 +86,7 @@ public static class WorkbookResolutionService
                     // Confirm identity before following a move or rename. Old choices have no size,
                     // so only exact filename matches are considered for them.
                     var identical = matches.Where(path => !MaterialLocationPolicy.IsExcluded(path))
-                        .Concat(possibleRenames.Where(path => new FileInfo(path).Length == choice.FileLength))
+                        .Concat(possibleRenames.Where(path => File.Exists(path) && new FileInfo(path).Length == choice.FileLength))
                         .Where(path => GetHash(path) == choice.Sha256).Take(2).ToArray();
                     if (identical.Length == 1)
                         return new(identical[0], [identical[0]], "保存したExcelと同じ内容のファイルを移動先・改名先で確認しました。");

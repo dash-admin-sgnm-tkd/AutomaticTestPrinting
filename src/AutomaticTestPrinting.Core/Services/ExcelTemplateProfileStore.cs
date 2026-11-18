@@ -249,7 +249,8 @@ public static class ExcelTemplateProfileStore
                 profile.MaterialNameKeywords.Any(string.IsNullOrWhiteSpace) ||
                 profile.WorkbookNameExcludedKeywords is null ||
                 profile.WorkbookNameExcludedKeywords.Any(string.IsNullOrWhiteSpace) ||
-                profile.MaximumQuestionNumber < 1 ||
+                profile.MinimumQuestionNumber < 1 ||
+                profile.MaximumQuestionNumber < profile.MinimumQuestionNumber ||
                 profile.MaximumQuestionCount < 1 ||
                 string.IsNullOrWhiteSpace(profile.WorkingSheetName) ||
                 string.IsNullOrWhiteSpace(profile.QuestionListSheetName) ||
@@ -272,11 +273,34 @@ public static class ExcelTemplateProfileStore
                 return $"教材「{name}」の範囲対応表シートが設定されていません。";
             }
 
-            if (profile.UseOriginalGrammarLayout &&
-                (profile.OriginalGrammarQuestionsPerPage is < 1 or > 25 ||
+            if ((profile.UseOriginalGrammarLayout || profile.UsePortraitReadingLayout || profile.UseStandardQuestionTable) &&
+                (profile.OriginalGrammarQuestionsPerPage < 1 || profile.OriginalGrammarQuestionsPerPage > (profile.UseStandardQuestionTable ? 50 : 25) ||
                  !double.IsFinite(profile.OriginalGrammarRowHeight) || profile.OriginalGrammarRowHeight <= 0))
             {
                 return $"教材「{name}」の1ページあたりの問題数または行の高さが不正です。";
+            }
+            if (profile.UsePortraitReadingLayout && profile.UseLandscapeReadingLayout)
+                return $"教材「{name}」の縦向き・横向きの指定が重複しています。";
+            if (profile.UseStandardQuestionTable && new[] { profile.SourceNumberColumn, profile.SourceQuestionColumn, profile.SourceAnswerColumn }
+                .Append(profile.SourceDisplayNumberColumn).Append(profile.SourceRangeColumn).Where(column => column.Length > 0).Any(column => column.Length != 1 || column[0] < 'A' || column[0] > 'H'))
+                return $"教材「{name}」の元データの列はA〜Hで指定してください。";
+            if (profile.UseStandardQuestionTable &&
+                (profile.SourceNumberColumn == profile.SourceQuestionColumn || profile.SourceNumberColumn == profile.SourceAnswerColumn ||
+                 profile.SourceQuestionColumn == profile.SourceAnswerColumn || !double.IsFinite(profile.StandardTableTopMargin) ||
+                 profile.StandardTableTopMargin is < 12 or > 100 || profile.OriginalGrammarRowHeight > 409))
+                return $"教材「{name}」の問題・解答の列、余白または行の高さを確認してください。";
+            if (profile.QuestionExpansionProfileId.Length > 0 && !PolarisSubquestionExpander.Supports(profile.QuestionExpansionProfileId))
+                return $"教材「{name}」の小問分割方式に対応していません。";
+            if ((profile.SectionMappingUsesRowPairs && !profile.RangeUsesSectionMapping) ||
+                (profile.SourceRangeUsesPrefix && profile.SourceRangeColumn.Length==0))
+                return $"教材「{name}」の単元・テーマ番号の指定が不正です。";
+            if (profile.UseOriginalWordPairLayout &&
+                (profile.OriginalWordPairQuestionsPerPage is < 1 or > 50 ||
+                 profile.OriginalWordPairFormatRows is < 1 or > 50 ||
+                 profile.MaximumQuestionCount > profile.OriginalWordPairQuestionsPerPage * 2 ||
+                 !double.IsFinite(profile.OriginalWordPairRowHeight) || profile.OriginalWordPairRowHeight <= 0))
+            {
+                return $"教材「{name}」の英単語レイアウトの問題数または行の高さが不正です。";
             }
 
             if (profile.UseWideAnswerLayout &&

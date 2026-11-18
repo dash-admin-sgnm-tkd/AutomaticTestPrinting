@@ -13,14 +13,15 @@ public static class VerticalJapaneseQuestionLayout
     // Preserve existing Japanese registrations; no migration of user JSON is needed.
     public static bool UsesLayout(ExcelTemplateProfile profile) => StackedQuestionAnswerLayout.UsesLayout(profile);
 
-    public static int ColumnsPerPage(IReadOnlyList<StackedQuestion> questions)
+    public static int ColumnsPerPage(IReadOnlyList<StackedQuestion> questions,
+        double questionHeight = QuestionHeight, double answerHeight = AnswerHeight)
     {
         if (questions.Count == 0) throw new ArgumentException("問題がありません。", nameof(questions));
         if (questions.Select(q => Convert.ToString(q.Number, CultureInfo.InvariantCulture)).Distinct().Count() != questions.Count)
             throw new InvalidOperationException("選ばれた問題番号が重複しています。国語テストの作成を停止しました。");
         for (var columns = MaximumColumns; columns >= 1; columns--)
-            if (questions.All(q => Fits(q.Question, QuestionHeight, TableWidth / columns, 8) &&
-                Fits(q.Answer, AnswerHeight, TableWidth / columns, 8))) return columns;
+            if (questions.All(q => Fits(q.Question, questionHeight, TableWidth / columns, 8) &&
+                Fits(q.Answer, answerHeight, TableWidth / columns, 8))) return columns;
         throw new InvalidOperationException("国語テストの文章が長すぎます。教材の問題・解答データを確認してください。");
     }
 
@@ -31,9 +32,10 @@ public static class VerticalJapaneseQuestionLayout
         throw new InvalidOperationException("縦書き欄に文章が収まりません。問題・解答データを確認してください。");
     }
 
-    public static IReadOnlyList<object[,]> CreatePages(IReadOnlyList<StackedQuestion> questions, bool includeAnswers)
+    public static IReadOnlyList<object[,]> CreatePages(IReadOnlyList<StackedQuestion> questions, bool includeAnswers,
+        double questionHeight = QuestionHeight, double answerHeight = AnswerHeight)
     {
-        var columns = ColumnsPerPage(questions);
+        var columns = ColumnsPerPage(questions, questionHeight, answerHeight);
         var pages = new List<object[,]>();
         for (var start = 0; start < questions.Count; start += columns)
         {
@@ -41,9 +43,11 @@ public static class VerticalJapaneseQuestionLayout
             var values = new object[3, columns];
             for (var column = 0; column < columns; column++)
             {
-                values[0, column] = column < count ? questions[start + column].Number : "";
-                values[1, column] = column < count ? questions[start + column].Question : "";
-                values[2, column] = column < count && includeAnswers ? questions[start + column].Answer : "";
+                var offsetFromRight = columns - 1 - column;
+                var question = offsetFromRight < count ? questions[start + offsetFromRight] : null;
+                values[0, column] = question?.Number ?? "";
+                values[1, column] = question?.Question ?? "";
+                values[2, column] = includeAnswers ? question?.Answer ?? "" : "";
             }
             pages.Add(values);
         }

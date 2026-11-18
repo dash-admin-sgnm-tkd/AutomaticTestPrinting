@@ -74,20 +74,21 @@ public static partial class ExcelTemplateCatalog
                 profile);
         }
 
-        if (start < 1 || end < start || end > profile.MaximumQuestionNumber)
+        if (start < profile.MinimumQuestionNumber || end < start || end > profile.MaximumQuestionNumber)
         {
             return new ExcelRequestPreparation(
                 true,
                 false,
-                $"範囲は1-{profile.MaximumQuestionNumber}内で指定してください。",
+                $"範囲は{profile.MinimumQuestionNumber}-{profile.MaximumQuestionNumber}内で指定してください。",
                 profile,
                 StartNumber: start,
                 EndNumber: end);
         }
 
-        var availableCount = profile.RangeUsesSectionMapping || profile.QuestionListUsesSectionNumbers
-            ? profile.EffectiveMaximumQuestionCount
-            : end - start + 1;
+        var availableCount = UnitQuestionRange.CandidateCount(profile,start,end);
+        if (availableCount <= 0)
+            return new ExcelRequestPreparation(true, false, "指定範囲には有効な問題がありません。開始・終了番号を確認してください。", profile,
+                StartNumber: start, EndNumber: end);
         if (request.QuestionCount < 1 ||
             request.QuestionCount > profile.EffectiveMaximumQuestionCount ||
             request.QuestionCount > availableCount)
@@ -130,7 +131,13 @@ public static partial class ExcelTemplateCatalog
             true,
             true,
             $"Excel連携準備OK：範囲 {start}-{end}／{request.QuestionCount}問／" +
-            $"使用Excel：{workbookPath}" + (resolution.Message.Length > 0 ? $"\n{resolution.Message}" : ""),
+            $"使用Excel：{workbookPath}" +
+            (PolarisSubquestionExpander.Supports(profile)
+                ? $"\n元の連番 {start}-{end} を小問へ分割して抽選します（候補 {availableCount}問）。" : "") +
+            (profile.GroupDuplicateQuestionNumbers ? $"\n元の単語番号で範囲を指定し、派生語の候補 {availableCount}問から抽選します。" : "") +
+            (profile.SectionMappingUsesRowPairs ? "\nこの教材は単元番号で範囲を指定します。対応表から単語番号へ変換します。" : "") +
+            (profile.SourceRangeColumn.Length>0 ? "\nこの教材はテーマ番号で範囲を指定します。各テーマに含まれる問題から抽選します。" : "") +
+            (resolution.Message.Length > 0 ? $"\n{resolution.Message}" : ""),
             profile,
             workbookPath,
             start,

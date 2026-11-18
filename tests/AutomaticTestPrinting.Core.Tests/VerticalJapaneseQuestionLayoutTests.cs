@@ -11,7 +11,7 @@ public sealed class VerticalJapaneseQuestionLayoutTests
     [InlineData(26, 2)]
     [InlineData(50, 2)]
     [InlineData(100, 4)]
-    public void PagesHaveHorizontalNumbersAndVerticalQuestionAnswerRows(int count, int pageCount)
+    public void PagesPlaceQuestionsFromRightToLeftAndLeaveEmptyColumnsOnTheLeft(int count, int pageCount)
     {
         var questions = Enumerable.Range(1, count).Select(i => new StackedQuestion(i, "語句", "意味です。")).ToArray();
         var teacher = VerticalJapaneseQuestionLayout.CreatePages(questions, true);
@@ -20,13 +20,15 @@ public sealed class VerticalJapaneseQuestionLayoutTests
         for (var i = 0; i < count; i++)
         {
             var page = i / 25;
-            var column = i % 25;
+            var column = 24 - i % 25;
             Assert.Equal(i + 1, teacher[page][0, column]);
             Assert.Equal("語句", teacher[page][1, column]);
             Assert.Equal("意味です。", teacher[page][2, column]);
+            Assert.Equal(i + 1, student[page][0, column]);
+            Assert.Equal("語句", student[page][1, column]);
             Assert.Equal("", student[page][2, column]);
         }
-        if (count % 25 != 0) Assert.Equal("", teacher[^1][0, 24]);
+        if (count % 25 != 0) Assert.Equal("", teacher[^1][0, 0]);
     }
 
     [Fact]

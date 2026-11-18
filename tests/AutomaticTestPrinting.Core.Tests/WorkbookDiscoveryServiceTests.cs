@@ -162,6 +162,63 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
         Assert.NotEqual("word-pair-list", candidate.SuggestedFormatId);
     }
 
+    [Theory]
+    [InlineData("肘井の読解のための英文法必修編確認問題.xlsm", "reading-landscape")]
+    [InlineData("関正生の英文解釈ポラリス.xlsm", "reading-landscape")]
+    [InlineData("Basic Lecture 動画でわかる英文法[読解入門編].xlsm", "reading-landscape")]
+    [InlineData("★【必修編】(例題)肘井の読解のための英文法.xlsm", "grammar-choice")]
+    public void Discover_DistinguishesReadingFromPortraitGrammar(string fileName, string expectedFormat)
+    {
+        Directory.CreateDirectory(_directory);
+        CreateWorkbook(Path.Combine(_directory, fileName),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"], [1, 10]);
+        var grammar = CreateProfile() with { Id = "grammar", FinishedLayoutId = "grammar-choice" };
+        var reading = CreateProfile() with
+        {
+            Id = "reading", FinishedLayoutId = "reading-landscape",
+            UseLandscapeReadingLayout = true, SourceHasSeparateDisplayNumber = true
+        };
+        var result = WorkbookDiscoveryService.Discover(_directory, [grammar, reading]);
+        Assert.Equal(expectedFormat, Assert.Single(result.Candidates).SuggestedFormatId);
+    }
+
+    [Theory]
+    [InlineData("portrait", "reading-portrait")]
+    [InlineData("landscape", "reading-landscape")]
+    public void Discover_UsesPrintOrientationToDistinguishReadingFormats(string orientation, string expectedFormat)
+    {
+        Directory.CreateDirectory(_directory);
+        CreateWorkbook(Path.Combine(_directory, "新しい英文解釈.xlsm"),
+            ["作業シート", "問題解答リスト", "講師用", "生徒用"], [1, 10], printOrientation: orientation);
+        var landscape = CreateProfile() with
+        {
+            Id = "landscape", FinishedLayoutId = "reading-landscape", UseLandscapeReadingLayout = true
+        };
+        var portrait = CreateProfile() with
+        {
+            Id = "portrait", FinishedLayoutId = "reading-portrait", UsePortraitReadingLayout = true
+        };
+        var result = WorkbookDiscoveryService.Discover(_directory, [landscape, portrait]);
+        Assert.Equal(expectedFormat, Assert.Single(result.Candidates).SuggestedFormatId);
+    }
+
+    [Fact]
+    public void SuggestFormat_ReadingIgnoresNumberedRowsWithoutQuestionsAndAnswers()
+    {
+        Directory.CreateDirectory(_directory);
+        var path = Path.Combine(_directory, "英文解釈.xlsm");
+        CreateWorkbook(path, ["作業シート", "問題解答リスト", "講師用", "生徒用"],
+            [1, 2, 1525], printOrientation: "portrait", contentThrough: 2);
+        var profile = CreateProfile() with
+        {
+            FinishedLayoutId = "reading-portrait", UsePortraitReadingLayout = true,
+            SourceHasSeparateDisplayNumber = true
+        };
+        var result = WorkbookDiscoveryService.SuggestFormat(path, [profile]);
+        Assert.NotNull(result.Profile);
+        Assert.Equal(2, result.MaximumQuestionNumber);
+    }
+
     public void Dispose()
     {
         if (Directory.Exists(_directory))
@@ -191,7 +248,9 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
         IReadOnlyList<string> sheetNames,
         IReadOnlyList<int> questionNumbers,
         double? questionColumnWidth = null,
-        double? answerColumnWidth = null)
+        double? answerColumnWidth = null,
+        string? printOrientation = null,
+        int? contentThrough = null)
     {
         using var archive = ZipFile.Open(path, ZipArchiveMode.Create);
         var sheets = new StringBuilder();
@@ -229,14 +288,17 @@ public sealed class WorkbookDiscoveryServiceTests : IDisposable
                 : string.Empty;
             var cells = sheetNames[index] == "問題解答リスト"
                 ? string.Concat(questionNumbers.Select((number, row) =>
-                    $"<row r=\"{row + 2}\"><c r=\"B{row + 2}\"><v>{number}</v></c></row>"))
+                    $"<row r=\"{row + 2}\"><c r=\"B{row + 2}\"><v>{number}</v></c>" +
+                    (contentThrough.HasValue && number <= contentThrough.Value
+                        ? $"<c r=\"D{row + 2}\" t=\"inlineStr\"><is><t>Example.</t></is></c><c r=\"E{row + 2}\" t=\"inlineStr\"><is><t>解答</t></is></c>" : "") + "</row>"))
                 : string.Empty;
             WriteEntry(
                 archive,
                 $"xl/worksheets/sheet{index + 1}.xml",
                 "<?xml version=\"1.0\" encoding=\"utf-8\"?>" +
                 "<worksheet xmlns=\"http://schemas.openxmlformats.org/spreadsheetml/2006/main\">" +
-                $"{columns}<sheetData>{cells}</sheetData></worksheet>");
+                $"{columns}<sheetData>{cells}</sheetData>" +
+                (printOrientation is null ? "" : $"<pageSetup orientation=\"{printOrientation}\"/>") + "</worksheet>");
         }
     }
 

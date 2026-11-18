@@ -1,6 +1,7 @@
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
+using AutomaticTestPrinting.App.Services;
 using AutomaticTestPrinting.Core.Models;
 
 namespace AutomaticTestPrinting.App.Models;
@@ -128,10 +129,11 @@ public sealed class RecognitionResultItem : INotifyPropertyChanged
 
     public static RecognitionResultItem Success(
         RecognizedReport report,
-        IReadOnlyCollection<string> materialFolders)
+        IReadOnlyCollection<string> materialFolders,
+        MaterialFileSnapshot? files = null)
     {
         var requests = report.TestRequests
-            .Select((request, index) => new EditableTestRequestItem(request, index + 1, materialFolders))
+            .Select((request, index) => new EditableTestRequestItem(request, index + 1, materialFolders, files))
             .ToArray();
         return new RecognitionResultItem(
             report.SourcePath,

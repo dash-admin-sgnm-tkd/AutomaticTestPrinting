@@ -2,6 +2,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.IO;
 using System.Runtime.CompilerServices;
+using AutomaticTestPrinting.App.Services;
 using AutomaticTestPrinting.Core.Models;
 using AutomaticTestPrinting.Core.Services;
 
@@ -22,7 +23,8 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     public EditableTestRequestItem(
         NormalTestRequestCandidate request,
         int displayNumber,
-        IReadOnlyCollection<string> materialFolders)
+        IReadOnlyCollection<string> materialFolders,
+        MaterialFileSnapshot? files = null)
     {
         _materialFolders = materialFolders;
         DisplayNumber = displayNumber;
@@ -32,7 +34,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         _materialName = ConfirmedReportMaterialNames.Resolve(request.MaterialName);
         (_startNumber, _endNumber) = SplitRange(request.Range);
         _questionCount = request.QuestionCount > 0 ? request.QuestionCount.ToString(CultureInfo.CurrentCulture) : string.Empty;
-        Revalidate();
+        Revalidate(files: files);
     }
 
     public event PropertyChangedEventHandler? PropertyChanged;
@@ -156,7 +158,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(nameof(SelectedMaterialSuggestion)));
     }
 
-    private void Revalidate(bool refreshSuggestions = false)
+    private void Revalidate(bool refreshSuggestions = false, MaterialFileSnapshot? files = null)
     {
         UpdateMaterialSuggestions(refreshSuggestions);
         WorkbookCandidates = [];
@@ -171,7 +173,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
             return;
         }
 
-        var pdf = PdfMaterialCatalog.Prepare(candidate, _materialFolders);
+        var pdf = PdfMaterialCatalog.Prepare(candidate, _materialFolders, knownPdfCandidates: files?.Pdfs);
         if (pdf.IsSupported)
         {
             IsValid = pdf.IsValid;
@@ -179,7 +181,7 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
         }
         else
         {
-            var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolders);
+            var preparation = ExcelTemplateCatalog.Prepare(candidate, _materialFolders, files?.Workbooks);
             ApplyExcelPreparation(preparation);
             if (!preparation.IsSupported && MaterialSuggestions.Count > 0)
                 ValidationMessage = "教材名が登録と一致しません（誤読・略称の可能性）。原本を見て下の修正候補を確認してください。";
@@ -232,7 +234,9 @@ public sealed class EditableTestRequestItem : INotifyPropertyChanged
     private static (string Start, string End) SplitRange(string range)
     {
         var separatorIndex = range.IndexOf('-');
-        return separatorIndex > 0
+        return separatorIndex > 0 &&
+            int.TryParse(range[..separatorIndex].Trim(), out _) &&
+            int.TryParse(range[(separatorIndex + 1)..].Trim(), out _)
             ? (range[..separatorIndex].Trim(), range[(separatorIndex + 1)..].Trim())
             : (range.Trim(), string.Empty);
     }

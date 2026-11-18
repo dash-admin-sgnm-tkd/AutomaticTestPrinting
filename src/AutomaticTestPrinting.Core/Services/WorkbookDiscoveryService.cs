@@ -32,7 +32,7 @@ public static partial class WorkbookDiscoveryService
             return (null, 0);
         var best = matches.OrderByDescending(profile => profile.MaximumQuestionCount).First();
         return (best, best.RangeUsesSectionMapping ? 0 :
-            ReadMaximumQuestionNumber(archive, map, best.QuestionListSheetName));
+            ReadMaximumQuestionNumber(archive, map, best.QuestionListSheetName, best));
     }
 
     public static WorkbookDiscoveryResult Discover(
@@ -124,7 +124,7 @@ public static partial class WorkbookDiscoveryService
                     : ReadMaximumQuestionNumber(
                         archive,
                         workbookMap,
-                        bestProfile.QuestionListSheetName);
+                        bestProfile.QuestionListSheetName, bestProfile);
                 if (maximumQuestionNumber < 1)
                 {
                     maximumQuestionNumber = bestProfile.MaximumQuestionNumber;
@@ -197,6 +197,31 @@ public static partial class WorkbookDiscoveryService
         }
     }
 
+    public static IReadOnlyDictionary<string, IReadOnlyList<(int Start, int Length)>> ReadBoldTextSpans(string path)
+    {
+        using var archive = ZipFile.OpenRead(path);
+        var entry = archive.GetEntry("xl/sharedStrings.xml");
+        var result = new Dictionary<string, IReadOnlyList<(int, int)>>(StringComparer.Ordinal);
+        if (entry is null) return result;
+
+        using var stream = entry.Open();
+        foreach (var item in XDocument.Load(stream).Descendants(SpreadsheetNamespace + "si"))
+        {
+            var text = new System.Text.StringBuilder();
+            var spans = new List<(int, int)>();
+            foreach (var run in item.Elements(SpreadsheetNamespace + "r"))
+            {
+                var part = (string?)run.Element(SpreadsheetNamespace + "t") ?? string.Empty;
+                var bold = run.Element(SpreadsheetNamespace + "rPr")?.Element(SpreadsheetNamespace + "b");
+                if (part.Length > 0 && bold is not null && (string?)bold.Attribute("val") is not ("0" or "false"))
+                    spans.Add((text.Length + 1, part.Length));
+                text.Append(part);
+            }
+            if (spans.Count > 0) result.TryAdd(text.ToString(), spans);
+        }
+        return result;
+    }
+
     private static Dictionary<string, string> ReadWorkbookMap(ZipArchive archive)
     {
         var workbookEntry = archive.GetEntry("xl/workbook.xml")
@@ -236,7 +261,8 @@ public static partial class WorkbookDiscoveryService
     private static int ReadMaximumQuestionNumber(
         ZipArchive archive,
         Dictionary<string, string> workbookMap,
-        string questionListSheetName)
+        string questionListSheetName,
+        ExcelTemplateProfile? profile = null)
     {
         if (!workbookMap.TryGetValue(questionListSheetName, out var worksheetPath))
         {
@@ -251,14 +277,35 @@ public static partial class WorkbookDiscoveryService
 
         using var worksheetStream = worksheetEntry.Open();
         var worksheet = XDocument.Load(worksheetStream);
+        var requireContent = profile?.UsesDirectReadingQuestions == true;
+        string[] sharedStrings = [];
+        if (requireContent && archive.GetEntry("xl/sharedStrings.xml") is { } stringsEntry)
+        {
+            using var stringsStream = stringsEntry.Open();
+            sharedStrings = XDocument.Load(stringsStream).Root?.Elements(SpreadsheetNamespace + "si")
+                .Select(item => string.Concat(item.Elements(SpreadsheetNamespace + "t")
+                    .Concat(item.Elements(SpreadsheetNamespace + "r").Elements(SpreadsheetNamespace + "t"))
+                    .Select(text => text.Value))).ToArray() ?? [];
+        }
         var maximum = 0;
         foreach (var cell in worksheet.Descendants(SpreadsheetNamespace + "c"))
         {
             var reference = (string?)cell.Attribute("r");
             if (string.IsNullOrWhiteSpace(reference) ||
-                !reference.StartsWith('B'))
+                !reference.StartsWith('B') || reference[1..].Any(character => !char.IsAsciiDigit(character)))
             {
                 continue;
+            }
+
+            if (requireContent)
+            {
+                var row = reference[1..];
+                var questionColumn = profile!.SourceHasSeparateDisplayNumber ? "D" : "C";
+                var answerColumn = profile.SourceHasSeparateDisplayNumber ? "E" : "D";
+                var rowCells = cell.Parent?.Elements(SpreadsheetNamespace + "c").ToArray() ?? [];
+                if (string.IsNullOrWhiteSpace(ReadText(rowCells.FirstOrDefault(item => (string?)item.Attribute("r") == questionColumn + row))) ||
+                    string.IsNullOrWhiteSpace(ReadText(rowCells.FirstOrDefault(item => (string?)item.Attribute("r") == answerColumn + row))))
+                    continue;
             }
 
             var value = (string?)cell.Element(SpreadsheetNamespace + "v");
@@ -269,6 +316,18 @@ public static partial class WorkbookDiscoveryService
         }
 
         return maximum;
+
+        string ReadText(XElement? item)
+        {
+            if (item is null) return string.Empty;
+            var value = (string?)item.Element(SpreadsheetNamespace + "v") ?? string.Empty;
+            if ((string?)item.Attribute("t") == "s" && int.TryParse(value, CultureInfo.InvariantCulture, out var index))
+                return index >= 0 && index < sharedStrings.Length ? sharedStrings[index] : string.Empty;
+            if ((string?)item.Attribute("t") == "inlineStr")
+                return string.Concat(item.Element(SpreadsheetNamespace + "is")?.Descendants(SpreadsheetNamespace + "t")
+                    .Select(text => text.Value) ?? []);
+            return value;
+        }
     }
 
     private static bool IsRegisteredWorkbook(
@@ -321,7 +380,17 @@ public static partial class WorkbookDiscoveryService
         profile.RangeUsesSectionMapping,
         profile.SectionMappingSheetName,
         profile.SectionMappingUsesGridPairs,
+        profile.SectionMappingUsesRowPairs,
         profile.SourceHasSeparateDisplayNumber,
+        profile.UseLandscapeReadingLayout,
+        profile.UsePortraitReadingLayout,
+        profile.UseStandardQuestionTable,
+        profile.SourceNumberColumn,
+        profile.SourceDisplayNumberColumn,
+        profile.SourceQuestionColumn,
+        profile.SourceAnswerColumn,
+        profile.SourceRangeColumn,
+        profile.SourceRangeUsesPrefix,
         profile.UseWideAnswerLayout,
         profile.AutoFitOutputRows,
         profile.FitToSinglePageTall);
@@ -338,6 +407,17 @@ public static partial class WorkbookDiscoveryService
             .Where(id => !string.IsNullOrWhiteSpace(id))
             .ToHashSet(StringComparer.OrdinalIgnoreCase);
         string? inferred = InferLayoutFromFileName(fileStem);
+        if (inferred == "reading-landscape" && availableLayoutIds.Contains("reading-portrait"))
+        {
+            var outputName = matchingProfiles.Select(profile => profile.StudentSheetName).FirstOrDefault(workbookMap.ContainsKey);
+            if (outputName is not null)
+            {
+                using var stream = archive.GetEntry(workbookMap[outputName])?.Open();
+                if (stream is not null && (string?)XDocument.Load(stream).Root?
+                    .Element(SpreadsheetNamespace + "pageSetup")?.Attribute("orientation") == "portrait")
+                    inferred = "reading-portrait";
+            }
+        }
         var isJapaneseFolder = Normalize(workbookPath).Contains("国語", StringComparison.Ordinal);
         if (inferred is null)
         {
@@ -372,6 +452,14 @@ public static partial class WorkbookDiscoveryService
                 ["語彙", "漢字", "古文単語", "古文常識", "四字熟語", "書き取り"]))
         {
             return "japanese-vocabulary";
+        }
+
+        if (ContainsAny(normalized,
+                ["英文解釈", "英文読解", "入門英文問題精講", "読解のための英文法", "動画でわかる英文法読解入門編"]))
+        {
+            // The essential-example workbook was verified separately as portrait grammar.
+            return ContainsAny(normalized, ["例題肘井", "必修編例題"])
+                ? "grammar-choice" : "reading-landscape";
         }
 
         if (ContainsAny(normalized,

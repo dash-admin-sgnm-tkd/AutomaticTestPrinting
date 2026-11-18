@@ -11,6 +11,7 @@ public sealed record ExcelTemplateProfile
     public IReadOnlyList<string> MaterialNameKeywords { get; init; } = [];
     public bool ExactMaterialNameOnly { get; init; }
     public int MaximumQuestionNumber { get; init; }
+    public int MinimumQuestionNumber { get; init; } = 1;
     public int MaximumQuestionCount { get; init; }
     public string WorkingSheetName { get; init; } = string.Empty;
     public string RangeStartCell { get; init; } = string.Empty;
@@ -23,9 +24,33 @@ public sealed record ExcelTemplateProfile
     public bool RangeUsesSectionMapping { get; init; }
     public string? SectionMappingSheetName { get; init; }
     public bool SectionMappingUsesGridPairs { get; init; }
+    public bool SectionMappingUsesRowPairs { get; init; }
     public bool SourceHasSeparateDisplayNumber { get; init; }
     public bool QuestionListUsesSectionNumbers { get; init; }
     public bool UseOriginalGrammarLayout { get; init; }
+    public bool UseLandscapeReadingLayout { get; init; }
+    public bool UsePortraitReadingLayout { get; init; }
+    public bool UseStandardQuestionTable { get; init; }
+    public string SourceNumberColumn { get; init; } = "B";
+    public string SourceDisplayNumberColumn { get; init; } = "";
+    public string SourceQuestionColumn { get; init; } = "C";
+    public string SourceAnswerColumn { get; init; } = "D";
+    public string SourceRangeColumn { get; init; } = "";
+    public bool SourceRangeUsesPrefix { get; init; }
+    public IReadOnlyDictionary<int, int> RangeQuestionCounts { get; init; } = new Dictionary<int, int>();
+    public bool RightAlignTableText { get; init; }
+    public double StandardTableTopMargin { get; init; } = 54;
+    public IReadOnlyList<int> UnavailableQuestionNumbers { get; init; } = [];
+    public string QuestionExpansionProfileId { get; init; } = "";
+    public bool GroupDuplicateQuestionNumbers { get; init; }
+    public IReadOnlyDictionary<int, int> AdditionalQuestionCounts { get; init; } = new Dictionary<int, int>();
+    public bool UseOriginalWordPairLayout { get; init; }
+    public int OriginalWordPairQuestionsPerPage { get; init; } = 50;
+    public int OriginalWordPairFormatRows { get; init; } = 50;
+    public double OriginalWordPairRowHeight { get; init; } = 31.2;
+    public bool UseKanjiWritingLayout { get; init; }
+    public bool UseKanjiReadingLayout { get; init; }
+    public bool ReadNumberedVocabularyDirectly { get; init; }
     public int OriginalGrammarQuestionsPerPage { get; init; } = 25;
     public double OriginalGrammarRowHeight { get; init; } = 61.5;
     public double QuestionColumnWidth { get; init; } = 18;
@@ -43,6 +68,10 @@ public sealed record ExcelTemplateProfile
     public bool UsesDirectGrammarQuestions => FinishedLayoutId == "grammar-choice" &&
         !RangeUsesSectionMapping && !QuestionListUsesSectionNumbers &&
         (!SourceHasSeparateDisplayNumber || UseOriginalGrammarLayout);
+
+    [System.Text.Json.Serialization.JsonIgnore]
+    public bool UsesDirectReadingQuestions => (UseLandscapeReadingLayout || UsePortraitReadingLayout) &&
+        !RangeUsesSectionMapping && !QuestionListUsesSectionNumbers;
 
     [System.Text.Json.Serialization.JsonIgnore]
     public int EffectiveMaximumQuestionCount => UsesDirectGrammarQuestions && !UseOriginalGrammarLayout

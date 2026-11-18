@@ -35,10 +35,13 @@ public sealed record RecognizedReportPage(
     int PixelWidth = 0,
     int PixelHeight = 0,
     IReadOnlyList<RecognizedWord>? Words = null,
-    string ExtractionMethod = "OCR")
+    string ExtractionMethod = "OCR",
+    IReadOnlyList<RecognizedTableLine>? TableLines = null)
 {
     public IReadOnlyList<RecognizedWord> RecognizedWords => Words ?? [];
 }
+
+public sealed record RecognizedTableLine(double X1, double Y1, double X2, double Y2);
 
 public sealed record RecognizedWord(
     string Text,

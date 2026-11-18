@@ -88,6 +88,8 @@ public static class PdfMaterialProfileStore
                     throw new InvalidDataException($"PDF教材名／別名が他の教材と重複しています：{alias}");
             }
             var numbers = new HashSet<int>();
+            if (profile.IsStageTest && profile.AllowSparseRanges)
+                throw new InvalidDataException("段階突破には練習問題の欠番指定を使用できません。");
             if (profile.IsStageTest && (profile.Questions.Count != 1 || profile.Questions[0].Number != 1 ||
                 !string.IsNullOrWhiteSpace(profile.Questions[0].Pages) || !string.IsNullOrWhiteSpace(profile.Questions[0].AnswerFileName)))
                 throw new InvalidDataException("段階突破は問題番号1・ページ空欄（全ページ）・解答欄空欄で登録してください。");

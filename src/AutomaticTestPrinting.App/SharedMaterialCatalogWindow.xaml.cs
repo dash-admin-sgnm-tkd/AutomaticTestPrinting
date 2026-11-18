@@ -76,7 +76,8 @@ public partial class SharedMaterialCatalogWindow : Window
         }
         else
         {
-            var profile = new PdfMaterialProfile(entry.Id, entry.DisplayName, entry.Aliases, entry.Questions, entry.Kind == "段階突破");
+            var profile = entry.PdfVariants.Count > 0 ? entry.PdfVariants[0] : new PdfMaterialProfile(entry.Id, entry.DisplayName,
+                entry.Aliases, entry.Questions, entry.Kind == "段階突破", entry.AllowSparseRanges);
             var window = new PdfMaterialRegistrationWindow(_folders, profile) { Owner = this };
             window.ShowDialog();
             WasSaved |= window.WasSaved;

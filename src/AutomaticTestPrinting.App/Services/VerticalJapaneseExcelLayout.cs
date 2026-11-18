@@ -7,10 +7,14 @@ namespace AutomaticTestPrinting.App.Services;
 public static class VerticalJapaneseExcelLayout
 {
     public static void Apply(dynamic sheet, IReadOnlyList<StackedQuestion> questions,
-        string title, string range, bool includeAnswers)
+        string title, string range, bool includeAnswers,
+        IReadOnlyDictionary<string, IReadOnlyList<(int Start, int Length)>>? questionEmphasis = null,
+        bool balancedKanjiRows = false)
     {
-        var columns = VerticalJapaneseQuestionLayout.ColumnsPerPage(questions);
-        var pages = VerticalJapaneseQuestionLayout.CreatePages(questions, includeAnswers);
+        var questionHeight = balancedKanjiRows ? 242.5 : questionEmphasis is not null ? 330 : VerticalJapaneseQuestionLayout.QuestionHeight;
+        var answerHeight = balancedKanjiRows ? 242.5 : questionEmphasis is not null ? 155 : VerticalJapaneseQuestionLayout.AnswerHeight;
+        var columns = VerticalJapaneseQuestionLayout.ColumnsPerPage(questions, questionHeight, answerHeight);
+        var pages = VerticalJapaneseQuestionLayout.CreatePages(questions, includeAnswers, questionHeight, answerHeight);
         var endColumn = (char)('B' + columns - 1);
         var lastRow = pages.Count * 4 - 1;
         object? used = null, output = null, font = null, setup = null, columnRange = null;
@@ -72,17 +76,20 @@ public static class VerticalJapaneseExcelLayout
                 });
                 WithRange((object)sheet, $"B{top}:{endColumn}{top}", numbers => { numbers.Orientation = 0; numbers.RowHeight = 16; });
                 WithRange((object)sheet, $"B{top + 1}:{endColumn}{top + 1}", body =>
-                { body.Orientation = -4166; body.RowHeight = VerticalJapaneseQuestionLayout.QuestionHeight; });
+                { body.Orientation = -4166; body.RowHeight = questionHeight; });
                 WithRange((object)sheet, $"B{top + 2}:{endColumn}{top + 2}", answers =>
-                { answers.Orientation = -4166; answers.RowHeight = VerticalJapaneseQuestionLayout.AnswerHeight; });
+                { answers.Orientation = -4166; answers.RowHeight = answerHeight; });
                 for (var column = 0; column < columns; column++)
                 {
                     var index = page * columns + column;
                     if (index >= questions.Count) break;
-                    SetFont(sheet, $"{(char)('B' + column)}{top + 1}", questions[index].Question,
-                        VerticalJapaneseQuestionLayout.QuestionHeight, false);
-                    SetFont(sheet, $"{(char)('B' + column)}{top + 2}", questions[index].Answer,
-                        VerticalJapaneseQuestionLayout.AnswerHeight, includeAnswers);
+                    var question = questions[index].Question;
+                    var emphasis = questionEmphasis?.GetValueOrDefault(question);
+                    var addressColumn = (char)(endColumn - column);
+                    SetFont(sheet, $"{addressColumn}{top + 1}", question,
+                        questionHeight, false, emphasis);
+                    SetFont(sheet, $"{addressColumn}{top + 2}", questions[index].Answer,
+                        answerHeight, includeAnswers);
                 }
                 if (!includeAnswers)
                     WithRange((object)sheet, $"B{top + 2}:{endColumn}{top + 2}", answers =>
@@ -112,7 +119,8 @@ public static class VerticalJapaneseExcelLayout
 
     private static string EscapeHeader(string text) => text.Replace("&", "&&", StringComparison.Ordinal);
 
-    private static void SetFont(dynamic sheet, string address, string text, double height, bool blue)
+    private static void SetFont(dynamic sheet, string address, string text, double height, bool blue,
+        IReadOnlyList<(int Start, int Length)>? emphasis = null)
     {
         WithRange((object)sheet, address, cell =>
         {
@@ -122,6 +130,21 @@ public static class VerticalJapaneseExcelLayout
                 font = cell.Font;
                 ((dynamic)font).Size = VerticalJapaneseQuestionLayout.FontSize(text, height, (double)cell.Width);
                 ((dynamic)font).Color = blue ? 0xA15D17 : 0;
+                if (emphasis is not null)
+                {
+                    ((dynamic)font).Bold = false;
+                    foreach (var (start, length) in emphasis)
+                    {
+                        object? characters = null, characterFont = null;
+                        try
+                        {
+                            characters = cell.Characters[start, length];
+                            characterFont = ((dynamic)characters).Font;
+                            ((dynamic)characterFont).Bold = true;
+                        }
+                        finally { Release(characterFont); Release(characters); }
+                    }
+                }
             }
             finally { Release(font); }
         });
